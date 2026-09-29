@@ -121,13 +121,13 @@
     <!-- Header Actions: Theme Switcher & JSON Export -->
     <div class="flex items-center space-x-2.5">
       <!-- Theme Switcher (Light / Dark) -->
-      <button id="btnThemeToggle" class="p-2 rounded-sm border border-line hover:border-lineStrong bg-surface text-textSecondary hover:text-textPrimary transition text-xs flex items-center gap-1.5" onclick="toggleTheme()" title="Переключить тему (Светлая / Темная)">
+      <button id="btnThemeToggle" class="p-2 rounded-sm border border-line hover:border-lineStrong bg-surface text-textSecondary hover:text-textPrimary transition text-xs flex items-center gap-1.5" data-action="toggle-theme" title="Переключить тему (Светлая / Темная)">
         <span id="themeIcon">🌙</span>
         <span class="hidden md:inline font-mono text-[12px]" id="themeLabel">Темная</span>
       </button>
 
       <!-- JSON Export Button -->
-      <button class="px-2.5 py-1.5 rounded-sm text-xs font-mono text-textSecondary hover:text-textPrimary border border-line hover:border-lineStrong bg-surface transition shadow-xs flex items-center gap-1" onclick="exportActiveSlice()" title="Скачать данные активного финансового года в формате JSON">
+      <button class="px-2.5 py-1.5 rounded-sm text-xs font-mono text-textSecondary hover:text-textPrimary border border-line hover:border-lineStrong bg-surface transition shadow-xs flex items-center gap-1" data-action="export-json" title="Скачать данные активного финансового года в формате JSON">
         <span>JSON</span>
         <span>⤓</span>
       </button>
@@ -187,19 +187,19 @@
       
       <!-- 1. Mode Switcher (Segmented Control with Icons) -->
       <div class="flex items-center bg-surface p-0.5 rounded-sm border border-line text-xs" role="tablist" aria-label="Режимы отображения">
-        <button id="tabBtnSankey" class="px-2.5 py-1.5 rounded-sm font-semibold transition bg-accent text-white shadow-xs flex items-center gap-1.5" role="tab" aria-selected="true" onclick="switchView('sankey')">
+        <button id="tabBtnSankey" class="px-2.5 py-1.5 rounded-sm font-semibold transition bg-accent text-white shadow-xs flex items-center gap-1.5" role="tab" aria-selected="true" data-action="switch-view" data-view="sankey">
           <span>🌊</span>
           <span>Потоки (Sankey)</span>
         </button>
-        <button id="tabBtnSunburst" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" onclick="switchView('sunburst')">
+        <button id="tabBtnSunburst" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" data-action="switch-view" data-view="sunburst">
           <span>☀️</span>
           <span class="hidden sm:inline">Иерархия</span>
         </button>
-        <button id="tabBtnGraph" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" onclick="switchView('graph')">
+        <button id="tabBtnGraph" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" data-action="switch-view" data-view="graph">
           <span>🕸️</span>
           <span class="hidden sm:inline">Сеть связей</span>
         </button>
-        <button id="tabBtnTable" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" onclick="switchView('table')">
+        <button id="tabBtnTable" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" data-action="switch-view" data-view="table">
           <span>📋</span>
           <span>Реестр регионов</span>
         </button>
@@ -212,7 +212,7 @@
         </div>
 
         <!-- Play/Pause Button -->
-        <button id="btnPlayScrubber" class="px-2.5 py-1 rounded-sm text-xs font-mono font-medium border border-line bg-surface hover:bg-surfaceHover text-textPrimary transition shadow-xs flex items-center gap-1" onclick="togglePlayTimeline()" title="Автопроигрывание динамики 2021-2025">
+        <button id="btnPlayScrubber" class="px-2.5 py-1 rounded-sm text-xs font-mono font-medium border border-line bg-surface hover:bg-surfaceHover text-textPrimary transition shadow-xs flex items-center gap-1" data-action="toggle-playback" title="Автопроигрывание динамики 2021-2025">
           <span id="scrubberPlayIcon" class="text-accent">▶</span>
           <span id="scrubberPlayLabel" class="hidden md:inline">Таймлайн</span>
         </button>
@@ -223,10 +223,10 @@
 
       <!-- 3. Region Filter Dropdown & Quick Focus -->
       <div class="flex items-center space-x-2 text-xs">
-        <select id="regionDropdown" class="bg-surface border border-line text-textPrimary text-xs rounded-sm px-2.5 py-1.5 focus:border-accent focus:outline-none cursor-pointer shadow-xs max-w-[200px] truncate" onchange="onRegionDropdownChange(this.value)">
+        <select id="regionDropdown" class="bg-surface border border-line text-textPrimary text-xs rounded-sm px-2.5 py-1.5 focus:border-accent focus:outline-none cursor-pointer shadow-xs max-w-[200px] truncate">
           <option value="ALL">Все 20 регионов Казахстана</option>
         </select>
-        <button id="btnResetFilter" class="hidden px-2 py-1 text-xs text-textMuted hover:text-textPrimary border border-line rounded-sm hover:bg-surface transition" onclick="resetRegionFocus()">
+        <button id="btnResetFilter" class="hidden px-2 py-1 text-xs text-textMuted hover:text-textPrimary border border-line rounded-sm hover:bg-surface transition" data-action="reset-region">
           Сброс
         </button>
       </div>
@@ -280,11 +280,11 @@
           <thead class="sticky top-0 bg-surfaceSunken text-textMuted font-mono uppercase text-[11px] tracking-wider border-b border-line">
             <tr>
               <th class="p-2.5">#</th>
-              <th class="p-2.5 cursor-pointer hover:text-textPrimary" onclick="sortTable('name')">Регион ↕</th>
+              <th class="p-2.5 cursor-pointer hover:text-textPrimary" data-action="sort-table" data-sort="name">Регион ↕</th>
               <th class="p-2.5">Статус</th>
-              <th class="p-2.5 text-right cursor-pointer hover:text-textPrimary" onclick="sortTable('population')">Население ↕</th>
-              <th class="p-2.5 text-right cursor-pointer hover:text-textPrimary" onclick="sortTable('budget')">Бюджет (₸) ↕</th>
-              <th class="p-2.5 text-right cursor-pointer hover:text-textPrimary" onclick="sortTable('per_capita')">На 1 жителя (₸) ↕</th>
+              <th class="p-2.5 text-right cursor-pointer hover:text-textPrimary" data-action="sort-table" data-sort="population">Население ↕</th>
+              <th class="p-2.5 text-right cursor-pointer hover:text-textPrimary" data-action="sort-table" data-sort="budget">Бюджет (₸) ↕</th>
+              <th class="p-2.5 text-right cursor-pointer hover:text-textPrimary" data-action="sort-table" data-sort="per_capita">На 1 жителя (₸) ↕</th>
               <th class="p-2.5 text-right">АСП (₸)</th>
               <th class="p-2.5 text-right">Интернаты / МСУ</th>
               <th class="p-2.5 text-center">Инспектор</th>
@@ -305,7 +305,7 @@
               <span id="drawerStatusBadge" class="text-[11px] font-mono px-2 py-0.5 rounded-sm border uppercase"></span>
               <h4 id="drawerRegionTitle" class="text-xl font-serif font-normal text-textPrimary mt-1">г. Алматы</h4>
             </div>
-            <button class="w-8 h-8 rounded-sm hover:bg-surfaceSunken flex items-center justify-center text-textMuted hover:text-textPrimary text-base font-mono transition" onclick="closeInspectorDrawer()" title="Закрыть (Esc)">
+            <button class="w-8 h-8 rounded-sm hover:bg-surfaceSunken flex items-center justify-center text-textMuted hover:text-textPrimary text-base font-mono transition" data-action="close-drawer" title="Закрыть (Esc)">
               ✕
             </button>
           </div>
@@ -352,7 +352,7 @@
 
         <!-- Drawer Action Footer -->
         <div class="pt-4 border-t border-line mt-6 flex gap-2">
-          <button id="btnFocusRegion" class="w-full py-2 rounded-sm text-xs font-semibold bg-accent hover:bg-accent-hover text-white transition font-sans shadow-xs" onclick="focusSelectedRegion()">
+          <button id="btnFocusRegion" class="w-full py-2 rounded-sm text-xs font-semibold bg-accent hover:bg-accent-hover text-white transition font-sans shadow-xs" data-action="focus-region">
             Сфокусировать граф на регионе
           </button>
         </div>
@@ -486,6 +486,29 @@
       // Window resize
       window.addEventListener('resize', () => myChart && myChart.resize());
 
+      // Centralized action delegation (No inline onclicks)
+      document.addEventListener('click', (e) => {
+        const target = e.target.closest('[data-action]');
+        if (!target) return;
+        const action = target.getAttribute('data-action');
+
+        if (action === 'toggle-theme') toggleTheme();
+        else if (action === 'export-json') exportActiveSlice();
+        else if (action === 'switch-view') switchView(target.getAttribute('data-view'));
+        else if (action === 'toggle-playback') togglePlayTimeline();
+        else if (action === 'reset-region') resetRegionFocus();
+        else if (action === 'sort-table') sortTable(target.getAttribute('data-sort'));
+        else if (action === 'close-drawer') closeInspectorDrawer();
+        else if (action === 'focus-region') focusSelectedRegion();
+        else if (action === 'inspect-region') inspectRegionById(target.getAttribute('data-region-id'));
+        else if (action === 'select-year') selectYear(Number(target.getAttribute('data-year')));
+      });
+
+      // Region dropdown change listener
+      document.getElementById('regionDropdown')?.addEventListener('change', (e) => {
+        onRegionDropdownChange(e.target.value);
+      });
+
       // Render components
       buildTimelineScrubber();
       populateRegionDropdown();
@@ -544,7 +567,8 @@
           ? "px-2.5 py-1 text-xs font-mono font-bold rounded-sm bg-accent text-white shadow-xs"
           : "px-2.5 py-1 text-xs font-mono text-textSecondary hover:text-textPrimary transition";
         btn.innerHTML = `${yr}${yr === 2025 ? ' <span class="text-[9px] uppercase opacity-75">План</span>' : ''}`;
-        btn.onclick = () => selectYear(yr);
+        btn.setAttribute('data-action', 'select-year');
+        btn.setAttribute('data-year', yr);
         container.appendChild(btn);
       });
     }
@@ -1021,7 +1045,7 @@
           <td class="p-2.5 text-right font-mono text-textMuted">${formatTenge(r.services.group_asp)}</td>
           <td class="p-2.5 text-right font-mono text-textMuted">${formatTenge(r.services.group_special_institutions)}</td>
           <td class="p-2.5 text-center">
-            <button class="px-2 py-0.5 text-xs font-mono bg-surface hover:bg-surfaceSunken text-textPrimary rounded-sm border border-line transition shadow-xs" onclick='inspectRegionById("${r.id}")'>
+            <button class="px-2 py-0.5 text-xs font-mono bg-surface hover:bg-surfaceSunken text-textPrimary rounded-sm border border-line transition shadow-xs" data-action="inspect-region" data-region-id="${r.id}">
               Инспектор →
             </button>
           </td>
