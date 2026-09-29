@@ -110,12 +110,12 @@
       </div>
       <div>
         <div class="flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.14em] text-textMuted">
-          <span>РК • Минфин</span>
+          <span>Республика Казахстан</span>
           <span class="opacity-40">•</span>
           <span class="text-accent font-semibold">Раздел 06 ЕБК</span>
         </div>
         <h1 class="text-sm sm:text-base font-serif font-medium text-textPrimary tracking-tight leading-none mt-0.5">
-          Qazaqstan Public Finance Monitor
+          Монитор государственных финансов
         </h1>
       </div>
     </div>
@@ -123,15 +123,17 @@
     <!-- Header Actions: Theme Switcher & JSON Export -->
     <div class="flex items-center space-x-2.5">
       <!-- Theme Switcher (Light / Dark) -->
-      <button id="btnThemeToggle" class="p-2 rounded-sm border border-line hover:border-lineStrong bg-surface text-textSecondary hover:text-textPrimary transition text-xs flex items-center gap-1.5" data-action="toggle-theme" title="Переключить тему (Светлая / Темная)">
-        <span id="themeIcon">🌙</span>
-        <span class="hidden md:inline font-mono text-[12px]" id="themeLabel">Темная</span>
+      <button id="btnThemeToggle" class="px-2.5 py-1.5 rounded-sm border border-line hover:border-lineStrong bg-surface text-textSecondary hover:text-textPrimary transition text-xs flex items-center gap-1.5" data-action="toggle-theme" title="Переключить тему оформления">
+        <span id="themeIcon" class="flex items-center text-textSecondary">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </span>
+        <span class="hidden md:inline font-mono text-[11px]" id="themeLabel">Темная</span>
       </button>
 
       <!-- JSON Export Button -->
-      <button class="px-2.5 py-1.5 rounded-sm text-xs font-mono text-textSecondary hover:text-textPrimary border border-line hover:border-lineStrong bg-surface transition shadow-xs flex items-center gap-1" data-action="export-json" title="Скачать данные активного финансового года в формате JSON">
-        <span>JSON</span>
-        <span>⤓</span>
+      <button class="px-2.5 py-1.5 rounded-sm text-xs font-mono text-textSecondary hover:text-textPrimary border border-line hover:border-lineStrong bg-surface transition shadow-xs flex items-center gap-1.5" data-action="export-json" title="Экспорт данных активного финансового года в формате JSON">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Экспорт JSON</span>
       </button>
     </div>
   </header>
@@ -144,19 +146,19 @@
       
       <!-- Narrative Lead with Inline Live Numbers -->
       <div class="lg:col-span-8">
-        <h2 class="text-2xl sm:text-3xl lg:text-[34px] font-serif font-normal text-textPrimary tracking-tight leading-tight">
-          Анатомия социальных расходов Казахстана
+        <h2 class="text-2xl sm:text-3xl lg:text-[32px] font-serif font-normal text-textPrimary tracking-tight leading-tight">
+          Государственные социальные расходы Республики Казахстан
         </h2>
-        <p class="font-sans text-sm sm:text-base text-textSecondary leading-relaxed mt-2">
+        <p class="font-sans text-sm sm:text-base text-textSecondary leading-relaxed mt-2.5">
           В <span id="leadYear" class="font-semibold text-textPrimary underline decoration-accent/40 decoration-2">2024</span> году совокупные социальные расходы государственного бюджета составляют 
           <strong id="leadTotal" class="font-mono text-accent font-bold">5.43 трлн ₸</strong>. 
-          Из них <strong id="leadRep" class="font-mono text-textPrimary font-semibold">4.71 трлн ₸ (86.7%)</strong> закрывает республиканский бюджет (пенсии и пособия), 
-          а <strong id="leadLocal" class="font-mono text-subvention font-semibold">722.2 млрд ₸ (13.3%)</strong> распределяются между 20 акиматами на адресную помощь (АСП), интернаты и реабилитацию.
+          Из них <strong id="leadRep" class="font-mono text-textPrimary font-semibold">4.71 трлн ₸ (86.7%)</strong> профинансированы из республиканского бюджета (пенсионные выплаты и государственные пособия), 
+          а <strong id="leadLocal" class="font-mono text-subvention font-semibold">722.2 млрд ₸ (13.3%)</strong> распределены через бюджеты 20 регионов на адресную социальную помощь, медико-социальные учреждения и реабилитацию.
         </p>
         <!-- Dynamic Year Context Editorial Callout -->
-        <div class="mt-3.5 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-sm bg-surfaceSunken border border-line text-xs text-textSecondary">
-          <span class="font-mono font-bold text-accent uppercase text-[10px] tracking-wider shrink-0">Фокус года:</span>
-          <span id="leadYearContext" class="leading-normal font-sans">Индексация солидарных пенсий на 9%, базовых пособий на 7%; расширение перечня техсредств реабилитации для ЛСИ.</span>
+        <div class="mt-3.5 border-l-2 border-accent pl-3 text-xs text-textSecondary font-sans leading-relaxed">
+          <span class="font-mono font-semibold text-textPrimary uppercase text-[10px] tracking-wider mr-1.5">Контекст периода:</span>
+          <span id="leadYearContext">Индексация солидарных пенсий на 9%, базовых пособий на 7%; расширение перечня техсредств реабилитации для ЛСИ.</span>
         </div>
       </div>
 
@@ -187,27 +189,22 @@
   <section class="border-b border-line bg-surfaceSunken px-4 sm:px-6 py-2.5 sticky top-14 sm:top-16 z-30">
     <div class="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-3">
       
-      <!-- 1. Mode Switcher (Segmented Control with Icons) -->
-      <div class="flex items-center bg-surface p-0.5 rounded-sm border border-line text-xs" role="tablist" aria-label="Режимы отображения">
-        <button id="tabBtnSankey" class="px-2.5 py-1.5 rounded-sm font-semibold transition bg-accent text-white shadow-xs flex items-center gap-1.5" role="tab" aria-selected="true" data-action="switch-view" data-view="sankey">
-          <span>🌊</span>
-          <span>Потоки (Sankey)</span>
+      <!-- 1. Mode Switcher (Segmented Control) -->
+      <div class="flex items-center bg-surface p-0.5 rounded-sm border border-line text-xs font-sans" role="tablist" aria-label="Режимы отображения">
+        <button id="tabBtnSankey" class="px-2.5 py-1.5 rounded-sm font-semibold transition bg-accent text-white shadow-xs" role="tab" aria-selected="true" data-action="switch-view" data-view="sankey">
+          Потоки средств
         </button>
-        <button id="tabBtnSunburst" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" data-action="switch-view" data-view="sunburst">
-          <span>☀️</span>
-          <span class="hidden sm:inline">Иерархия</span>
+        <button id="tabBtnSunburst" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary" role="tab" aria-selected="false" data-action="switch-view" data-view="sunburst">
+          Иерархия
         </button>
-        <button id="tabBtnGraph" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" data-action="switch-view" data-view="graph">
-          <span>🕸️</span>
-          <span class="hidden sm:inline">Сеть связей</span>
+        <button id="tabBtnGraph" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary" role="tab" aria-selected="false" data-action="switch-view" data-view="graph">
+          Сетевой граф
         </button>
-        <button id="tabBtnTable" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" data-action="switch-view" data-view="table">
-          <span>📋</span>
-          <span>Реестр регионов</span>
+        <button id="tabBtnTable" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary" role="tab" aria-selected="false" data-action="switch-view" data-view="table">
+          Реестр регионов
         </button>
-        <button id="tabBtnProcurements" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" data-action="switch-view" data-view="procurements">
-          <span>🛒</span>
-          <span>Госзакупки</span>
+        <button id="tabBtnProcurements" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary" role="tab" aria-selected="false" data-action="switch-view" data-view="procurements">
+          Госзакупки
         </button>
       </div>
 
@@ -218,9 +215,11 @@
         </div>
 
         <!-- Play/Pause Button -->
-        <button id="btnPlayScrubber" class="px-2.5 py-1 rounded-sm text-xs font-mono font-medium border border-line bg-surface hover:bg-surfaceHover text-textPrimary transition shadow-xs flex items-center gap-1" data-action="toggle-playback" title="Автопроигрывание динамики 2021-2025">
-          <span id="scrubberPlayIcon" class="text-accent">▶</span>
-          <span id="scrubberPlayLabel" class="hidden md:inline">Таймлайн</span>
+        <button id="btnPlayScrubber" class="px-2.5 py-1 rounded-sm text-xs font-mono font-medium border border-line bg-surface hover:bg-surfaceHover text-textPrimary transition shadow-xs flex items-center gap-1.5" data-action="toggle-playback" title="Автоматическое воспроизведение динамики 2021–2025">
+          <span id="scrubberPlayIcon" class="flex items-center text-accent">
+            <svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+          </span>
+          <span id="scrubberPlayLabel" class="hidden md:inline">Динамика</span>
         </button>
 
         <!-- Dynamic YoY Indicator -->
@@ -252,7 +251,7 @@
           Движение средств: Республиканский бюджет → 20 Регионов → Виды социальных услуг
         </h3>
         <p id="currentViewSubheading" class="text-[12px] text-textMuted mt-0.5">
-          Кликните по узлу или региону, чтобы открыть аналитический инспектор с подушевым расчетом.
+          Консолидированные трансферты и социальные расходы акиматов. Выберите субъект для детализации.
         </p>
       </div>
 
@@ -386,8 +385,8 @@
               <span id="drawerStatusBadge" class="text-[11px] font-mono px-2 py-0.5 rounded-sm border uppercase"></span>
               <h4 id="drawerRegionTitle" class="text-xl font-serif font-normal text-textPrimary mt-1">г. Алматы</h4>
             </div>
-            <button class="w-8 h-8 rounded-sm hover:bg-surfaceSunken flex items-center justify-center text-textMuted hover:text-textPrimary text-base font-mono transition" data-action="close-drawer" title="Закрыть (Esc)">
-              ✕
+            <button class="w-8 h-8 rounded-sm hover:bg-surfaceSunken flex items-center justify-center text-textMuted hover:text-textPrimary transition" data-action="close-drawer" title="Закрыть (Esc)" aria-label="Закрыть">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>
 
@@ -434,8 +433,7 @@
             Сфокусировать граф на регионе
           </button>
           <button id="btnDrawerOpenProcurements" class="w-full py-2 rounded-sm text-xs font-mono font-medium border border-line bg-surface hover:bg-surfaceSunken text-textPrimary transition shadow-xs flex items-center justify-center gap-1.5" data-action="open-region-procurements">
-            <span>🛒</span>
-            <span>Госзакупки этого региона →</span>
+            <span>Госзакупки региона →</span>
           </button>
         </div>
       </aside>
@@ -445,35 +443,37 @@
     <!-- =========================================================================
          FAZA 4.5. EDITORIAL ANNOTATIONS (Clean Broadsheet Editorial Vrezki)
     ========================================================================== -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-5 border-t border-line">
-      <div>
-        <h4 class="font-serif text-base text-textPrimary mb-1.5 flex items-center gap-2">
-          <span class="font-mono text-xs font-bold text-accent">§ 01</span>
-          Межбюджетные изъятия доноров
-        </h4>
-        <p class="text-xs text-textSecondary leading-relaxed">
-          Алматы, Астана и Атырауская область формируют профицит доходов и выплачивают <strong>бюджетные изъятия</strong> в республиканский центр. Это позволяет государству перераспределять деньги в пользу дотационных областей.
-        </p>
+    <section class="pt-6 border-t border-line">
+      <div class="text-[11px] font-mono uppercase tracking-[0.14em] text-textMuted mb-3">
+        Аналитические примечания и институциональный контекст
       </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <h4 class="font-serif text-base text-textPrimary mb-1.5 font-medium">
+            Бюджетные изъятия регионов-доноров
+          </h4>
+          <p class="text-xs text-textSecondary leading-relaxed">
+            Города Алматы, Астана и Атырауская область формируют чистый профицит налоговых поступлений и перечисляют бюджетные изъятия в республиканский центр, обеспечивая ресурсную базу для выравнивания регионального развития.
+          </p>
+        </div>
 
-      <div>
-        <h4 class="font-serif text-base text-textPrimary mb-1.5 flex items-center gap-2">
-          <span class="font-mono text-xs font-bold text-subvention">§ 02</span>
-          Туркестан: максимум соцподдержки
-        </h4>
-        <p class="text-xs text-textSecondary leading-relaxed">
-          Туркестанская область получает наибольшие субвенции в РК (96 млрд ₸, 44 848 ₸ на жителя). Это связано с рекордной рождаемостью и высокой концентрацией получателей адресной помощи (АСП).
-        </p>
-      </div>
+        <div>
+          <h4 class="font-serif text-base text-textPrimary mb-1.5 font-medium">
+            Дифференциация подушевого финансирования
+          </h4>
+          <p class="text-xs text-textSecondary leading-relaxed">
+            Туркестанская область аккумулирует наибольший объем трансфертов в силу демографической структуры, высокой рождаемости и максимальной численности получателей адресной социальной помощи (АСП).
+          </p>
+        </div>
 
-      <div>
-        <h4 class="font-serif text-base text-textPrimary mb-1.5 flex items-center gap-2">
-          <span class="font-mono text-xs font-bold text-donor">§ 03</span>
-          Пятилетний тренд (+52%)
-        </h4>
-        <p class="text-xs text-textSecondary leading-relaxed">
-          С 2021 по 2025 год социальный бюджет вырос с 3.98 до 6.05 трлн ₸. Главные драйверы: вступление в силу нового Социального кодекса РК, продление выплат до 1.5 лет и индексация солидарных пенсий.
-        </p>
+        <div>
+          <h4 class="font-serif text-base text-textPrimary mb-1.5 font-medium">
+            Траектория расходов (2021–2025)
+          </h4>
+          <p class="text-xs text-textSecondary leading-relaxed">
+            Рост финансирования с 3.98 до 6.05 трлн ₸ отражает введение норм Социального кодекса РК, увеличение срока выплат по уходу за ребенком до полутора лет и системную индексацию базовых социальных обязательств.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -485,10 +485,10 @@
   <footer class="border-t border-line bg-surface py-5 px-4 sm:px-6 mt-8 text-xs text-textMuted font-mono">
     <div class="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-[11px]">
       <div>
-        QAZAQSTAN STATE BUDGET DATA MONITOR • РАЗДЕЛ 06 «СОЦПОМОЩЬ И СОЦОБЕСПЕЧЕНИЕ» • 2021–2025
+        РЕСПУБЛИКА КАЗАХСТАН • МОНИТОР ГОСУДАРСТВЕННЫХ ФИНАНСОВ • РАЗДЕЛ 06 «СОЦИАЛЬНАЯ ПОМОЩЬ И СОЦИАЛЬНОЕ ОБЕСПЕЧЕНИЕ»
       </div>
-      <div>
-        Автономный клиент • Без серверов и бэкенда • Apache ECharts • Open Data RK
+      <div class="text-textSecondary">
+        Источники данных: Министерство финансов РК • Бюро национальной статистики АСПиР РК • Портал государственных закупок
       </div>
     </div>
   </footer>
@@ -637,15 +637,18 @@
       const themeIcon = document.getElementById('themeIcon');
       const themeLabel = document.getElementById('themeLabel');
 
+      const sunSvg = `<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`;
+      const moonSvg = `<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+
       if (theme === 'dark') {
         html.classList.add('dark');
         html.classList.remove('light');
-        if (themeIcon) themeIcon.innerText = '☀️';
+        if (themeIcon) themeIcon.innerHTML = sunSvg;
         if (themeLabel) themeLabel.innerText = 'Светлая';
       } else {
         html.classList.add('light');
         html.classList.remove('dark');
-        if (themeIcon) themeIcon.innerText = '🌙';
+        if (themeIcon) themeIcon.innerHTML = moonSvg;
         if (themeLabel) themeLabel.innerText = 'Темная';
       }
     }
@@ -778,7 +781,7 @@
       ['tabBtnSankey', 'tabBtnSunburst', 'tabBtnGraph', 'tabBtnTable', 'tabBtnProcurements'].forEach(btnId => {
         const b = document.getElementById(btnId);
         if (b) {
-          b.className = "px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5";
+          b.className = "px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary";
           b.setAttribute('aria-selected', 'false');
         }
       });
@@ -792,7 +795,7 @@
       };
       const activeBtn = document.getElementById(activeBtnMap[viewName]);
       if (activeBtn) {
-        activeBtn.className = "px-2.5 py-1.5 rounded-sm font-semibold transition bg-accent text-white shadow-xs flex items-center gap-1.5";
+        activeBtn.className = "px-2.5 py-1.5 rounded-sm font-semibold transition bg-accent text-white shadow-xs";
         activeBtn.setAttribute('aria-selected', 'true');
       }
 
@@ -804,15 +807,15 @@
         chartDom.classList.add('hidden');
         procDom.classList.add('hidden');
         registryDom.classList.remove('hidden');
-        document.getElementById('currentViewHeading').innerText = `Сравнительный реестр всех 20 регионов Казахстана (${activeYear} г.)`;
-        document.getElementById('currentViewSubheading').innerText = "Подушевой объем социальной помощи, демографический статус и расходы по 4 ключевым услугам.";
+        document.getElementById('currentViewHeading').innerText = `Сравнительный реестр 20 регионов Казахстана (${activeYear} г.)`;
+        document.getElementById('currentViewSubheading').innerText = "Подушевые нормативы, трансфертный статус и структура расходов местных исполнительных органов.";
         populateRegistryTable();
       } else if (viewName === 'procurements') {
         chartDom.classList.add('hidden');
         registryDom.classList.add('hidden');
         procDom.classList.remove('hidden');
-        document.getElementById('currentViewHeading').innerText = `Реестр государственных закупок и договоров социальной сферы (${activeYear} г.)`;
-        document.getElementById('currentViewSubheading').innerText = "Прямой аудит лотов, заказчиков (КГУ/акиматы), поставщиков, организаций инвалидов (ООИ) и способов закупки.";
+        document.getElementById('currentViewHeading').innerText = `Реестр государственных закупок социальной сферы (${activeYear} г.)`;
+        document.getElementById('currentViewSubheading').innerText = "Исполнение бюджета через закупки: заказчики, поставщики, контракты и квоты статьи 51 (ООИ).";
         populateProcurementsView();
       } else {
         registryDom.classList.add('hidden');
@@ -860,6 +863,10 @@
       document.getElementById('currentViewHeading').innerText = selectedRegionId === 'ALL'
         ? `Движение средств: Республиканский бюджет → 20 Регионов → Виды социальных услуг (${activeYear})`
         : `Детализированный поток: «${cur.regions.find(r => r.id === selectedRegionId)?.name}» (${activeYear})`;
+
+      document.getElementById('currentViewSubheading').innerText = selectedRegionId === 'ALL'
+        ? "Консолидированные трансферты и социальные расходы акиматов. Выберите субъект для детализации."
+        : "Распределение финансирования по 4 ключевым направлениям местных социальных программ.";
 
       let nodes = [];
       let links = [];
@@ -980,8 +987,8 @@
     // 2. SUNBURST VIEW
     function renderSunburstView() {
       const cur = multiData.years[String(activeYear)];
-      document.getElementById('currentViewHeading').innerText = `Иерархическая структура расходов (Радиальная декомпозиция, ${activeYear})`;
-      document.getElementById('currentViewSubheading').innerText = "Нажимайте на секторы диаграммы для плавного приближения структуры расходов.";
+      document.getElementById('currentViewHeading').innerText = `Иерархическая декомпозиция расходов (${activeYear})`;
+      document.getElementById('currentViewSubheading').innerText = "Многоуровневая структура: от центрального бюджета до конкретных программ местных органов.";
 
       const option = {
         backgroundColor: 'transparent',
@@ -1036,8 +1043,8 @@
     function renderGraphView() {
       const cur = multiData.years[String(activeYear)];
       const palette = getPalette();
-      document.getElementById('currentViewHeading').innerText = `Сетевой топологический граф связей (${activeYear})`;
-      document.getElementById('currentViewSubheading').innerText = "Топологическая физическая модель: перетаскивайте узлы для анализа плотности перетоков.";
+      document.getElementById('currentViewHeading').innerText = `Сетевая структура межбюджетных перетоков (${activeYear})`;
+      document.getElementById('currentViewSubheading').innerText = "Взаимосвязи между центральным бюджетом, регионами-донорами, субвенционными областями и программами.";
 
       const idToName = {};
       cur.nodes.forEach(n => idToName[n.id] = n.name);
@@ -1334,10 +1341,10 @@
 
       const deltaEl = document.getElementById('drawerPerCapitaDelta');
       if (diffPct >= 0) {
-        deltaEl.innerText = `▲ +${diffPct}% выше медианы по РК (${formatTenge(avgPerCapita)})`;
+        deltaEl.innerText = `+${diffPct}% относительно среднего по РК (${formatTenge(avgPerCapita)})`;
         deltaEl.className = "text-[11px] font-mono text-donor block mt-0.5 font-medium";
       } else {
-        deltaEl.innerText = `▼ ${diffPct}% ниже медианы по РК (${formatTenge(avgPerCapita)})`;
+        deltaEl.innerText = `−${Math.abs(diffPct)}% относительно среднего по РК (${formatTenge(avgPerCapita)})`;
         deltaEl.className = "text-[11px] font-mono text-textMuted block mt-0.5";
       }
 
@@ -1394,7 +1401,7 @@
       const procBtn = document.getElementById('btnDrawerOpenProcurements');
       if (procBtn && window.PROCUREMENT_DATA) {
         const regContracts = window.PROCUREMENT_DATA.contracts.filter(c => c.year === activeYear && c.region_id === reg.id);
-        procBtn.innerHTML = `<span>🛒</span> <span>Госзакупки: ${regContracts.length} договоров →</span>`;
+        procBtn.innerHTML = `<span>Госзакупки региона (${regContracts.length} договоров) →</span>`;
       }
     }
 
@@ -1424,7 +1431,8 @@
       isPlaying = true;
       const btn = document.getElementById('btnPlayScrubber');
       if (btn) btn.setAttribute('aria-pressed', 'true');
-      document.getElementById('scrubberPlayIcon').innerText = '⏸';
+      const icon = document.getElementById('scrubberPlayIcon');
+      if (icon) icon.innerHTML = `<svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
       document.getElementById('scrubberPlayLabel').innerText = 'Пауза';
 
       const years = multiData.meta.available_years;
@@ -1441,8 +1449,9 @@
       clearInterval(playbackInterval);
       const btn = document.getElementById('btnPlayScrubber');
       if (btn) btn.setAttribute('aria-pressed', 'false');
-      document.getElementById('scrubberPlayIcon').innerText = '▶';
-      document.getElementById('scrubberPlayLabel').innerText = 'Таймлайн';
+      const icon = document.getElementById('scrubberPlayIcon');
+      if (icon) icon.innerHTML = `<svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>`;
+      document.getElementById('scrubberPlayLabel').innerText = 'Динамика';
     }
 
     // Export Slice in JSON
