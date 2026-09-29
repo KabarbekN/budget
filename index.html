@@ -24,6 +24,8 @@
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   <!-- Multi-Year Data Bundle (Zero-config file:// fallback) -->
   <script src="data/budget_data.js"></script>
+  <!-- Social Procurement Contracts Data Bundle -->
+  <script src="data/procurement_data.js"></script>
 
   <script>
     tailwind.config = {
@@ -203,6 +205,10 @@
           <span>📋</span>
           <span>Реестр регионов</span>
         </button>
+        <button id="tabBtnProcurements" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" data-action="switch-view" data-view="procurements">
+          <span>🛒</span>
+          <span>Госзакупки</span>
+        </button>
       </div>
 
       <!-- 2. Timeline Scrubber (2021-2025, YoY, Play/Pause) -->
@@ -296,6 +302,81 @@
         </table>
       </div>
 
+      <!-- Tabular Procurement Alternative View -->
+      <div id="procurementView" class="hidden absolute inset-0 bg-surface p-4 sm:p-6 overflow-y-auto z-10">
+        <!-- Procurement Top Bar with KPIs -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5 pb-4 border-b border-line">
+          <div>
+            <div class="text-[10px] font-mono uppercase text-textMuted tracking-wider">Законтрактовано в закупках (<span id="procYearLabel">2024</span>)</div>
+            <div id="procTotalSum" class="text-base sm:text-lg font-mono font-bold text-accent mt-0.5 tabular-nums">0 ₸</div>
+            <div class="text-[11px] text-textMuted mt-0.5" id="procTotalContractsCount">0 договоров в выборке</div>
+          </div>
+          <div>
+            <div class="text-[10px] font-mono uppercase text-textMuted tracking-wider">Организации инвалидов (ООИ)</div>
+            <div id="procOoiShare" class="text-base sm:text-lg font-mono font-bold text-donor mt-0.5 tabular-nums">0%</div>
+            <div class="text-[11px] text-textMuted mt-0.5">Преференция ст. 51 Закона РК</div>
+          </div>
+          <div>
+            <div class="text-[10px] font-mono uppercase text-textMuted tracking-wider">Из одного источника</div>
+            <div id="procSingleSourceShare" class="text-base sm:text-lg font-mono font-bold text-subvention mt-0.5 tabular-nums">0%</div>
+            <div class="text-[11px] text-textMuted mt-0.5">Несостоявшиеся / прямые закупки</div>
+          </div>
+          <div>
+            <div class="text-[10px] font-mono uppercase text-textMuted tracking-wider">Выбранный регион</div>
+            <div id="procActiveRegionLabel" class="text-xs sm:text-sm font-sans font-semibold text-textPrimary mt-1 truncate">Все 20 регионов Казахстана</div>
+            <button class="text-[11px] font-mono text-accent hover:underline mt-0.5 hidden" id="procBtnResetRegion" data-action="reset-proc-region">Сбросить фильтр региона</button>
+          </div>
+        </div>
+
+        <!-- Procurement Search & Filter Row -->
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div class="flex flex-wrap items-center gap-2 flex-1">
+            <input type="text" id="procSearchInput" placeholder="Поиск по предмету закупки, поставщику, БИН..." class="bg-surfaceSunken border border-line rounded-sm text-xs px-3 py-1.5 text-textPrimary placeholder-textMuted focus:outline-none focus:border-accent w-full sm:w-72">
+            
+            <select id="procCategoryFilter" class="bg-surfaceSunken border border-line rounded-sm text-xs px-2.5 py-1.5 text-textPrimary focus:outline-none focus:border-accent">
+              <option value="ALL">Все категории соцуслуг</option>
+              <option value="group_rehabilitation">Реабилитация и инватакси</option>
+              <option value="group_special_institutions">Спец. соцуслуги и интернаты</option>
+              <option value="group_employment">Программы занятости</option>
+              <option value="group_asp">АСП и цифровая инфраструктура</option>
+            </select>
+
+            <select id="procMethodFilter" class="bg-surfaceSunken border border-line rounded-sm text-xs px-2.5 py-1.5 text-textPrimary focus:outline-none focus:border-accent">
+              <option value="ALL">Все способы закупки</option>
+              <option value="ООИ">Среди организаций инвалидов (ООИ)</option>
+              <option value="Открытый конкурс">Открытый конкурс</option>
+              <option value="источника">Из одного источника</option>
+              <option value="ЗЦП">Запрос ценовых предложений</option>
+            </select>
+          </div>
+
+          <div class="text-xs font-mono text-textMuted">
+            Найдено контрактов: <span id="procMatchCount" class="font-bold text-textPrimary">0</span>
+          </div>
+        </div>
+
+        <!-- Contracts Table -->
+        <div class="overflow-x-auto border border-line rounded-sm">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead class="sticky top-0 bg-surfaceSunken text-textMuted font-mono uppercase text-[10px] tracking-wider border-b border-line">
+              <tr>
+                <th class="p-2.5">Договор / Дата</th>
+                <th class="p-2.5">Заказчик (Акимат / КГУ)</th>
+                <th class="p-2.5">Предмет закупки</th>
+                <th class="p-2.5">Поставщик</th>
+                <th class="p-2.5">Способ закупки</th>
+                <th class="p-2.5">ЭКР</th>
+                <th class="p-2.5 text-right cursor-pointer hover:text-textPrimary" data-action="sort-proc" data-sort="amount">Сумма договора ↕</th>
+                <th class="p-2.5 text-center">Статус</th>
+              </tr>
+            </thead>
+            <tbody id="procurementTableBody" class="divide-y divide-line font-mono text-xs text-textPrimary">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- MASTER-DETAIL INSPECTOR DRAWER (Slides from Right, Does Not Permanently Compress Graphic) -->
       <aside id="inspectorDrawer" class="is-closed absolute top-0 right-0 w-full sm:w-[420px] h-full bg-surface border-l border-line shadow-2xl p-5 sm:p-6 overflow-y-auto z-20 flex flex-col justify-between" aria-label="Инспектор региона">
         <div>
@@ -336,10 +417,7 @@
               
               <!-- Mini Stacked Bar Visual -->
               <div class="w-full h-2 rounded-sm bg-surfaceSunken flex overflow-hidden mb-3" id="drawerStackedBar">
-                <div class="bg-[#B85807] h-full" style="width: 28%" title="АСП (28%)"></div>
-                <div class="bg-[#167D48] h-full" style="width: 32%" title="Интернаты / МСУ (32%)"></div>
-                <div class="bg-[#0082CA] h-full" style="width: 22%" title="Реабилитация ЛСИ (22%)"></div>
-                <div class="bg-[#6D28D9] h-full" style="width: 18%" title="Занятость (18%)"></div>
+                <!-- Dynamically rendered -->
               </div>
 
               <!-- List with Exact Amounts -->
@@ -351,9 +429,13 @@
         </div>
 
         <!-- Drawer Action Footer -->
-        <div class="pt-4 border-t border-line mt-6 flex gap-2">
+        <div class="pt-4 border-t border-line mt-6 flex flex-col gap-2">
           <button id="btnFocusRegion" class="w-full py-2 rounded-sm text-xs font-semibold bg-accent hover:bg-accent-hover text-white transition font-sans shadow-xs" data-action="focus-region">
             Сфокусировать граф на регионе
+          </button>
+          <button id="btnDrawerOpenProcurements" class="w-full py-2 rounded-sm text-xs font-mono font-medium border border-line bg-surface hover:bg-surfaceSunken text-textPrimary transition shadow-xs flex items-center justify-center gap-1.5" data-action="open-region-procurements">
+            <span>🛒</span>
+            <span>Госзакупки этого региона →</span>
           </button>
         </div>
       </aside>
@@ -463,8 +545,8 @@
         if (e.key === 'Escape') closeInspectorDrawer();
 
         if (document.activeElement && document.activeElement.getAttribute('role') === 'tab') {
-          const tabs = ['tabBtnSankey', 'tabBtnSunburst', 'tabBtnGraph', 'tabBtnTable'];
-          const views = ['sankey', 'sunburst', 'graph', 'table'];
+          const tabs = ['tabBtnSankey', 'tabBtnSunburst', 'tabBtnGraph', 'tabBtnTable', 'tabBtnProcurements'];
+          const views = ['sankey', 'sunburst', 'graph', 'table', 'procurements'];
           const curIdx = tabs.indexOf(document.activeElement.id);
           if (curIdx !== -1) {
             let nextIdx = -1;
@@ -498,8 +580,18 @@
         else if (action === 'toggle-playback') togglePlayTimeline();
         else if (action === 'reset-region') resetRegionFocus();
         else if (action === 'sort-table') sortTable(target.getAttribute('data-sort'));
+        else if (action === 'sort-proc') sortProcurements();
+        else if (action === 'reset-proc-region') { resetRegionFocus(); populateProcurementsView(); }
         else if (action === 'close-drawer') closeInspectorDrawer();
         else if (action === 'focus-region') focusSelectedRegion();
+        else if (action === 'open-region-procurements') {
+          if (!inspectingRegionObj) return;
+          selectedRegionId = inspectingRegionObj.id;
+          document.getElementById('regionDropdown').value = selectedRegionId;
+          document.getElementById('btnResetFilter').classList.remove('hidden');
+          closeInspectorDrawer();
+          switchView('procurements');
+        }
         else if (action === 'inspect-region') inspectRegionById(target.getAttribute('data-region-id'));
         else if (action === 'select-year') selectYear(Number(target.getAttribute('data-year')));
       });
@@ -507,7 +599,13 @@
       // Region dropdown change listener
       document.getElementById('regionDropdown')?.addEventListener('change', (e) => {
         onRegionDropdownChange(e.target.value);
+        if (activeView === 'procurements') populateProcurementsView();
       });
+
+      // Procurement filters listeners
+      document.getElementById('procSearchInput')?.addEventListener('input', populateProcurementsView);
+      document.getElementById('procCategoryFilter')?.addEventListener('change', populateProcurementsView);
+      document.getElementById('procMethodFilter')?.addEventListener('change', populateProcurementsView);
 
       // Render components
       buildTimelineScrubber();
@@ -628,6 +726,8 @@
       // Re-populate table or refresh drawer if open
       if (activeView === 'table') {
         populateRegistryTable();
+      } else if (activeView === 'procurements') {
+        populateProcurementsView();
       }
 
       if (inspectingRegionObj) {
@@ -675,33 +775,48 @@
     function switchView(viewName) {
       activeView = viewName;
 
-      ['tabBtnSankey', 'tabBtnSunburst', 'tabBtnGraph', 'tabBtnTable'].forEach(btnId => {
+      ['tabBtnSankey', 'tabBtnSunburst', 'tabBtnGraph', 'tabBtnTable', 'tabBtnProcurements'].forEach(btnId => {
         const b = document.getElementById(btnId);
-        b.className = "px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5";
-        b.setAttribute('aria-selected', 'false');
+        if (b) {
+          b.className = "px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5";
+          b.setAttribute('aria-selected', 'false');
+        }
       });
 
       const activeBtnMap = {
         'sankey': 'tabBtnSankey',
         'sunburst': 'tabBtnSunburst',
         'graph': 'tabBtnGraph',
-        'table': 'tabBtnTable'
+        'table': 'tabBtnTable',
+        'procurements': 'tabBtnProcurements'
       };
       const activeBtn = document.getElementById(activeBtnMap[viewName]);
-      activeBtn.className = "px-2.5 py-1.5 rounded-sm font-semibold transition bg-accent text-white shadow-xs flex items-center gap-1.5";
-      activeBtn.setAttribute('aria-selected', 'true');
+      if (activeBtn) {
+        activeBtn.className = "px-2.5 py-1.5 rounded-sm font-semibold transition bg-accent text-white shadow-xs flex items-center gap-1.5";
+        activeBtn.setAttribute('aria-selected', 'true');
+      }
 
       const chartDom = document.getElementById('chartViewport');
       const registryDom = document.getElementById('registryView');
+      const procDom = document.getElementById('procurementView');
 
       if (viewName === 'table') {
         chartDom.classList.add('hidden');
+        procDom.classList.add('hidden');
         registryDom.classList.remove('hidden');
         document.getElementById('currentViewHeading').innerText = `Сравнительный реестр всех 20 регионов Казахстана (${activeYear} г.)`;
         document.getElementById('currentViewSubheading').innerText = "Подушевой объем социальной помощи, демографический статус и расходы по 4 ключевым услугам.";
         populateRegistryTable();
+      } else if (viewName === 'procurements') {
+        chartDom.classList.add('hidden');
+        registryDom.classList.add('hidden');
+        procDom.classList.remove('hidden');
+        document.getElementById('currentViewHeading').innerText = `Реестр государственных закупок и договоров социальной сферы (${activeYear} г.)`;
+        document.getElementById('currentViewSubheading').innerText = "Прямой аудит лотов, заказчиков (КГУ/акиматы), поставщиков, организаций инвалидов (ООИ) и способов закупки.";
+        populateProcurementsView();
       } else {
         registryDom.classList.add('hidden');
+        procDom.classList.add('hidden');
         chartDom.classList.remove('hidden');
         myChart.resize();
         renderView();
@@ -712,6 +827,10 @@
     function renderView() {
       if (activeView === 'table') {
         populateRegistryTable();
+        return;
+      }
+      if (activeView === 'procurements') {
+        populateProcurementsView();
         return;
       }
       if (activeView === 'sankey') renderSankeyView();
@@ -1066,6 +1185,130 @@
 
     document.getElementById('tableSearchInput')?.addEventListener('input', populateRegistryTable);
 
+    // 5. PROCUREMENTS VIEW (goszakup.gov.kz contracts & supplier audit)
+    let procSortAsc = false;
+
+    function populateProcurementsView() {
+      if (!window.PROCUREMENT_DATA) return;
+      const allContracts = window.PROCUREMENT_DATA.contracts || [];
+      const tbody = document.getElementById('procurementTableBody');
+      const search = (document.getElementById('procSearchInput')?.value || '').toLowerCase().trim();
+      const catFilter = document.getElementById('procCategoryFilter')?.value || 'ALL';
+      const methodFilter = document.getElementById('procMethodFilter')?.value || 'ALL';
+
+      document.getElementById('procYearLabel').innerText = activeYear;
+
+      // Filter by activeYear, selectedRegionId, search, category, method
+      let filtered = allContracts.filter(c => c.year === activeYear);
+
+      if (selectedRegionId !== 'ALL') {
+        filtered = filtered.filter(c => c.region_id === selectedRegionId);
+        const cur = multiData.years[String(activeYear)];
+        const rName = cur?.regions.find(r => r.id === selectedRegionId)?.name || 'Выбранный регион';
+        document.getElementById('procActiveRegionLabel').innerText = rName;
+        document.getElementById('procBtnResetRegion').classList.remove('hidden');
+      } else {
+        document.getElementById('procActiveRegionLabel').innerText = 'Все 20 регионов Казахстана';
+        document.getElementById('procBtnResetRegion').classList.add('hidden');
+      }
+
+      if (catFilter !== 'ALL') {
+        filtered = filtered.filter(c => c.category_id === catFilter);
+      }
+
+      if (methodFilter !== 'ALL') {
+        filtered = filtered.filter(c => c.procurement_method.toLowerCase().includes(methodFilter.toLowerCase()));
+      }
+
+      if (search) {
+        filtered = filtered.filter(c =>
+          c.item_name.toLowerCase().includes(search) ||
+          c.supplier_name.toLowerCase().includes(search) ||
+          c.customer_name.toLowerCase().includes(search) ||
+          c.contract_id.toLowerCase().includes(search) ||
+          c.supplier_bin.includes(search)
+        );
+      }
+
+      // Sort
+      filtered.sort((a, b) => procSortAsc ? a.amount_kzt - b.amount_kzt : b.amount_kzt - a.amount_kzt);
+
+      // KPIs calculation
+      const totalSum = filtered.reduce((acc, c) => acc + c.amount_kzt, 0);
+      const ooiSum = filtered.filter(c => c.supplier_type.includes('ООИ') || c.procurement_method.includes('ООИ')).reduce((acc, c) => acc + c.amount_kzt, 0);
+      const ooiShare = totalSum > 0 ? Math.round((ooiSum / totalSum) * 100) : 0;
+      const singleSourceSum = filtered.filter(c => c.procurement_method.includes('источника')).reduce((acc, c) => acc + c.amount_kzt, 0);
+      const singleShare = totalSum > 0 ? Math.round((singleSourceSum / totalSum) * 100) : 0;
+
+      document.getElementById('procTotalSum').innerText = formatTenge(totalSum);
+      document.getElementById('procTotalContractsCount').innerText = `${filtered.length} договоров в выборке`;
+      document.getElementById('procOoiShare').innerText = `${ooiShare}%`;
+      document.getElementById('procSingleSourceShare').innerText = `${singleShare}%`;
+      document.getElementById('procMatchCount').innerText = filtered.length;
+
+      tbody.innerHTML = '';
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-textMuted font-sans">По заданным фильтрам договоров не найдено. Попробуйте сбросить параметры поиска.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-surfaceSunken transition border-b border-line";
+
+        const isOoi = c.supplier_type.includes('ООИ') || c.procurement_method.includes('ООИ');
+        const methodBadge = isOoi
+          ? `<span class="px-2 py-0.5 rounded-sm text-[10px] bg-donor/10 text-donor border border-donor/30 font-medium">ООИ (Преференция)</span>`
+          : (c.procurement_method.includes('источника')
+            ? `<span class="px-2 py-0.5 rounded-sm text-[10px] bg-subvention/10 text-subvention border border-subvention/30 font-medium">Один источник</span>`
+            : `<span class="px-2 py-0.5 rounded-sm text-[10px] bg-accent/10 text-accent border border-accent/30 font-medium">Конкурс</span>`);
+
+        const statusBadge = c.status.includes('Исполнен')
+          ? `<span class="px-1.5 py-0.5 rounded-sm text-[10px] bg-donor/10 text-donor font-medium">Исполнен</span>`
+          : `<span class="px-1.5 py-0.5 rounded-sm text-[10px] bg-accent/10 text-accent font-medium">Действует</span>`;
+
+        tr.innerHTML = `
+          <td class="p-2.5 whitespace-nowrap">
+            <div class="font-bold text-textPrimary">${c.contract_id}</div>
+            <div class="text-[11px] text-textMuted">${c.contract_date}</div>
+          </td>
+          <td class="p-2.5 max-w-[220px]">
+            <div class="text-textPrimary font-sans truncate" title="${c.customer_name}">${c.customer_name}</div>
+            <div class="text-[10px] text-textMuted">БИН: ${c.customer_bin} • ${c.region_name}</div>
+          </td>
+          <td class="p-2.5 max-w-[280px]">
+            <div class="font-sans font-medium text-textPrimary leading-snug line-clamp-2" title="${c.item_name}">${c.item_name}</div>
+            <div class="text-[10px] text-accent mt-0.5">${c.category_name}</div>
+          </td>
+          <td class="p-2.5 max-w-[200px]">
+            <div class="font-sans text-textPrimary font-semibold truncate" title="${c.supplier_name}">${c.supplier_name}</div>
+            <div class="text-[10px] text-textMuted">БИН: ${c.supplier_bin} • <span class="${isOoi ? 'text-donor font-bold' : ''}">${c.supplier_type}</span></div>
+          </td>
+          <td class="p-2.5 whitespace-nowrap">
+            ${methodBadge}
+            <div class="text-[10px] text-textMuted mt-0.5 truncate max-w-[130px]" title="${c.procurement_method}">${c.procurement_method}</div>
+          </td>
+          <td class="p-2.5 whitespace-nowrap text-[11px] text-textMuted font-mono">
+            ${c.economic_code.split(' - ')[0]}
+          </td>
+          <td class="p-2.5 text-right whitespace-nowrap">
+            <div class="font-bold text-textPrimary text-sm font-mono">${formatTenge(c.amount_kzt)}</div>
+            <div class="text-[10px] text-textMuted font-mono">${c.amount_kzt.toLocaleString('ru-RU')} ₸</div>
+          </td>
+          <td class="p-2.5 text-center whitespace-nowrap">
+            ${statusBadge}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function sortProcurements() {
+      procSortAsc = !procSortAsc;
+      populateProcurementsView();
+    }
+
     // Inspector Drawer Logic
     function inspectRegionById(regId) {
       const cur = multiData.years[String(activeYear)];
@@ -1145,6 +1388,13 @@
           </div>
         `;
         list.appendChild(row);
+      }
+
+      // Update procurement button count
+      const procBtn = document.getElementById('btnDrawerOpenProcurements');
+      if (procBtn && window.PROCUREMENT_DATA) {
+        const regContracts = window.PROCUREMENT_DATA.contracts.filter(c => c.year === activeYear && c.region_id === reg.id);
+        procBtn.innerHTML = `<span>🛒</span> <span>Госзакупки: ${regContracts.length} договоров →</span>`;
       }
     }
 
