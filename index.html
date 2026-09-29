@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Анатомия бюджета Казахстана | Социальные расходы (2021–2025)</title>
+
+  <!-- Typography: Newsreader (Editorial Serif) + Plus Jakarta Sans (Swiss Grotesque) + JetBrains Mono (Financial Tabular Figures) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Apache ECharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <!-- Multi-Year Data Bundle -->
+  <script src="data/budget_data.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Newsreader', 'Georgia', 'serif'],
+            sans: ['Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            paper: {
+              DEFAULT: '#FBFBF9',
+              subtle: '#F4F4F0',
+              border: '#E8E8E2',
+              borderDark: '#D4D4CA',
+            },
+            ink: {
+              DEFAULT: '#191918',
+              secondary: '#4A4A45',
+              muted: '#787870',
+              faint: '#A8A8A0'
+            },
+            kazakh: {
+              sky: '#0082CA',
+              skyDark: '#00629B',
+              gold: '#C98708',
+              goldDark: '#996300',
+              emerald: '#167D48',
+              emeraldBg: '#EEF7F1',
+              amber: '#B85807',
+              amberBg: '#FDF4EB',
+              violet: '#6D28D9'
+            }
+          },
+          borderRadius: {
+            'none': '0px',
+            'sm': '3px',
+            'md': '5px',
+            'lg': '8px'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Warm editorial broadsheet aesthetics (FT / Reuters / NYT Upshot) */
+    body {
+      background-color: #FAF9F5;
+      color: #191918;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .tabular-nums { font-variant-numeric: tabular-nums; }
+
+    /* Custom elegant paper scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #FAF9F5; }
+    ::-webkit-scrollbar-thumb { background: #D8D8D0; border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: #B4B4AA; }
+
+    /* Subtle grid rule */
+    .editorial-rule {
+      background-image: linear-gradient(to right, #E8E8E2 50%, transparent 50%);
+      background-size: 8px 1px;
+      background-repeat: repeat-x;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-[#E8E8E2] selection:text-ink">
+
+  <!-- =========================================================================
+       1. EDITORIAL MASTHEAD & TOP KICKER
+  ========================================================================== -->
+  <header class="border-b border-paper-border bg-paper/90 backdrop-blur sticky top-0 z-30 px-6 py-4">
+    <div class="max-w-[1500px] mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      
+      <!-- Brand & Analytical Topic -->
+      <div class="flex items-center space-x-3.5">
+        <div class="w-8 h-8 rounded-sm bg-kazakh-sky flex items-center justify-center font-serif font-bold text-white text-base shadow-xs">
+          ₸
+        </div>
+        <div>
+          <div class="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.16em] text-ink-muted">
+            <span>Республика Казахстан</span>
+            <span class="text-ink-faint">•</span>
+            <span>Министерство финансов РК</span>
+            <span class="text-ink-faint">•</span>
+            <span class="text-kazakh-sky font-semibold">ЕБК: Раздел 06</span>
+          </div>
+          <h1 class="text-xl md:text-2xl font-serif font-normal text-ink tracking-tight mt-0.5">
+            Анатомия социальных расходов Казахстана
+          </h1>
+        </div>
+      </div>
+
+      <!-- Toolbar: View Switcher, Timeline, Export -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        
+        <!-- Timeline Play Button -->
+        <button id="btnPlayTimeline" class="flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium border border-paper-borderDark bg-white hover:bg-paper-subtle text-ink transition shadow-xs" onclick="togglePlayTimeline()">
+          <span id="playIcon" class="text-kazakh-sky font-bold">▶</span>
+          <span id="playLabel">Таймлайн пятилетки</span>
+        </button>
+
+        <!-- View Segmented Tabs -->
+        <div class="flex bg-paper-subtle p-0.5 rounded-sm border border-paper-border text-xs">
+          <button id="btnViewSankey" class="px-3 py-1 rounded-sm font-semibold transition bg-white text-ink shadow-xs" onclick="switchView('sankey')">
+            Потоки (Sankey)
+          </button>
+          <button id="btnViewSunburst" class="px-3 py-1 rounded-sm font-medium transition text-ink-muted hover:text-ink" onclick="switchView('sunburst')">
+            Иерархия
+          </button>
+          <button id="btnViewGraph" class="px-3 py-1 rounded-sm font-medium transition text-ink-muted hover:text-ink" onclick="switchView('graph')">
+            Сеть связей
+          </button>
+          <button id="btnViewTable" class="px-3 py-1 rounded-sm font-medium transition text-ink-muted hover:text-ink" onclick="switchView('table')">
+            Реестр 20 регионов
+          </button>
+        </div>
+
+        <!-- Export Data -->
+        <button class="px-2.5 py-1.5 rounded-sm text-xs font-mono text-ink-muted hover:text-ink border border-paper-border hover:border-paper-borderDark bg-white transition shadow-xs" onclick="exportActiveSlice()" title="Скачать данные текущего года в JSON">
+          JSON ⤓
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       2. INTERACTIVE EDITORIAL TIMELINE SCRUBBER
+  ========================================================================== -->
+  <section class="border-b border-paper-border bg-white px-6 py-3">
+    <div class="max-w-[1500px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+      
+      <!-- Interactive Year Selector -->
+      <div class="flex items-center space-x-2">
+        <span class="text-xs font-mono uppercase text-ink-muted mr-1.5">Финансовый год:</span>
+        <div class="flex items-center bg-paper-subtle rounded-sm border border-paper-border p-0.5" id="yearSelectorContainer">
+          <!-- Populated dynamically via JS -->
+        </div>
+        <span id="yearStatusBadge" class="text-[11px] font-mono px-2 py-0.5 rounded-sm border ml-1.5"></span>
+      </div>
+
+      <!-- Dynamic YoY & Historical Legislative Context -->
+      <div class="flex items-center gap-3 text-xs text-ink-secondary">
+        <span id="yoyBadge" class="font-mono font-bold text-kazakh-emerald"></span>
+        <span class="hidden md:inline-block text-paper-borderDark">|</span>
+        <p id="yearEditorialContext" class="font-serif italic text-ink text-[13px] truncate max-w-xl"></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       3. EDITORIAL LEAD & FISCAL HORIZON (NO AI-CARD SYNDROME)
+  ========================================================================== -->
+  <section class="border-b border-paper-border bg-white px-6 py-6">
+    <div class="max-w-[1500px] mx-auto">
+      
+      <!-- Narrative Lead Paragraph with Integrated Live Numbers -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-8">
+          <p class="font-serif text-lg md:text-xl text-ink leading-relaxed">
+            В <span id="leadYear" class="font-semibold underline decoration-kazakh-sky/50 decoration-2">2024</span> году совокупные расходы государственного бюджета Казахстана по разделу социальной помощи составляют <strong id="leadTotal" class="font-mono text-kazakh-skyDark font-bold">5.43 трлн ₸</strong>. 
+            Подавляющая часть средств — <strong id="leadRep" class="font-mono text-ink">4.71 трлн ₸ (86.7%)</strong> — выплачивается централизованно через Минтруда (пенсии и пособия). 
+            Оставшиеся <strong id="leadLocal" class="font-mono text-kazakh-amber font-bold">720 млрд ₸ (13.3%)</strong> распределяются между 20 регионами для адресной социальной помощи (АСП), содержания интернатов и реабилитации инвалидов.
+          </p>
+        </div>
+
+        <!-- Macro Stats Ribbon (Delicate Vertical Rules, No Boxed Clutter) -->
+        <div class="lg:col-span-4 grid grid-cols-2 gap-4 border-l border-paper-border pl-6 text-xs">
+          <div>
+            <div class="text-[10px] font-mono uppercase text-ink-muted">Республиканский центр</div>
+            <div id="statRepTotal" class="text-lg font-mono font-bold text-ink mt-0.5 tabular-nums">4.71 трлн ₸</div>
+            <div class="text-[11px] text-ink-muted mt-0.5">Базовые пенсии и пособия</div>
+          </div>
+          <div>
+            <div class="text-[10px] font-mono uppercase text-ink-muted">Местные бюджеты</div>
+            <div id="statLocalTotal" class="text-lg font-mono font-bold text-kazakh-amber mt-0.5 tabular-nums">720.0 млрд ₸</div>
+            <div class="text-[11px] text-ink-muted mt-0.5">20 регионов и городов</div>
+          </div>
+          <div class="col-span-2 pt-2 border-t border-paper-border flex justify-between items-center text-[11px] font-mono">
+            <span class="text-ink-muted">Топ-получатель соцподдержки:</span>
+            <span id="statTopRegion" class="font-semibold text-ink">Туркестанская обл. (44 848 ₸/чел)</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       4. MAIN INTERACTIVE WORKSPACE (SANKEY FLOWS + REGIONAL LEDGER)
+  ========================================================================== -->
+  <main class="max-w-[1500px] mx-auto w-full px-6 py-8 flex-1 flex flex-col space-y-6">
+
+    <!-- Workspace Controls Bar -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-paper-border gap-4">
+      <div>
+        <h2 id="viewHeading" class="text-base font-serif font-normal text-ink">
+          Карта финансовых потоков: Государственный бюджет → 20 Регионов → Социальные услуги
+        </h2>
+        <p id="viewSubheading" class="text-xs text-ink-muted mt-0.5">
+          Наведите на линию перечисления для просмотра суммы. Нажмите на любой регион для изоляции и детального аудита.
+        </p>
+      </div>
+
+      <!-- Quick Jump / Filter Dropdown -->
+      <div class="flex items-center gap-2 text-xs">
+        <span class="text-ink-muted font-mono text-[11px]">Изолировать регион:</span>
+        <select id="regionDropdown" class="bg-white border border-paper-borderDark text-ink text-xs rounded-sm px-2.5 py-1.5 focus:border-kazakh-sky focus:outline-none cursor-pointer shadow-xs">
+          <option value="ALL">Все 20 регионов Казахстана</option>
+        </select>
+        <button id="btnResetFilter" class="hidden px-2 py-1 text-xs text-ink-muted hover:text-ink border border-paper-border rounded-sm hover:bg-paper-subtle transition" onclick="resetRegionFocus()">
+          Сброс
+        </button>
+      </div>
+    </div>
+
+    <!-- Layout Grid: Left Diagram (68%) / Right Regional Ledger (32%) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start min-h-[660px]">
+      
+      <!-- Visual Canvas Area (8 Columns on Desktop) -->
+      <div class="lg:col-span-8 bg-white border border-paper-border rounded-sm p-4 relative min-h-[660px] flex flex-col shadow-xs" id="canvasBox">
+        
+        <!-- ECharts Host Viewport -->
+        <div id="chartViewport" class="w-full h-full min-h-[620px] flex-1"></div>
+
+        <!-- Full Table Registry View (Alternative Tab) -->
+        <div id="registryView" class="hidden absolute inset-0 bg-white p-6 overflow-y-auto">
+          <div class="flex items-center justify-between mb-4">
+            <div class="text-xs text-ink-muted font-mono">
+              Сравнительный реестр 20 административно-территориальных единиц РК (<span id="tableYearLabel">2024</span> г.)
+            </div>
+            <input type="text" id="tableSearchInput" placeholder="Поиск региона..." class="bg-paper-subtle border border-paper-borderDark rounded-sm text-xs px-3 py-1.5 text-ink placeholder-ink-muted focus:outline-none focus:border-kazakh-sky w-60">
+          </div>
+
+          <table class="w-full text-left text-xs border-collapse font-sans">
+            <thead class="sticky top-0 bg-paper-subtle text-ink-muted font-mono uppercase text-[10px] tracking-wider border-b border-paper-border">
+              <tr>
+                <th class="p-2.5">#</th>
+                <th class="p-2.5">Регион</th>
+                <th class="p-2.5">Статус</th>
+                <th class="p-2.5 text-right">Население</th>
+                <th class="p-2.5 text-right">Бюджет (₸)</th>
+                <th class="p-2.5 text-right">На 1 жителя</th>
+                <th class="p-2.5 text-right">АСП</th>
+                <th class="p-2.5 text-right">Интернаты / МСУ</th>
+                <th class="p-2.5 text-center">Действие</th>
+              </tr>
+            </thead>
+            <tbody id="registryTableBody" class="divide-y divide-paper-border font-mono text-[11px] text-ink">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Diagram Color Legend Footnote -->
+        <div class="pt-3 mt-2 border-t border-paper-border flex flex-wrap items-center justify-between gap-3 text-[11px] text-ink-muted font-mono">
+          <div class="flex flex-wrap items-center gap-4">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-none bg-[#0082CA] inline-block"></span> Республиканский центр</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-none bg-[#167D48] inline-block"></span> Доноры (Изъятия: Алматы, Астана, Атырау)</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-none bg-[#B85807] inline-block"></span> Субвенционные регионы</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-none bg-[#6D28D9] inline-block"></span> Социальные услуги</span>
+          </div>
+          <div class="font-serif italic text-ink-muted text-xs">
+            Источник: Официальные отчеты Министерства финансов РК
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Regional Explorer & Master-Detail Drawer (4 Columns) -->
+      <div class="lg:col-span-4 space-y-5">
+        
+        <!-- Live Selected Region Inspector (Deep Dive Card) -->
+        <div id="inspectorCard" class="bg-white border border-paper-border rounded-sm p-5 shadow-xs relative">
+          <div class="flex items-start justify-between border-b border-paper-border pb-3">
+            <div>
+              <span id="drawerStatusBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-sm border uppercase"></span>
+              <h3 id="drawerRegionTitle" class="text-lg font-serif font-normal text-ink mt-1">г. Алматы</h3>
+            </div>
+            <button id="btnFocusRegion" class="text-xs text-kazakh-sky hover:underline font-mono" onclick="focusSelectedRegion()">
+              Изолировать →
+            </button>
+          </div>
+
+          <div class="mt-4 space-y-2.5 text-xs">
+            <div class="flex justify-between items-center py-1 border-b border-paper-border/60">
+              <span class="text-ink-secondary">Население:</span>
+              <span id="drawerPop" class="font-mono font-medium text-ink"></span>
+            </div>
+            <div class="flex justify-between items-center py-1 border-b border-paper-border/60">
+              <span class="text-ink-secondary">Социальный бюджет региона:</span>
+              <span id="drawerTotal" class="font-mono font-bold text-ink"></span>
+            </div>
+            <div class="flex justify-between items-center py-1.5 border-b border-paper-border/60">
+              <span class="text-ink-secondary">Расходы на 1 жителя:</span>
+              <div class="text-right">
+                <span id="drawerPerCapita" class="font-mono font-bold text-kazakh-skyDark"></span>
+                <span id="drawerPerCapitaDelta" class="text-[10px] font-mono block mt-0.5"></span>
+              </div>
+            </div>
+
+            <!-- Breakdown across 4 local services -->
+            <div class="pt-2">
+              <div class="text-[10px] uppercase tracking-wider text-ink-muted font-mono mb-2">Структура местных расходов:</div>
+              <div class="space-y-1.5" id="drawerServicesList">
+                <!-- Dynamically rendered -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scannable Top Regions Quick Ledger (Micro-bars) -->
+        <div class="bg-white border border-paper-border rounded-sm p-5 shadow-xs space-y-3">
+          <div class="flex items-center justify-between border-b border-paper-border pb-2">
+            <h4 class="text-xs font-mono uppercase text-ink tracking-wider font-semibold">
+              Расходы на душу населения (₸ / чел.)
+            </h4>
+            <span class="text-[10px] font-mono text-ink-muted">20 регионов</span>
+          </div>
+
+          <div id="quickLedgerList" class="space-y-2 max-h-[300px] overflow-y-auto pr-1 text-xs">
+            <!-- Populated via JS with ranking bars -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         5. EDITORIAL COMMENTARY & FISCAL INSIGHTS (NEWSPAPER OF RECORD FORMAT)
+    ========================================================================== -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-paper-border">
+      <div>
+        <h4 class="font-serif text-base text-ink mb-1.5 flex items-center gap-2">
+          <span class="font-mono text-xs font-bold text-kazakh-sky">01.</span>
+          Почему Алматы и Атырау отдают деньги?
+        </h4>
+        <p class="text-xs text-ink-secondary leading-relaxed font-sans">
+          Алматы, Астана и Атырауская область формируют до 60% налоговой базы страны. В этих регионах доходы превышают гарантированные расходы, поэтому Минфин производит <strong>бюджетные изъятия</strong>. Эти средства уходят в республиканский бюджет для субсидирования дотационных областей.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-serif text-base text-ink mb-1.5 flex items-center gap-2">
+          <span class="font-mono text-xs font-bold text-kazakh-gold">02.</span>
+          Феномен Туркестанской области
+        </h4>
+        <p class="text-xs text-ink-secondary leading-relaxed font-sans">
+          Туркестанская область — рекордсмен Казахстана по социальной поддержке (96 млрд ₸ в 2024 г., 44 848 ₸ на человека). Это связано с высочайшей рождаемостью в стране и концентрацией многодетных семей, получающих адресную социальную помощь (АСП).
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-serif text-base text-ink mb-1.5 flex items-center gap-2">
+          <span class="font-mono text-xs font-bold text-kazakh-emerald">03.</span>
+          Пятилетка роста (+52% за 2021–2025)
+        </h4>
+        <p class="text-xs text-ink-secondary leading-relaxed font-sans">
+          С 2021 по 2025 год бюджет соцсферы вырос с 3.98 до 6.05 трлн ₸. Рост обусловлен тремя реформами: внедрением нового Социального кодекса РК, продлением выплат по уходу за ребенком до 1.5 лет и запуском Цифровой карты семьи.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       6. EDITORIAL COLOPHON / FOOTER
+  ========================================================================== -->
+  <footer class="border-t border-paper-border bg-white py-6 px-6 mt-12 text-xs text-ink-muted font-mono">
+    <div class="max-w-[1500px] mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-[11px]">
+      <div>
+        QAZAQSTAN STATE BUDGET DATA REPOSITORY • РАЗДЕЛ 06 «СОЦЗАЩИТА И ОБЕСПЕЧЕНИЕ» • 2021–2025
+      </div>
+      <div class="text-ink-muted">
+        Автономный клиент • Без серверов и бэкенда • Apache ECharts • Open Data RK
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       7. APPLICATION CONTROLLER SCRIPT
+  ========================================================================== -->
+  <script>
+    // State management
+    let multiData = null;
+    let activeYear = 2024;
+    let activeView = 'sankey';
+    let selectedRegionId = 'ALL';
+    let myChart = null;
+    let isPlaying = false;
+    let playbackInterval = null;
+    let inspectingRegionObj = null;
+
+    // Formatting currency in Kazakhstani Tenge
+    function formatTenge(amount, precision = 2) {
+      if (amount >= 1e12) return (amount / 1e12).toFixed(precision) + ' трлн ₸';
+      if (amount >= 1e9) return (amount / 1e9).toFixed(precision) + ' млрд ₸';
+      if (amount >= 1e6) return (amount / 1e6).toFixed(1) + ' млн ₸';
+      return amount.toLocaleString('ru-RU') + ' ₸';
+    }
+
+    // App Initialization
+    async function initApp() {
+      if (window.BUDGET_MULTI_DATA) {
+        multiData = window.BUDGET_MULTI_DATA;
+      } else {
+        try {
+          const res = await fetch('data/budget_social_multiyear.json');
+          multiData = await res.json();
+        } catch (e) {
+          console.error("Unable to load data slice:", e);
+          return;
+        }
+      }
+
+      activeYear = multiData.meta.default_year || 2024;
+
+      // Initialize ECharts instance (Light Editorial Theme)
+      const chartDom = document.getElementById('chartViewport');
+      myChart = echarts.init(chartDom, null, { renderer: 'canvas' });
+      window.addEventListener('resize', () => myChart && myChart.resize());
+
+      // Build components
+      buildYearSelector();
+      populateRegionDropdown();
+      updateYearContext();
+
+      // Default inspector to first region
+      const cur = multiData.years[String(activeYear)];
+      if (cur && cur.regions.length > 0) {
+        openInspectorCard(cur.regions[0]);
+      }
+
+      // Render view
+      renderView();
+    }
+
+    // Build the Year Selector Ribbon
+    function buildYearSelector() {
+      const container = document.getElementById('yearSelectorContainer');
+      container.innerHTML = '';
+
+      multiData.meta.available_years.forEach(yr => {
+        const btn = document.createElement('button');
+        btn.id = `btnYear_${yr}`;
+        btn.className = yr === activeYear
+          ? "px-2.5 py-1 text-xs font-mono font-bold rounded-sm bg-white text-ink shadow-xs border border-paper-borderDark"
+          : "px-2.5 py-1 text-xs font-mono text-ink-muted hover:text-ink transition";
+        btn.innerText = yr;
+        btn.onclick = () => selectYear(yr);
+        container.appendChild(btn);
+      });
+    }
+
+    function selectYear(yr) {
+      activeYear = yr;
+
+      multiData.meta.available_years.forEach(y => {
+        const b = document.getElementById(`btnYear_${y}`);
+        if (b) {
+          b.className = y === activeYear
+            ? "px-2.5 py-1 text-xs font-mono font-bold rounded-sm bg-white text-ink shadow-xs border border-paper-borderDark"
+            : "px-2.5 py-1 text-xs font-mono text-ink-muted hover:text-ink transition";
+        }
+      });
+
+      updateYearContext();
+      renderView();
+    }
+
+    // Update Editorial HUD & Lead Metrics
+    function updateYearContext() {
+      const cur = multiData.years[String(activeYear)];
+      if (!cur) return;
+
+      document.getElementById('leadYear').innerText = activeYear;
+      document.getElementById('leadTotal').innerText = formatTenge(cur.total_social_kzt);
+      document.getElementById('leadRep').innerText = `${formatTenge(cur.republican_total_kzt)} (${cur.republican_share_pct}%)`;
+      document.getElementById('leadLocal').innerText = `${formatTenge(cur.local_total_kzt)} (${cur.local_share_pct}%)`;
+
+      document.getElementById('statRepTotal').innerText = formatTenge(cur.republican_total_kzt);
+      document.getElementById('statLocalTotal').innerText = formatTenge(cur.local_total_kzt);
+
+      // Status Badge
+      const statusBadge = document.getElementById('yearStatusBadge');
+      statusBadge.innerText = cur.status;
+      if (cur.status.includes('Факт')) {
+        statusBadge.className = "text-[11px] font-mono px-2 py-0.5 rounded-sm border border-kazakh-emerald/30 bg-kazakh-emeraldBg text-kazakh-emerald ml-1.5";
+      } else if (cur.status.includes('Уточненный')) {
+        statusBadge.className = "text-[11px] font-mono px-2 py-0.5 rounded-sm border border-kazakh-sky/30 bg-blue-50 text-kazakh-skyDark ml-1.5";
+      } else {
+        statusBadge.className = "text-[11px] font-mono px-2 py-0.5 rounded-sm border border-kazakh-gold/30 bg-amber-50 text-kazakh-amber ml-1.5";
+      }
+
+      // YoY Badge
+      const yoy = document.getElementById('yoyBadge');
+      if (cur.yoy_pct !== null && cur.yoy_pct !== undefined) {
+        yoy.innerText = `+${cur.yoy_pct}% YoY`;
+        yoy.className = "font-mono font-bold text-kazakh-emerald text-xs";
+      } else {
+        yoy.innerText = 'Базовый период';
+        yoy.className = "font-mono text-ink-muted text-xs";
+      }
+
+      // Editorial Context
+      document.getElementById('yearEditorialContext').innerText = `«${cur.context}»`;
+
+      // Top Region Lead
+      const topReg = cur.top_regions_by_budget[0];
+      if (topReg) {
+        document.getElementById('statTopRegion').innerText = `${topReg.name} (${topReg.per_capita_kzt.toLocaleString('ru-RU')} ₸/чел)`;
+      }
+
+      // Populate Quick Ledger
+      populateQuickLedger();
+
+      // Refresh inspector if region selected
+      if (inspectingRegionObj) {
+        const updatedReg = cur.regions.find(r => r.id === inspectingRegionObj.id) || cur.regions[0];
+        openInspectorCard(updatedReg);
+      }
+
+      if (activeView === 'table') {
+        populateRegistryTable();
+      }
+    }
+
+    // Populate Region Dropdown
+    function populateRegionDropdown() {
+      const cur = multiData.years[String(activeYear)];
+      const sel = document.getElementById('regionDropdown');
+      sel.innerHTML = '<option value="ALL">Все 20 регионов Казахстана</option>';
+
+      cur.regions.forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r.id;
+        opt.innerText = `${r.name}`;
+        sel.appendChild(opt);
+      });
+
+      sel.addEventListener('change', (e) => {
+        selectedRegionId = e.target.value;
+        const btnReset = document.getElementById('btnResetFilter');
+        if (selectedRegionId === 'ALL') {
+          btnReset.classList.add('hidden');
+        } else {
+          btnReset.classList.remove('hidden');
+          const r = cur.regions.find(x => x.id === selectedRegionId);
+          if (r) openInspectorCard(r);
+        }
+        renderView();
+      });
+    }
+
+    function resetRegionFocus() {
+      selectedRegionId = 'ALL';
+      document.getElementById('regionDropdown').value = 'ALL';
+      document.getElementById('btnResetFilter').classList.add('hidden');
+      renderView();
+    }
+
+    // Populate Right Column Scannable Ledger
+    function populateQuickLedger() {
+      const cur = multiData.years[String(activeYear)];
+      const list = document.getElementById('quickLedgerList');
+      list.innerHTML = '';
+
+      const maxPerCapita = Math.max(...cur.regions.map(r => r.per_capita_kzt));
+
+      cur.regions.forEach((r, idx) => {
+        const barPct = Math.round((r.per_capita_kzt / maxPerCapita) * 100);
+        const item = document.createElement('div');
+        item.className = "p-1.5 rounded-sm hover:bg-paper-subtle cursor-pointer transition flex items-center justify-between";
+        item.onclick = () => openInspectorCard(r);
+
+        item.innerHTML = `
+          <div class="min-w-0 flex-1 pr-2">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="truncate font-medium text-ink">${idx + 1}. ${r.name}</span>
+              <span class="font-mono text-ink font-semibold">${r.per_capita_kzt.toLocaleString('ru-RU')} ₸</span>
+            </div>
+            <div class="w-full bg-paper-border h-1 rounded-none mt-1 overflow-hidden">
+              <div class="bg-kazakh-sky h-full" style="width: ${barPct}%"></div>
+            </div>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    // Switch View
+    function switchView(viewName) {
+      activeView = viewName;
+
+      ['btnViewSankey', 'btnViewSunburst', 'btnViewGraph', 'btnViewTable'].forEach(btnId => {
+        const b = document.getElementById(btnId);
+        b.className = "px-3 py-1 rounded-sm font-medium transition text-ink-muted hover:text-ink";
+      });
+
+      const activeBtnMap = {
+        'sankey': 'btnViewSankey',
+        'sunburst': 'btnViewSunburst',
+        'graph': 'btnViewGraph',
+        'table': 'btnViewTable'
+      };
+      document.getElementById(activeBtnMap[viewName]).className = "px-3 py-1 rounded-sm font-semibold transition bg-white text-ink shadow-xs";
+
+      const chartDom = document.getElementById('chartViewport');
+      const registryDom = document.getElementById('registryView');
+
+      if (viewName === 'table') {
+        chartDom.classList.add('hidden');
+        registryDom.classList.remove('hidden');
+        document.getElementById('viewHeading').innerText = `Сравнительный реестр всех 20 регионов Казахстана (${activeYear} г.)`;
+        document.getElementById('viewSubheading').innerText = "Подушевое финансирование, статус донорства и объемы финансирования ключевых соцуслуг";
+        populateRegistryTable();
+      } else {
+        registryDom.classList.add('hidden');
+        chartDom.classList.remove('hidden');
+        myChart.resize();
+        renderView();
+      }
+    }
+
+    // Render Dispatcher
+    function renderView() {
+      if (activeView === 'table') {
+        populateRegistryTable();
+        return;
+      }
+      if (activeView === 'sankey') renderSankeyView();
+      if (activeView === 'sunburst') renderSunburstView();
+      if (activeView === 'graph') renderGraphView();
+    }
+
+    // Editorial Palette (Light Broadsheet)
+    const EDITORIAL_PALETTE = {
+      root: '#0082CA',          // Sky Blue (State Core)
+      republican: '#0284C7',
+      rep_prog: '#4F46E5',      // Indigo
+      local_level: '#B85807',   // Amber
+      region_donor: '#167D48',  // Emerald
+      region_subv: '#C98708',   // Steppe Gold
+      region_neut: '#64748B',   // Slate
+      soc_group: '#6D28D9'      // Violet
+    };
+
+    // 1. SANKEY VIEW
+    function renderSankeyView() {
+      const cur = multiData.years[String(activeYear)];
+
+      document.getElementById('viewHeading').innerText = selectedRegionId === 'ALL'
+        ? `Карта финансовых потоков: Государственный бюджет → 20 Регионов → Социальные услуги (${activeYear})`
+        : `Детализированный поток финансирования: «${cur.regions.find(r => r.id === selectedRegionId)?.name}» (${activeYear})`;
+
+      let nodes = [];
+      let links = [];
+
+      if (selectedRegionId === 'ALL') {
+        nodes = cur.nodes.map(n => ({
+          name: n.name,
+          itemStyle: {
+            color: EDITORIAL_PALETTE[n.category] || '#64748B',
+            borderColor: '#FAF9F5',
+            borderWidth: 1
+          }
+        }));
+
+        const idToName = {};
+        cur.nodes.forEach(n => idToName[n.id] = n.name);
+
+        links = cur.links.map(l => ({
+          source: idToName[l.source],
+          target: idToName[l.target],
+          value: l.value
+        }));
+      } else {
+        const reg = cur.regions.find(r => r.id === selectedRegionId);
+        const rootName = `Госбюджет (${activeYear})`;
+        const localName = `Местные бюджеты`;
+        const regName = reg.name;
+
+        nodes = [
+          { name: rootName, itemStyle: { color: EDITORIAL_PALETTE.root } },
+          { name: localName, itemStyle: { color: EDITORIAL_PALETTE.local_level } },
+          { name: regName, itemStyle: { color: reg.donor_status === 'donor' ? EDITORIAL_PALETTE.region_donor : EDITORIAL_PALETTE.region_subv } }
+        ];
+
+        links = [
+          { source: rootName, target: localName, value: cur.local_total_kzt },
+          { source: localName, target: regName, value: reg.total_social_kzt }
+        ];
+
+        for (const [sKey, sVal] of Object.entries(reg.services)) {
+          const sName = multiData.categories_info[sKey].name;
+          nodes.push({ name: sName, itemStyle: { color: EDITORIAL_PALETTE.soc_group } });
+          links.push({ source: regName, target: sName, value: sVal });
+        }
+      }
+
+      const option = {
+        backgroundColor: 'transparent',
+        animationDurationUpdate: 800,
+        tooltip: {
+          trigger: 'item',
+          triggerOn: 'mousemove',
+          backgroundColor: '#FFFFFF',
+          borderColor: '#E8E8E2',
+          borderWidth: 1,
+          padding: [10, 14],
+          textStyle: { color: '#191918', fontFamily: 'Plus Jakarta Sans', fontSize: 12 },
+          extraCssText: 'box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-radius: 4px;',
+          formatter: function (p) {
+            if (p.dataType === 'edge') {
+              return `
+                <div class="text-[10px] font-mono uppercase text-ink-muted mb-0.5">Движение средств (${activeYear})</div>
+                <div class="text-ink font-semibold">${p.data.source} → ${p.data.target}</div>
+                <div class="text-kazakh-skyDark font-mono font-bold text-sm mt-1">${formatTenge(p.data.value)}</div>
+              `;
+            }
+            return `
+              <div class="text-[10px] font-mono uppercase text-ink-muted mb-0.5">Бюджетная позиция</div>
+              <div class="text-ink font-semibold text-sm">${p.data.name}</div>
+              <div class="text-kazakh-skyDark font-mono font-bold text-sm mt-1">${formatTenge(p.value)}</div>
+            `;
+          }
+        },
+        series: [
+          {
+            type: 'sankey',
+            layout: 'none',
+            emphasis: { focus: 'adjacency' },
+            data: nodes,
+            links: links,
+            top: '5%',
+            bottom: '7%',
+            left: '2%',
+            right: '12%',
+            nodeWidth: 14,
+            nodeGap: 14,
+            draggable: true,
+            lineStyle: {
+              color: 'gradient',
+              curveness: 0.5,
+              opacity: 0.38
+            },
+            label: {
+              color: '#191918',
+              fontSize: 11,
+              fontFamily: 'Plus Jakarta Sans',
+              formatter: '{b}'
+            }
+          }
+        ]
+      };
+
+      myChart.setOption(option, true);
+
+      // Node click interaction: open inspector drawer
+      myChart.off('click');
+      myChart.on('click', function(params) {
+        if (params.dataType === 'node') {
+          const curYear = multiData.years[String(activeYear)];
+          const matched = curYear.regions.find(r => r.name === params.name);
+          if (matched) {
+            openInspectorCard(matched);
+          }
+        }
+      });
+    }
+
+    // 2. SUNBURST VIEW
+    function renderSunburstView() {
+      const cur = multiData.years[String(activeYear)];
+      document.getElementById('viewHeading').innerText = `Иерархическая структура расходов (Радиальная декомпозиция, ${activeYear})`;
+      document.getElementById('viewSubheading').innerText = "Нажимайте на секторы колеса для плавного приближения структуры расходов";
+
+      const option = {
+        backgroundColor: 'transparent',
+        tooltip: {
+          trigger: 'item',
+          backgroundColor: '#FFFFFF',
+          borderColor: '#E8E8E2',
+          padding: [10, 14],
+          textStyle: { color: '#191918', fontFamily: 'Plus Jakarta Sans', fontSize: 12 },
+          extraCssText: 'box-shadow: 0 4px 14px rgba(0,0,0,0.08);',
+          formatter: function (info) {
+            return `
+              <div class="text-[10px] font-mono text-ink-muted uppercase">Позиция</div>
+              <div class="text-ink font-semibold mt-0.5">${info.name}</div>
+              <div class="text-kazakh-skyDark font-mono font-bold mt-1">${formatTenge(info.value)}</div>
+            `;
+          }
+        },
+        series: {
+          type: 'sunburst',
+          data: cur.tree.children,
+          radius: [0, '94%'],
+          sort: undefined,
+          emphasis: { focus: 'ancestor' },
+          levels: [
+            {},
+            {
+              r0: '0%',
+              r: '24%',
+              itemStyle: { borderWidth: 1.5, borderColor: '#FFFFFF', color: '#0082CA' },
+              label: { rotate: 'tangential', fontSize: 11, color: '#FFFFFF', fontFamily: 'Plus Jakarta Sans' }
+            },
+            {
+              r0: '24%',
+              r: '58%',
+              itemStyle: { borderWidth: 1.5, borderColor: '#FFFFFF', color: '#E8E8E2' },
+              label: { align: 'right', fontSize: 10, color: '#191918', fontFamily: 'Plus Jakarta Sans' }
+            },
+            {
+              r0: '58%',
+              r: '92%',
+              itemStyle: { borderWidth: 1, borderColor: '#FFFFFF' },
+              label: { position: 'outside', padding: 2, fontSize: 9, color: '#787870', fontFamily: 'JetBrains Mono' }
+            }
+          ]
+        }
+      };
+
+      myChart.setOption(option, true);
+    }
+
+    // 3. GRAPH VIEW (Force Directed)
+    function renderGraphView() {
+      const cur = multiData.years[String(activeYear)];
+      document.getElementById('viewHeading').innerText = `Сетевой топологический граф связей (${activeYear})`;
+      document.getElementById('viewSubheading').innerText = "Топологическая физическая модель: перетаскивайте узлы для анализа плотности перетоков";
+
+      const idToName = {};
+      cur.nodes.forEach(n => idToName[n.id] = n.name);
+
+      const graphNodes = cur.nodes.map(n => {
+        let size = Math.max(16, Math.min(60, Math.log10(n.value || 1e6) * 4.2));
+        if (n.category === 'root') size = 62;
+        if (n.category === 'level') size = 46;
+
+        return {
+          id: n.id,
+          name: n.name,
+          value: n.value,
+          symbolSize: size,
+          itemStyle: {
+            color: EDITORIAL_PALETTE[n.category] || '#64748B',
+            borderColor: '#FFFFFF',
+            borderWidth: 1.5
+          },
+          label: {
+            show: size > 26,
+            color: '#191918',
+            fontSize: 10,
+            fontFamily: 'Plus Jakarta Sans'
+          }
+        };
+      });
+
+      const graphLinks = cur.links.map(l => ({
+        source: l.source,
+        target: l.target,
+        value: l.value,
+        lineStyle: {
+          width: Math.max(1, Math.min(6, Math.log10(l.value) - 8)),
+          opacity: 0.35,
+          curveness: 0.15
+        }
+      }));
+
+      const option = {
+        backgroundColor: 'transparent',
+        tooltip: {
+          backgroundColor: '#FFFFFF',
+          borderColor: '#E8E8E2',
+          padding: [10, 14],
+          textStyle: { color: '#191918', fontFamily: 'Plus Jakarta Sans', fontSize: 12 },
+          extraCssText: 'box-shadow: 0 4px 14px rgba(0,0,0,0.08);',
+          formatter: function (p) {
+            if (p.dataType === 'edge') {
+              return `<div>${idToName[p.data.source]} → ${idToName[p.data.target]}</div><div class="text-kazakh-skyDark font-mono font-bold mt-1">${formatTenge(p.data.value)}</div>`;
+            }
+            return `<div class="font-medium">${p.data.name}</div><div class="text-kazakh-skyDark font-mono font-bold mt-1">${formatTenge(p.data.value)}</div>`;
+          }
+        },
+        series: [
+          {
+            type: 'graph',
+            layout: 'force',
+            data: graphNodes,
+            links: graphLinks,
+            roam: true,
+            draggable: true,
+            label: { position: 'right', formatter: '{b}' },
+            force: {
+              repulsion: 340,
+              edgeLength: [50, 190],
+              gravity: 0.12
+            }
+          }
+        ]
+      };
+
+      myChart.setOption(option, true);
+    }
+
+    // 4. REGISTRY TABLE VIEW
+    function populateRegistryTable() {
+      const cur = multiData.years[String(activeYear)];
+      const tbody = document.getElementById('registryTableBody');
+      const search = (document.getElementById('tableSearchInput').value || '').toLowerCase();
+      document.getElementById('tableYearLabel').innerText = activeYear;
+      tbody.innerHTML = '';
+
+      const filtered = cur.regions
+        .filter(r => r.name.toLowerCase().includes(search))
+        .sort((a, b) => b.total_social_kzt - a.total_social_kzt);
+
+      filtered.forEach((r, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-paper-subtle transition border-b border-paper-border";
+
+        const badge = r.donor_status === 'donor'
+          ? '<span class="px-2 py-0.5 rounded-sm text-[10px] bg-kazakh-emeraldBg text-kazakh-emerald border border-kazakh-emerald/30 font-medium">Донор (Изъятия)</span>'
+          : '<span class="px-2 py-0.5 rounded-sm text-[10px] bg-amber-50 text-kazakh-amber border border-kazakh-gold/30 font-medium">Субвенции</span>';
+
+        tr.innerHTML = `
+          <td class="p-2.5 text-ink-muted font-mono text-[11px]">${idx + 1}</td>
+          <td class="p-2.5 font-sans font-medium text-ink flex items-center gap-1.5">
+            ${r.name}
+            ${r.type === 'city' ? '<span class="text-[9px] font-mono text-kazakh-sky bg-blue-50 px-1 py-0.2 rounded border border-kazakh-sky/20">Город РК</span>' : ''}
+          </td>
+          <td class="p-2.5 font-mono">${badge}</td>
+          <td class="p-2.5 text-right text-ink font-mono">${r.population.toLocaleString('ru-RU')}</td>
+          <td class="p-2.5 text-right font-mono font-semibold text-ink">${formatTenge(r.total_social_kzt)}</td>
+          <td class="p-2.5 text-right font-mono text-kazakh-skyDark font-medium">${r.per_capita_kzt.toLocaleString('ru-RU')} ₸</td>
+          <td class="p-2.5 text-right font-mono text-ink-muted">${formatTenge(r.services.group_asp)}</td>
+          <td class="p-2.5 text-right font-mono text-ink-muted">${formatTenge(r.services.group_special_institutions)}</td>
+          <td class="p-2.5 text-center">
+            <button class="px-2 py-0.5 text-[10px] font-mono bg-paper-subtle hover:bg-white text-ink rounded-sm border border-paper-borderDark transition" onclick='inspectRegionById("${r.id}")'>
+              Инспектор →
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('tableSearchInput')?.addEventListener('input', populateRegistryTable);
+
+    // Inspector Card Population & National Benchmark Calculation
+    function inspectRegionById(regId) {
+      const cur = multiData.years[String(activeYear)];
+      const r = cur.regions.find(x => x.id === regId);
+      if (r) openInspectorCard(r);
+    }
+
+    function openInspectorCard(reg) {
+      inspectingRegionObj = reg;
+
+      document.getElementById('drawerRegionTitle').innerText = reg.name;
+      document.getElementById('drawerPop').innerText = `${reg.population.toLocaleString('ru-RU')} чел.`;
+      document.getElementById('drawerTotal').innerText = formatTenge(reg.total_social_kzt);
+      document.getElementById('drawerPerCapita').innerText = `${reg.per_capita_kzt.toLocaleString('ru-RU')} ₸ / чел.`;
+
+      // National benchmark calculation
+      const cur = multiData.years[String(activeYear)];
+      const totalPop = cur.regions.reduce((acc, r) => acc + r.population, 0);
+      const avgPerCapita = Math.round(cur.local_total_kzt / totalPop);
+      const diffPct = Math.round(((reg.per_capita_kzt - avgPerCapita) / avgPerCapita) * 100);
+
+      const deltaEl = document.getElementById('drawerPerCapitaDelta');
+      if (diffPct >= 0) {
+        deltaEl.innerText = `▲ +${diffPct}% выше медианы по РК (${formatTenge(avgPerCapita)})`;
+        deltaEl.className = "text-[10px] font-mono text-kazakh-emerald block mt-0.5";
+      } else {
+        deltaEl.innerText = `▼ ${diffPct}% ниже медианы по РК (${formatTenge(avgPerCapita)})`;
+        deltaEl.className = "text-[10px] font-mono text-ink-muted block mt-0.5";
+      }
+
+      const badge = document.getElementById('drawerStatusBadge');
+      if (reg.donor_status === 'donor') {
+        badge.innerText = 'РЕГИОН-ДОНОР (ИЗЪЯТИЯ)';
+        badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded-sm border border-kazakh-emerald/30 bg-kazakh-emeraldBg text-kazakh-emerald';
+      } else {
+        badge.innerText = 'СУБВЕНЦИОННЫЙ РЕГИОН';
+        badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded-sm border border-kazakh-gold/30 bg-amber-50 text-kazakh-amber';
+      }
+
+      // Populate services
+      const list = document.getElementById('drawerServicesList');
+      list.innerHTML = '';
+      for (const [sKey, sVal] of Object.entries(reg.services)) {
+        const sName = multiData.categories_info[sKey].name;
+        const pct = ((sVal / reg.total_social_kzt) * 100).toFixed(1);
+        const row = document.createElement('div');
+        row.className = "flex justify-between items-center text-xs py-1 border-b border-paper-border";
+        row.innerHTML = `
+          <span class="text-ink-secondary truncate max-w-[180px]" title="${sName}">${sName}</span>
+          <div class="text-right">
+            <span class="font-mono text-ink font-semibold">${formatTenge(sVal)}</span>
+            <span class="text-[10px] font-mono text-ink-muted ml-1">(${pct}%)</span>
+          </div>
+        `;
+        list.appendChild(row);
+      }
+    }
+
+    function focusSelectedRegion() {
+      if (!inspectingRegionObj) return;
+      selectedRegionId = inspectingRegionObj.id;
+      document.getElementById('regionDropdown').value = selectedRegionId;
+      document.getElementById('btnResetFilter').classList.remove('hidden');
+      switchView('sankey');
+    }
+
+    // Playback timeline animation (2021 -> 2025)
+    function togglePlayTimeline() {
+      if (isPlaying) {
+        stopPlayback();
+      } else {
+        startPlayback();
+      }
+    }
+
+    function startPlayback() {
+      isPlaying = true;
+      document.getElementById('playIcon').innerText = '⏸';
+      document.getElementById('playLabel').innerText = 'Пауза';
+
+      const years = multiData.meta.available_years;
+      let currentIndex = years.indexOf(activeYear);
+
+      playbackInterval = setInterval(() => {
+        currentIndex = (currentIndex + 1) % years.length;
+        selectYear(years[currentIndex]);
+      }, 2500);
+    }
+
+    function stopPlayback() {
+      isPlaying = false;
+      clearInterval(playbackInterval);
+      document.getElementById('playIcon').innerText = '▶';
+      document.getElementById('playLabel').innerText = 'Таймлайн пятилетки';
+    }
+
+    // Export Slice in JSON
+    function exportActiveSlice() {
+      const cur = multiData.years[String(activeYear)];
+      const blob = new Blob([JSON.stringify(cur, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `budget_kz_social_${activeYear}.json`;
+      a.click();
+    }
+
+    // Initialize on DOM load
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>

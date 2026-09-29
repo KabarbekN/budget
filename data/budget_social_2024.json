@@ -1,0 +1,1822 @@
+{
+  "meta": {
+    "title": "Государственный бюджет Республики Казахстан в разрезе социальных услуг и регионов",
+    "year": 2024,
+    "currency": "тенге (₸)",
+    "classification_code": "06 - Социальная помощь и социальное обеспечение"
+  },
+  "kpi": {
+    "year": 2024,
+    "currency": "KZT",
+    "total_social_kzt": 5430000000000,
+    "total_social_billion": 5430.0,
+    "republican_share_pct": 86.7,
+    "local_share_pct": 13.3,
+    "regions_count": 20,
+    "top_regions_by_budget": [
+      {
+        "id": "reg_turkestan",
+        "name": "Туркестанская область",
+        "type": "region",
+        "population": 2140000,
+        "donor_status": "subvention",
+        "total_social_kzt": 95976302147,
+        "per_capita_kzt": 44848,
+        "services": {
+          "group_asp": 26873364601,
+          "group_special_institutions": 30712416687,
+          "group_rehabilitation": 21114786472,
+          "group_employment": 17275734386
+        }
+      },
+      {
+        "id": "reg_almaty_city",
+        "name": "г. Алматы",
+        "type": "city",
+        "population": 2228500,
+        "donor_status": "donor",
+        "total_social_kzt": 66630277051,
+        "per_capita_kzt": 29899,
+        "services": {
+          "group_asp": 18656477574,
+          "group_special_institutions": 21321688656,
+          "group_rehabilitation": 14658660951,
+          "group_employment": 11993449869
+        }
+      },
+      {
+        "id": "reg_almaty_obl",
+        "name": "Алматинская область",
+        "type": "region",
+        "population": 1540000,
+        "donor_status": "subvention",
+        "total_social_kzt": 58834901731,
+        "per_capita_kzt": 38204,
+        "services": {
+          "group_asp": 16473772484,
+          "group_special_institutions": 18827168553,
+          "group_rehabilitation": 12943678380,
+          "group_employment": 10590282311
+        }
+      }
+    ],
+    "top_regions_per_capita": [
+      {
+        "id": "reg_turkestan",
+        "name": "Туркестанская область",
+        "type": "region",
+        "population": 2140000,
+        "donor_status": "subvention",
+        "total_social_kzt": 95976302147,
+        "per_capita_kzt": 44848,
+        "services": {
+          "group_asp": 26873364601,
+          "group_special_institutions": 30712416687,
+          "group_rehabilitation": 21114786472,
+          "group_employment": 17275734386
+        }
+      },
+      {
+        "id": "reg_zhambyl",
+        "name": "Жамбылская область",
+        "type": "region",
+        "population": 1220000,
+        "donor_status": "subvention",
+        "total_social_kzt": 54715461972,
+        "per_capita_kzt": 44848,
+        "services": {
+          "group_asp": 15320329352,
+          "group_special_institutions": 17508947831,
+          "group_rehabilitation": 12037401633,
+          "group_employment": 9848783154
+        }
+      },
+      {
+        "id": "reg_kyzylorda",
+        "name": "Кызылординская область",
+        "type": "region",
+        "population": 840000,
+        "donor_status": "subvention",
+        "total_social_kzt": 37672941029,
+        "per_capita_kzt": 44848,
+        "services": {
+          "group_asp": 10548423488,
+          "group_special_institutions": 12055341129,
+          "group_rehabilitation": 8288047026,
+          "group_employment": 6781129385
+        }
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "id": "node_state_budget",
+      "name": "Госбюджет РК: Соцсфера",
+      "category": "root",
+      "value": 5430000000000,
+      "description": "Общий объем финансирования раздела 06 «Социальная помощь и обеспечение» (2024)"
+    },
+    {
+      "id": "node_republican_budget",
+      "name": "Республиканский бюджет (МТСЗН)",
+      "category": "level",
+      "value": 4710000000000,
+      "description": "Централизованные пенсионные выплаты, государственные базовые социальные пособия и трансферты"
+    },
+    {
+      "id": "node_local_budgets",
+      "name": "Местные бюджеты (20 регионов)",
+      "category": "level",
+      "value": 720000000000,
+      "description": "Региональные программы занятости, адресной помощи (АСП), реабилитации и соцучреждений"
+    },
+    {
+      "id": "rep_pensions",
+      "name": "Базовые и солидарные пенсии",
+      "category": "rep_prog",
+      "value": 3014400000000,
+      "description": "Выплаты республиканского значения: 3014.4 млрд ₸"
+    },
+    {
+      "id": "rep_disability",
+      "name": "Гос. пособия по инвалидности",
+      "category": "rep_prog",
+      "value": 753600000000,
+      "description": "Выплаты республиканского значения: 753.6 млрд ₸"
+    },
+    {
+      "id": "rep_maternity",
+      "name": "Пособия семьям с детьми и многодетным",
+      "category": "rep_prog",
+      "value": 706500000000,
+      "description": "Выплаты республиканского значения: 706.5 млрд ₸"
+    },
+    {
+      "id": "rep_survivor",
+      "name": "Пособия по потере кормильца",
+      "category": "rep_prog",
+      "value": 235500000000,
+      "description": "Выплаты республиканского значения: 235.5 млрд ₸"
+    },
+    {
+      "id": "node_group_asp",
+      "name": "АСП и адресная матпомощь",
+      "category": "soc_group",
+      "value": 201600000000,
+      "description": "Суммарно по всем регионам: 201.6 млрд ₸"
+    },
+    {
+      "id": "node_group_special_institutions",
+      "name": "Спец. соцуслуги и дома-интернаты",
+      "category": "soc_group",
+      "value": 230400000000,
+      "description": "Суммарно по всем регионам: 230.4 млрд ₸"
+    },
+    {
+      "id": "node_group_rehabilitation",
+      "name": "Реабилитация и инватакси",
+      "category": "soc_group",
+      "value": 158400000000,
+      "description": "Суммарно по всем регионам: 158.4 млрд ₸"
+    },
+    {
+      "id": "node_group_employment",
+      "name": "Программы содействия занятости",
+      "category": "soc_group",
+      "value": 129600000000,
+      "description": "Суммарно по всем регионам: 129.6 млрд ₸"
+    },
+    {
+      "id": "reg_almaty_city",
+      "name": "г. Алматы",
+      "category": "region_donor",
+      "value": 66630277051,
+      "population": 2228500,
+      "per_capita": 29899,
+      "donor_status": "donor",
+      "description": "Население: 2,228,500 чел. На душу: 29,899 ₸"
+    },
+    {
+      "id": "reg_astana_city",
+      "name": "г. Астана",
+      "category": "region_donor",
+      "value": 42755798152,
+      "population": 1430000,
+      "per_capita": 29899,
+      "donor_status": "donor",
+      "description": "Население: 1,430,000 чел. На душу: 29,899 ₸"
+    },
+    {
+      "id": "reg_shymkent_city",
+      "name": "г. Шымкент",
+      "category": "region_subv",
+      "value": 46227422789,
+      "population": 1210000,
+      "per_capita": 38204,
+      "donor_status": "subvention",
+      "description": "Население: 1,210,000 чел. На душу: 38,204 ₸"
+    },
+    {
+      "id": "reg_turkestan",
+      "name": "Туркестанская область",
+      "category": "region_subv",
+      "value": 95976302147,
+      "population": 2140000,
+      "per_capita": 44848,
+      "donor_status": "subvention",
+      "description": "Население: 2,140,000 чел. На душу: 44,848 ₸"
+    },
+    {
+      "id": "reg_almaty_obl",
+      "name": "Алматинская область",
+      "category": "region_subv",
+      "value": 58834901731,
+      "population": 1540000,
+      "per_capita": 38204,
+      "donor_status": "subvention",
+      "description": "Население: 1,540,000 чел. На душу: 38,204 ₸"
+    },
+    {
+      "id": "reg_karaganda",
+      "name": "Карагандинская область",
+      "category": "region_neut",
+      "value": 37706162318,
+      "population": 1135000,
+      "per_capita": 33221,
+      "donor_status": "neutral",
+      "description": "Население: 1,135,000 чел. На душу: 33,221 ₸"
+    },
+    {
+      "id": "reg_zhambyl",
+      "name": "Жамбылская область",
+      "category": "region_subv",
+      "value": 54715461972,
+      "population": 1220000,
+      "per_capita": 44848,
+      "donor_status": "subvention",
+      "description": "Население: 1,220,000 чел. На душу: 44,848 ₸"
+    },
+    {
+      "id": "reg_aktobe",
+      "name": "Актюбинская область",
+      "category": "region_neut",
+      "value": 31228011082,
+      "population": 940000,
+      "per_capita": 33221,
+      "donor_status": "neutral",
+      "description": "Население: 940,000 чел. На душу: 33,221 ₸"
+    },
+    {
+      "id": "reg_atyrau",
+      "name": "Атырауская область",
+      "category": "region_donor",
+      "value": 21078907481,
+      "population": 705000,
+      "per_capita": 29899,
+      "donor_status": "donor",
+      "description": "Население: 705,000 чел. На душу: 29,899 ₸"
+    },
+    {
+      "id": "reg_mangystau",
+      "name": "Мангистауская область",
+      "category": "region_donor",
+      "value": 26244817825,
+      "population": 790000,
+      "per_capita": 33221,
+      "donor_status": "donor",
+      "description": "Население: 790,000 чел. На душу: 33,221 ₸"
+    },
+    {
+      "id": "reg_kyzylorda",
+      "name": "Кызылординская область",
+      "category": "region_subv",
+      "value": 37672941029,
+      "population": 840000,
+      "per_capita": 44848,
+      "donor_status": "subvention",
+      "description": "Население: 840,000 чел. На душу: 44,848 ₸"
+    },
+    {
+      "id": "reg_kostanay",
+      "name": "Костанайская область",
+      "category": "region_subv",
+      "value": 27573669360,
+      "population": 830000,
+      "per_capita": 33221,
+      "donor_status": "subvention",
+      "description": "Население: 830,000 чел. На душу: 33,221 ₸"
+    },
+    {
+      "id": "reg_pavlodar",
+      "name": "Павлодарская область",
+      "category": "region_neut",
+      "value": 25082072731,
+      "population": 755000,
+      "per_capita": 33221,
+      "donor_status": "neutral",
+      "description": "Население: 755,000 чел. На душу: 33,221 ₸"
+    },
+    {
+      "id": "reg_vko",
+      "name": "Восточно-Казахстанская область",
+      "category": "region_subv",
+      "value": 24251540521,
+      "population": 730000,
+      "per_capita": 33221,
+      "donor_status": "subvention",
+      "description": "Население: 730,000 чел. На душу: 33,221 ₸"
+    },
+    {
+      "id": "reg_akmola",
+      "name": "Акмолинская область",
+      "category": "region_subv",
+      "value": 26178375248,
+      "population": 788000,
+      "per_capita": 33221,
+      "donor_status": "subvention",
+      "description": "Население: 788,000 чел. На душу: 33,221 ₸"
+    },
+    {
+      "id": "reg_zko",
+      "name": "Западно-Казахстанская область",
+      "category": "region_subv",
+      "value": 22922688986,
+      "population": 690000,
+      "per_capita": 33221,
+      "donor_status": "subvention",
+      "description": "Население: 690,000 чел. На душу: 33,221 ₸"
+    },
+    {
+      "id": "reg_sko",
+      "name": "Северо-Казахстанская область",
+      "category": "region_subv",
+      "value": 17607282844,
+      "population": 530000,
+      "per_capita": 33221,
+      "donor_status": "subvention",
+      "description": "Население: 530,000 чел. На душу: 33,221 ₸"
+    },
+    {
+      "id": "reg_abai",
+      "name": "Область Абай",
+      "category": "region_subv",
+      "value": 23304733802,
+      "population": 610000,
+      "per_capita": 38204,
+      "donor_status": "subvention",
+      "description": "Население: 610,000 чел. На душу: 38,204 ₸"
+    },
+    {
+      "id": "reg_zhetysu",
+      "name": "Область Жетісу",
+      "category": "region_subv",
+      "value": 26666728187,
+      "population": 698000,
+      "per_capita": 38204,
+      "donor_status": "subvention",
+      "description": "Население: 698,000 чел. На душу: 38,204 ₸"
+    },
+    {
+      "id": "reg_ulytau",
+      "name": "Область Ұлытау",
+      "category": "region_subv",
+      "value": 7341904733,
+      "population": 221000,
+      "per_capita": 33221,
+      "donor_status": "subvention",
+      "description": "Население: 221,000 чел. На душу: 33,221 ₸"
+    }
+  ],
+  "links": [
+    {
+      "source": "node_state_budget",
+      "target": "node_republican_budget",
+      "value": 4710000000000,
+      "label": "Централизованные обязательства"
+    },
+    {
+      "source": "node_state_budget",
+      "target": "node_local_budgets",
+      "value": 720000000000,
+      "label": "Местное исполнение через акиматы"
+    },
+    {
+      "source": "node_republican_budget",
+      "target": "rep_pensions",
+      "value": 3014400000000,
+      "label": "Республиканская программа"
+    },
+    {
+      "source": "node_republican_budget",
+      "target": "rep_disability",
+      "value": 753600000000,
+      "label": "Республиканская программа"
+    },
+    {
+      "source": "node_republican_budget",
+      "target": "rep_maternity",
+      "value": 706500000000,
+      "label": "Республиканская программа"
+    },
+    {
+      "source": "node_republican_budget",
+      "target": "rep_survivor",
+      "value": 235500000000,
+      "label": "Республиканская программа"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_almaty_city",
+      "value": 66630277051,
+      "label": "Бюджет соцсферы г. Алматы"
+    },
+    {
+      "source": "reg_almaty_city",
+      "target": "node_group_asp",
+      "value": 18656477574,
+      "label": "г. Алматы -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_almaty_city",
+      "target": "node_group_special_institutions",
+      "value": 21321688656,
+      "label": "г. Алматы -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_almaty_city",
+      "target": "node_group_rehabilitation",
+      "value": 14658660951,
+      "label": "г. Алматы -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_almaty_city",
+      "target": "node_group_employment",
+      "value": 11993449869,
+      "label": "г. Алматы -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_astana_city",
+      "value": 42755798152,
+      "label": "Бюджет соцсферы г. Астана"
+    },
+    {
+      "source": "reg_astana_city",
+      "target": "node_group_asp",
+      "value": 11971623482,
+      "label": "г. Астана -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_astana_city",
+      "target": "node_group_special_institutions",
+      "value": 13681855408,
+      "label": "г. Астана -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_astana_city",
+      "target": "node_group_rehabilitation",
+      "value": 9406275593,
+      "label": "г. Астана -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_astana_city",
+      "target": "node_group_employment",
+      "value": 7696043667,
+      "label": "г. Астана -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_shymkent_city",
+      "value": 46227422789,
+      "label": "Бюджет соцсферы г. Шымкент"
+    },
+    {
+      "source": "reg_shymkent_city",
+      "target": "node_group_asp",
+      "value": 12943678380,
+      "label": "г. Шымкент -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_shymkent_city",
+      "target": "node_group_special_institutions",
+      "value": 14792775292,
+      "label": "г. Шымкент -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_shymkent_city",
+      "target": "node_group_rehabilitation",
+      "value": 10170033013,
+      "label": "г. Шымкент -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_shymkent_city",
+      "target": "node_group_employment",
+      "value": 8320936102,
+      "label": "г. Шымкент -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_turkestan",
+      "value": 95976302147,
+      "label": "Бюджет соцсферы Туркестанская область"
+    },
+    {
+      "source": "reg_turkestan",
+      "target": "node_group_asp",
+      "value": 26873364601,
+      "label": "Туркестанская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_turkestan",
+      "target": "node_group_special_institutions",
+      "value": 30712416687,
+      "label": "Туркестанская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_turkestan",
+      "target": "node_group_rehabilitation",
+      "value": 21114786472,
+      "label": "Туркестанская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_turkestan",
+      "target": "node_group_employment",
+      "value": 17275734386,
+      "label": "Туркестанская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_almaty_obl",
+      "value": 58834901731,
+      "label": "Бюджет соцсферы Алматинская область"
+    },
+    {
+      "source": "reg_almaty_obl",
+      "target": "node_group_asp",
+      "value": 16473772484,
+      "label": "Алматинская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_almaty_obl",
+      "target": "node_group_special_institutions",
+      "value": 18827168553,
+      "label": "Алматинская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_almaty_obl",
+      "target": "node_group_rehabilitation",
+      "value": 12943678380,
+      "label": "Алматинская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_almaty_obl",
+      "target": "node_group_employment",
+      "value": 10590282311,
+      "label": "Алматинская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_karaganda",
+      "value": 37706162318,
+      "label": "Бюджет соцсферы Карагандинская область"
+    },
+    {
+      "source": "reg_karaganda",
+      "target": "node_group_asp",
+      "value": 10557725449,
+      "label": "Карагандинская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_karaganda",
+      "target": "node_group_special_institutions",
+      "value": 12065971941,
+      "label": "Карагандинская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_karaganda",
+      "target": "node_group_rehabilitation",
+      "value": 8295355709,
+      "label": "Карагандинская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_karaganda",
+      "target": "node_group_employment",
+      "value": 6787109217,
+      "label": "Карагандинская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_zhambyl",
+      "value": 54715461972,
+      "label": "Бюджет соцсферы Жамбылская область"
+    },
+    {
+      "source": "reg_zhambyl",
+      "target": "node_group_asp",
+      "value": 15320329352,
+      "label": "Жамбылская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_zhambyl",
+      "target": "node_group_special_institutions",
+      "value": 17508947831,
+      "label": "Жамбылская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_zhambyl",
+      "target": "node_group_rehabilitation",
+      "value": 12037401633,
+      "label": "Жамбылская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_zhambyl",
+      "target": "node_group_employment",
+      "value": 9848783154,
+      "label": "Жамбылская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_aktobe",
+      "value": 31228011082,
+      "label": "Бюджет соцсферы Актюбинская область"
+    },
+    {
+      "source": "reg_aktobe",
+      "target": "node_group_asp",
+      "value": 8743843102,
+      "label": "Актюбинская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_aktobe",
+      "target": "node_group_special_institutions",
+      "value": 9992963546,
+      "label": "Актюбинская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_aktobe",
+      "target": "node_group_rehabilitation",
+      "value": 6870162438,
+      "label": "Актюбинская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_aktobe",
+      "target": "node_group_employment",
+      "value": 5621041994,
+      "label": "Актюбинская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_atyrau",
+      "value": 21078907481,
+      "label": "Бюджет соцсферы Атырауская область"
+    },
+    {
+      "source": "reg_atyrau",
+      "target": "node_group_asp",
+      "value": 5902094094,
+      "label": "Атырауская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_atyrau",
+      "target": "node_group_special_institutions",
+      "value": 6745250393,
+      "label": "Атырауская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_atyrau",
+      "target": "node_group_rehabilitation",
+      "value": 4637359645,
+      "label": "Атырауская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_atyrau",
+      "target": "node_group_employment",
+      "value": 3794203346,
+      "label": "Атырауская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_mangystau",
+      "value": 26244817825,
+      "label": "Бюджет соцсферы Мангистауская область"
+    },
+    {
+      "source": "reg_mangystau",
+      "target": "node_group_asp",
+      "value": 7348548991,
+      "label": "Мангистауская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_mangystau",
+      "target": "node_group_special_institutions",
+      "value": 8398341704,
+      "label": "Мангистауская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_mangystau",
+      "target": "node_group_rehabilitation",
+      "value": 5773859921,
+      "label": "Мангистауская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_mangystau",
+      "target": "node_group_employment",
+      "value": 4724067208,
+      "label": "Мангистауская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_kyzylorda",
+      "value": 37672941029,
+      "label": "Бюджет соцсферы Кызылординская область"
+    },
+    {
+      "source": "reg_kyzylorda",
+      "target": "node_group_asp",
+      "value": 10548423488,
+      "label": "Кызылординская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_kyzylorda",
+      "target": "node_group_special_institutions",
+      "value": 12055341129,
+      "label": "Кызылординская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_kyzylorda",
+      "target": "node_group_rehabilitation",
+      "value": 8288047026,
+      "label": "Кызылординская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_kyzylorda",
+      "target": "node_group_employment",
+      "value": 6781129385,
+      "label": "Кызылординская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_kostanay",
+      "value": 27573669360,
+      "label": "Бюджет соцсферы Костанайская область"
+    },
+    {
+      "source": "reg_kostanay",
+      "target": "node_group_asp",
+      "value": 7720627420,
+      "label": "Костанайская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_kostanay",
+      "target": "node_group_special_institutions",
+      "value": 8823574195,
+      "label": "Костанайская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_kostanay",
+      "target": "node_group_rehabilitation",
+      "value": 6066207259,
+      "label": "Костанайская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_kostanay",
+      "target": "node_group_employment",
+      "value": 4963260484,
+      "label": "Костанайская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_pavlodar",
+      "value": 25082072731,
+      "label": "Бюджет соцсферы Павлодарская область"
+    },
+    {
+      "source": "reg_pavlodar",
+      "target": "node_group_asp",
+      "value": 7022980364,
+      "label": "Павлодарская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_pavlodar",
+      "target": "node_group_special_institutions",
+      "value": 8026263273,
+      "label": "Павлодарская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_pavlodar",
+      "target": "node_group_rehabilitation",
+      "value": 5518056000,
+      "label": "Павлодарская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_pavlodar",
+      "target": "node_group_employment",
+      "value": 4514773091,
+      "label": "Павлодарская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_vko",
+      "value": 24251540521,
+      "label": "Бюджет соцсферы Восточно-Казахстанская область"
+    },
+    {
+      "source": "reg_vko",
+      "target": "node_group_asp",
+      "value": 6790431345,
+      "label": "Восточно-Казахстанская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_vko",
+      "target": "node_group_special_institutions",
+      "value": 7760492966,
+      "label": "Восточно-Казахстанская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_vko",
+      "target": "node_group_rehabilitation",
+      "value": 5335338914,
+      "label": "Восточно-Казахстанская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_vko",
+      "target": "node_group_employment",
+      "value": 4365277293,
+      "label": "Восточно-Казахстанская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_akmola",
+      "value": 26178375248,
+      "label": "Бюджет соцсферы Акмолинская область"
+    },
+    {
+      "source": "reg_akmola",
+      "target": "node_group_asp",
+      "value": 7329945069,
+      "label": "Акмолинская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_akmola",
+      "target": "node_group_special_institutions",
+      "value": 8377080079,
+      "label": "Акмолинская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_akmola",
+      "target": "node_group_rehabilitation",
+      "value": 5759242554,
+      "label": "Акмолинская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_akmola",
+      "target": "node_group_employment",
+      "value": 4712107544,
+      "label": "Акмолинская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_zko",
+      "value": 22922688986,
+      "label": "Бюджет соцсферы Западно-Казахстанская область"
+    },
+    {
+      "source": "reg_zko",
+      "target": "node_group_asp",
+      "value": 6418352916,
+      "label": "Западно-Казахстанская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_zko",
+      "target": "node_group_special_institutions",
+      "value": 7335260475,
+      "label": "Западно-Казахстанская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_zko",
+      "target": "node_group_rehabilitation",
+      "value": 5042991576,
+      "label": "Западно-Казахстанская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_zko",
+      "target": "node_group_employment",
+      "value": 4126084017,
+      "label": "Западно-Казахстанская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_sko",
+      "value": 17607282844,
+      "label": "Бюджет соцсферы Северо-Казахстанская область"
+    },
+    {
+      "source": "reg_sko",
+      "target": "node_group_asp",
+      "value": 4930039196,
+      "label": "Северо-Казахстанская область -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_sko",
+      "target": "node_group_special_institutions",
+      "value": 5634330510,
+      "label": "Северо-Казахстанская область -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_sko",
+      "target": "node_group_rehabilitation",
+      "value": 3873602225,
+      "label": "Северо-Казахстанская область -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_sko",
+      "target": "node_group_employment",
+      "value": 3169310911,
+      "label": "Северо-Казахстанская область -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_abai",
+      "value": 23304733802,
+      "label": "Бюджет соцсферы Область Абай"
+    },
+    {
+      "source": "reg_abai",
+      "target": "node_group_asp",
+      "value": 6525325464,
+      "label": "Область Абай -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_abai",
+      "target": "node_group_special_institutions",
+      "value": 7457514816,
+      "label": "Область Абай -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_abai",
+      "target": "node_group_rehabilitation",
+      "value": 5127041436,
+      "label": "Область Абай -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_abai",
+      "target": "node_group_employment",
+      "value": 4194852084,
+      "label": "Область Абай -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_zhetysu",
+      "value": 26666728187,
+      "label": "Бюджет соцсферы Область Жетісу"
+    },
+    {
+      "source": "reg_zhetysu",
+      "target": "node_group_asp",
+      "value": 7466683892,
+      "label": "Область Жетісу -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_zhetysu",
+      "target": "node_group_special_institutions",
+      "value": 8533353019,
+      "label": "Область Жетісу -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_zhetysu",
+      "target": "node_group_rehabilitation",
+      "value": 5866680201,
+      "label": "Область Жетісу -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_zhetysu",
+      "target": "node_group_employment",
+      "value": 4800011073,
+      "label": "Область Жетісу -> Программы содействия занятости"
+    },
+    {
+      "source": "node_local_budgets",
+      "target": "reg_ulytau",
+      "value": 7341904733,
+      "label": "Бюджет соцсферы Область Ұлытау"
+    },
+    {
+      "source": "reg_ulytau",
+      "target": "node_group_asp",
+      "value": 2055733325,
+      "label": "Область Ұлытау -> АСП и адресная матпомощь"
+    },
+    {
+      "source": "reg_ulytau",
+      "target": "node_group_special_institutions",
+      "value": 2349409514,
+      "label": "Область Ұлытау -> Спец. соцуслуги и дома-интернаты"
+    },
+    {
+      "source": "reg_ulytau",
+      "target": "node_group_rehabilitation",
+      "value": 1615219041,
+      "label": "Область Ұлытау -> Реабилитация и инватакси"
+    },
+    {
+      "source": "reg_ulytau",
+      "target": "node_group_employment",
+      "value": 1321542851,
+      "label": "Область Ұлытау -> Программы содействия занятости"
+    }
+  ],
+  "tree": {
+    "name": "Госбюджет РК: Соцсфера",
+    "value": 5430000000000,
+    "children": [
+      {
+        "name": "Республиканский бюджет (Центр)",
+        "value": 4710000000000,
+        "children": [
+          {
+            "name": "Базовые и солидарные пенсии",
+            "value": 3014400000000
+          },
+          {
+            "name": "Гос. пособия по инвалидности",
+            "value": 753600000000
+          },
+          {
+            "name": "Пособия семьям с детьми и многодетным",
+            "value": 706500000000
+          },
+          {
+            "name": "Пособия по потере кормильца",
+            "value": 235500000000
+          }
+        ]
+      },
+      {
+        "name": "Местные бюджеты (20 регионов)",
+        "value": 720000000000,
+        "children": [
+          {
+            "name": "Туркестанская область",
+            "value": 95976302147,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 26873364601
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 30712416687
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 21114786472
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 17275734386
+              }
+            ]
+          },
+          {
+            "name": "г. Алматы",
+            "value": 66630277051,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 18656477574
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 21321688656
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 14658660951
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 11993449869
+              }
+            ]
+          },
+          {
+            "name": "Алматинская область",
+            "value": 58834901731,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 16473772484
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 18827168553
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 12943678380
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 10590282311
+              }
+            ]
+          },
+          {
+            "name": "Жамбылская область",
+            "value": 54715461972,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 15320329352
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 17508947831
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 12037401633
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 9848783154
+              }
+            ]
+          },
+          {
+            "name": "г. Шымкент",
+            "value": 46227422789,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 12943678380
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 14792775292
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 10170033013
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 8320936102
+              }
+            ]
+          },
+          {
+            "name": "г. Астана",
+            "value": 42755798152,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 11971623482
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 13681855408
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 9406275593
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 7696043667
+              }
+            ]
+          },
+          {
+            "name": "Карагандинская область",
+            "value": 37706162318,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 10557725449
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 12065971941
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 8295355709
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 6787109217
+              }
+            ]
+          },
+          {
+            "name": "Кызылординская область",
+            "value": 37672941029,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 10548423488
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 12055341129
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 8288047026
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 6781129385
+              }
+            ]
+          },
+          {
+            "name": "Актюбинская область",
+            "value": 31228011082,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 8743843102
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 9992963546
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 6870162438
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 5621041994
+              }
+            ]
+          },
+          {
+            "name": "Костанайская область",
+            "value": 27573669360,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 7720627420
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 8823574195
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 6066207259
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 4963260484
+              }
+            ]
+          },
+          {
+            "name": "Область Жетісу",
+            "value": 26666728187,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 7466683892
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 8533353019
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 5866680201
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 4800011073
+              }
+            ]
+          },
+          {
+            "name": "Мангистауская область",
+            "value": 26244817825,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 7348548991
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 8398341704
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 5773859921
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 4724067208
+              }
+            ]
+          },
+          {
+            "name": "Акмолинская область",
+            "value": 26178375248,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 7329945069
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 8377080079
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 5759242554
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 4712107544
+              }
+            ]
+          },
+          {
+            "name": "Павлодарская область",
+            "value": 25082072731,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 7022980364
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 8026263273
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 5518056000
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 4514773091
+              }
+            ]
+          },
+          {
+            "name": "Восточно-Казахстанская область",
+            "value": 24251540521,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 6790431345
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 7760492966
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 5335338914
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 4365277293
+              }
+            ]
+          },
+          {
+            "name": "Область Абай",
+            "value": 23304733802,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 6525325464
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 7457514816
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 5127041436
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 4194852084
+              }
+            ]
+          },
+          {
+            "name": "Западно-Казахстанская область",
+            "value": 22922688986,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 6418352916
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 7335260475
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 5042991576
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 4126084017
+              }
+            ]
+          },
+          {
+            "name": "Атырауская область",
+            "value": 21078907481,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 5902094094
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 6745250393
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 4637359645
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 3794203346
+              }
+            ]
+          },
+          {
+            "name": "Северо-Казахстанская область",
+            "value": 17607282844,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 4930039196
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 5634330510
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 3873602225
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 3169310911
+              }
+            ]
+          },
+          {
+            "name": "Область Ұлытау",
+            "value": 7341904733,
+            "children": [
+              {
+                "name": "АСП и адресная матпомощь",
+                "value": 2055733325
+              },
+              {
+                "name": "Спец. соцуслуги и дома-интернаты",
+                "value": 2349409514
+              },
+              {
+                "name": "Реабилитация и инватакси",
+                "value": 1615219041
+              },
+              {
+                "name": "Программы содействия занятости",
+                "value": 1321542851
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "regions": [
+    {
+      "id": "reg_almaty_city",
+      "name": "г. Алматы",
+      "type": "city",
+      "population": 2228500,
+      "donor_status": "donor",
+      "total_social_kzt": 66630277051,
+      "per_capita_kzt": 29899,
+      "services": {
+        "group_asp": 18656477574,
+        "group_special_institutions": 21321688656,
+        "group_rehabilitation": 14658660951,
+        "group_employment": 11993449869
+      }
+    },
+    {
+      "id": "reg_astana_city",
+      "name": "г. Астана",
+      "type": "city",
+      "population": 1430000,
+      "donor_status": "donor",
+      "total_social_kzt": 42755798152,
+      "per_capita_kzt": 29899,
+      "services": {
+        "group_asp": 11971623482,
+        "group_special_institutions": 13681855408,
+        "group_rehabilitation": 9406275593,
+        "group_employment": 7696043667
+      }
+    },
+    {
+      "id": "reg_shymkent_city",
+      "name": "г. Шымкент",
+      "type": "city",
+      "population": 1210000,
+      "donor_status": "subvention",
+      "total_social_kzt": 46227422789,
+      "per_capita_kzt": 38204,
+      "services": {
+        "group_asp": 12943678380,
+        "group_special_institutions": 14792775292,
+        "group_rehabilitation": 10170033013,
+        "group_employment": 8320936102
+      }
+    },
+    {
+      "id": "reg_turkestan",
+      "name": "Туркестанская область",
+      "type": "region",
+      "population": 2140000,
+      "donor_status": "subvention",
+      "total_social_kzt": 95976302147,
+      "per_capita_kzt": 44848,
+      "services": {
+        "group_asp": 26873364601,
+        "group_special_institutions": 30712416687,
+        "group_rehabilitation": 21114786472,
+        "group_employment": 17275734386
+      }
+    },
+    {
+      "id": "reg_almaty_obl",
+      "name": "Алматинская область",
+      "type": "region",
+      "population": 1540000,
+      "donor_status": "subvention",
+      "total_social_kzt": 58834901731,
+      "per_capita_kzt": 38204,
+      "services": {
+        "group_asp": 16473772484,
+        "group_special_institutions": 18827168553,
+        "group_rehabilitation": 12943678380,
+        "group_employment": 10590282311
+      }
+    },
+    {
+      "id": "reg_karaganda",
+      "name": "Карагандинская область",
+      "type": "region",
+      "population": 1135000,
+      "donor_status": "neutral",
+      "total_social_kzt": 37706162318,
+      "per_capita_kzt": 33221,
+      "services": {
+        "group_asp": 10557725449,
+        "group_special_institutions": 12065971941,
+        "group_rehabilitation": 8295355709,
+        "group_employment": 6787109217
+      }
+    },
+    {
+      "id": "reg_zhambyl",
+      "name": "Жамбылская область",
+      "type": "region",
+      "population": 1220000,
+      "donor_status": "subvention",
+      "total_social_kzt": 54715461972,
+      "per_capita_kzt": 44848,
+      "services": {
+        "group_asp": 15320329352,
+        "group_special_institutions": 17508947831,
+        "group_rehabilitation": 12037401633,
+        "group_employment": 9848783154
+      }
+    },
+    {
+      "id": "reg_aktobe",
+      "name": "Актюбинская область",
+      "type": "region",
+      "population": 940000,
+      "donor_status": "neutral",
+      "total_social_kzt": 31228011082,
+      "per_capita_kzt": 33221,
+      "services": {
+        "group_asp": 8743843102,
+        "group_special_institutions": 9992963546,
+        "group_rehabilitation": 6870162438,
+        "group_employment": 5621041994
+      }
+    },
+    {
+      "id": "reg_atyrau",
+      "name": "Атырауская область",
+      "type": "region",
+      "population": 705000,
+      "donor_status": "donor",
+      "total_social_kzt": 21078907481,
+      "per_capita_kzt": 29899,
+      "services": {
+        "group_asp": 5902094094,
+        "group_special_institutions": 6745250393,
+        "group_rehabilitation": 4637359645,
+        "group_employment": 3794203346
+      }
+    },
+    {
+      "id": "reg_mangystau",
+      "name": "Мангистауская область",
+      "type": "region",
+      "population": 790000,
+      "donor_status": "donor",
+      "total_social_kzt": 26244817825,
+      "per_capita_kzt": 33221,
+      "services": {
+        "group_asp": 7348548991,
+        "group_special_institutions": 8398341704,
+        "group_rehabilitation": 5773859921,
+        "group_employment": 4724067208
+      }
+    },
+    {
+      "id": "reg_kyzylorda",
+      "name": "Кызылординская область",
+      "type": "region",
+      "population": 840000,
+      "donor_status": "subvention",
+      "total_social_kzt": 37672941029,
+      "per_capita_kzt": 44848,
+      "services": {
+        "group_asp": 10548423488,
+        "group_special_institutions": 12055341129,
+        "group_rehabilitation": 8288047026,
+        "group_employment": 6781129385
+      }
+    },
+    {
+      "id": "reg_kostanay",
+      "name": "Костанайская область",
+      "type": "region",
+      "population": 830000,
+      "donor_status": "subvention",
+      "total_social_kzt": 27573669360,
+      "per_capita_kzt": 33221,
+      "services": {
+        "group_asp": 7720627420,
+        "group_special_institutions": 8823574195,
+        "group_rehabilitation": 6066207259,
+        "group_employment": 4963260484
+      }
+    },
+    {
+      "id": "reg_pavlodar",
+      "name": "Павлодарская область",
+      "type": "region",
+      "population": 755000,
+      "donor_status": "neutral",
+      "total_social_kzt": 25082072731,
+      "per_capita_kzt": 33221,
+      "services": {
+        "group_asp": 7022980364,
+        "group_special_institutions": 8026263273,
+        "group_rehabilitation": 5518056000,
+        "group_employment": 4514773091
+      }
+    },
+    {
+      "id": "reg_vko",
+      "name": "Восточно-Казахстанская область",
+      "type": "region",
+      "population": 730000,
+      "donor_status": "subvention",
+      "total_social_kzt": 24251540521,
+      "per_capita_kzt": 33221,
+      "services": {
+        "group_asp": 6790431345,
+        "group_special_institutions": 7760492966,
+        "group_rehabilitation": 5335338914,
+        "group_employment": 4365277293
+      }
+    },
+    {
+      "id": "reg_akmola",
+      "name": "Акмолинская область",
+      "type": "region",
+      "population": 788000,
+      "donor_status": "subvention",
+      "total_social_kzt": 26178375248,
+      "per_capita_kzt": 33221,
+      "services": {
+        "group_asp": 7329945069,
+        "group_special_institutions": 8377080079,
+        "group_rehabilitation": 5759242554,
+        "group_employment": 4712107544
+      }
+    },
+    {
+      "id": "reg_zko",
+      "name": "Западно-Казахстанская область",
+      "type": "region",
+      "population": 690000,
+      "donor_status": "subvention",
+      "total_social_kzt": 22922688986,
+      "per_capita_kzt": 33221,
+      "services": {
+        "group_asp": 6418352916,
+        "group_special_institutions": 7335260475,
+        "group_rehabilitation": 5042991576,
+        "group_employment": 4126084017
+      }
+    },
+    {
+      "id": "reg_sko",
+      "name": "Северо-Казахстанская область",
+      "type": "region",
+      "population": 530000,
+      "donor_status": "subvention",
+      "total_social_kzt": 17607282844,
+      "per_capita_kzt": 33221,
+      "services": {
+        "group_asp": 4930039196,
+        "group_special_institutions": 5634330510,
+        "group_rehabilitation": 3873602225,
+        "group_employment": 3169310911
+      }
+    },
+    {
+      "id": "reg_abai",
+      "name": "Область Абай",
+      "type": "region",
+      "population": 610000,
+      "donor_status": "subvention",
+      "total_social_kzt": 23304733802,
+      "per_capita_kzt": 38204,
+      "services": {
+        "group_asp": 6525325464,
+        "group_special_institutions": 7457514816,
+        "group_rehabilitation": 5127041436,
+        "group_employment": 4194852084
+      }
+    },
+    {
+      "id": "reg_zhetysu",
+      "name": "Область Жетісу",
+      "type": "region",
+      "population": 698000,
+      "donor_status": "subvention",
+      "total_social_kzt": 26666728187,
+      "per_capita_kzt": 38204,
+      "services": {
+        "group_asp": 7466683892,
+        "group_special_institutions": 8533353019,
+        "group_rehabilitation": 5866680201,
+        "group_employment": 4800011073
+      }
+    },
+    {
+      "id": "reg_ulytau",
+      "name": "Область Ұлытау",
+      "type": "region",
+      "population": 221000,
+      "donor_status": "subvention",
+      "total_social_kzt": 7341904733,
+      "per_capita_kzt": 33221,
+      "services": {
+        "group_asp": 2055733325,
+        "group_special_institutions": 2349409514,
+        "group_rehabilitation": 1615219041,
+        "group_employment": 1321542851
+      }
+    }
+  ],
+  "categories_info": {
+    "group_asp": {
+      "name": "АСП и адресная матпомощь",
+      "share": 0.28
+    },
+    "group_special_institutions": {
+      "name": "Спец. соцуслуги и дома-интернаты",
+      "share": 0.32
+    },
+    "group_rehabilitation": {
+      "name": "Реабилитация и инватакси",
+      "share": 0.22
+    },
+    "group_employment": {
+      "name": "Программы содействия занятости",
+      "share": 0.18
+    }
+  }
+}

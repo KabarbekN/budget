@@ -1,0 +1,182 @@
+[
+  {
+    "id": "reg_almaty_city",
+    "name": "г. Алматы",
+    "type": "city",
+    "code": "750000000",
+    "population": 2228500,
+    "donor_status": "donor",
+    "center": "г. Алматы"
+  },
+  {
+    "id": "reg_astana_city",
+    "name": "г. Астана",
+    "type": "city",
+    "code": "710000000",
+    "population": 1430000,
+    "donor_status": "donor",
+    "center": "г. Астана"
+  },
+  {
+    "id": "reg_shymkent_city",
+    "name": "г. Шымкент",
+    "type": "city",
+    "code": "790000000",
+    "population": 1210000,
+    "donor_status": "subvention",
+    "center": "г. Шымкент"
+  },
+  {
+    "id": "reg_turkestan",
+    "name": "Туркестанская область",
+    "type": "region",
+    "code": "610000000",
+    "population": 2140000,
+    "donor_status": "subvention",
+    "center": "г. Туркестан"
+  },
+  {
+    "id": "reg_almaty_obl",
+    "name": "Алматинская область",
+    "type": "region",
+    "code": "190000000",
+    "population": 1540000,
+    "donor_status": "subvention",
+    "center": "г. Қонаев"
+  },
+  {
+    "id": "reg_karaganda",
+    "name": "Карагандинская область",
+    "type": "region",
+    "code": "350000000",
+    "population": 1135000,
+    "donor_status": "neutral",
+    "center": "г. Караганда"
+  },
+  {
+    "id": "reg_zhambyl",
+    "name": "Жамбылская область",
+    "type": "region",
+    "code": "310000000",
+    "population": 1220000,
+    "donor_status": "subvention",
+    "center": "г. Тараз"
+  },
+  {
+    "id": "reg_aktobe",
+    "name": "Актюбинская область",
+    "type": "region",
+    "code": "150000000",
+    "population": 940000,
+    "donor_status": "neutral",
+    "center": "г. Актобе"
+  },
+  {
+    "id": "reg_atyrau",
+    "name": "Атырауская область",
+    "type": "region",
+    "code": "230000000",
+    "population": 705000,
+    "donor_status": "donor",
+    "center": "г. Атырау"
+  },
+  {
+    "id": "reg_mangystau",
+    "name": "Мангистауская область",
+    "type": "region",
+    "code": "470000000",
+    "population": 790000,
+    "donor_status": "donor",
+    "center": "г. Актау"
+  },
+  {
+    "id": "reg_kyzylorda",
+    "name": "Кызылординская область",
+    "type": "region",
+    "code": "430000000",
+    "population": 840000,
+    "donor_status": "subvention",
+    "center": "г. Кызылорда"
+  },
+  {
+    "id": "reg_kostanay",
+    "name": "Костанайская область",
+    "type": "region",
+    "code": "390000000",
+    "population": 830000,
+    "donor_status": "subvention",
+    "center": "г. Костанай"
+  },
+  {
+    "id": "reg_pavlodar",
+    "name": "Павлодарская область",
+    "type": "region",
+    "code": "550000000",
+    "population": 755000,
+    "donor_status": "neutral",
+    "center": "г. Павлодар"
+  },
+  {
+    "id": "reg_vko",
+    "name": "Восточно-Казахстанская область",
+    "type": "region",
+    "code": "630000000",
+    "population": 730000,
+    "donor_status": "subvention",
+    "center": "г. Усть-Каменогорск"
+  },
+  {
+    "id": "reg_akmola",
+    "name": "Акмолинская область",
+    "type": "region",
+    "code": "110000000",
+    "population": 788000,
+    "donor_status": "subvention",
+    "center": "г. Кокшетау"
+  },
+  {
+    "id": "reg_zko",
+    "name": "Западно-Казахстанская область",
+    "type": "region",
+    "code": "270000000",
+    "population": 690000,
+    "donor_status": "subvention",
+    "center": "г. Уральск"
+  },
+  {
+    "id": "reg_sko",
+    "name": "Северо-Казахстанская область",
+    "type": "region",
+    "code": "590000000",
+    "population": 530000,
+    "donor_status": "subvention",
+    "center": "г. Петропавловск"
+  },
+  {
+    "id": "reg_abai",
+    "name": "Область Абай",
+    "type": "region",
+    "code": "100000000",
+    "population": 610000,
+    "donor_status": "subvention",
+    "center": "г. Семей"
+  },
+  {
+    "id": "reg_zhetysu",
+    "name": "Область Жетісу",
+    "type": "region",
+    "code": "330000000",
+    "population": 698000,
+    "donor_status": "subvention",
+    "center": "г. Талдыкорган"
+  },
+  {
+    "id": "reg_ulytau",
+    "name": "Область Ұлытау",
+    "type": "region",
+    "code": "620000000",
+    "population": 221000,
+    "donor_status": "subvention",
+    "center": "г. Жезказган"
+  }
+]
