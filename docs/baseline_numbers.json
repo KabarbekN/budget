@@ -1,0 +1,55 @@
+{
+  "years": {
+    "2021": {
+      "total_social_kzt": 3980000000000,
+      "republican_total_kzt": 3482500000000,
+      "local_total_kzt": 497500000000,
+      "republican_share_pct": 87.5,
+      "local_share_pct": 12.5,
+      "top_region": "Туркестанская область",
+      "top_region_budget": 66211651184,
+      "top_region_per_capita": 30940
+    },
+    "2022": {
+      "total_social_kzt": 4410000000000,
+      "republican_total_kzt": 3845520000000,
+      "local_total_kzt": 564480000000,
+      "republican_share_pct": 87.2,
+      "local_share_pct": 12.8,
+      "top_region": "Туркестанская область",
+      "top_region_budget": 75125935398,
+      "top_region_per_capita": 35105
+    },
+    "2023": {
+      "total_social_kzt": 4920000000000,
+      "republican_total_kzt": 4280400000000,
+      "local_total_kzt": 639600000000,
+      "republican_share_pct": 87.0,
+      "local_share_pct": 13.0,
+      "top_region": "Туркестанская область",
+      "top_region_budget": 85123562005,
+      "top_region_per_capita": 39777
+    },
+    "2024": {
+      "total_social_kzt": 5430000000000,
+      "republican_total_kzt": 4707810000000,
+      "local_total_kzt": 722190000000,
+      "republican_share_pct": 86.7,
+      "local_share_pct": 13.3,
+      "top_region": "Туркестанская область",
+      "top_region_budget": 96115361546,
+      "top_region_per_capita": 44913
+    },
+    "2025": {
+      "total_social_kzt": 6050000000000,
+      "republican_total_kzt": 5233250000000,
+      "local_total_kzt": 816750000000,
+      "republican_share_pct": 86.5,
+      "local_share_pct": 13.5,
+      "top_region": "Туркестанская область",
+      "top_region_budget": 108700233377,
+      "top_region_per_capita": 50794
+    }
+  },
+  "regions_count": 20
+}

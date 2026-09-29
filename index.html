@@ -1,24 +1,33 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Анатомия бюджета Казахстана | Социальные расходы (2021–2025)</title>
+  <title>Qazaqstan Public Finance Monitor | Социальные расходы бюджета РК (2021–2025)</title>
+  <meta name="description" content="Интерактивное исследование движения 5.4 триллионов тенге: от республиканского бюджета через субвенции акиматов к видам социальных услуг.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230082CA'/><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-size='60' font-family='serif' font-weight='bold' fill='%23ffffff'>₸</text></svg>">
+  <meta property="og:title" content="Qazaqstan Public Finance Monitor | Социальные расходы бюджета РК (2021–2025)">
+  <meta property="og:description" content="Аналитическая система мониторинга социальных расходов государственного бюджета РК (Раздел 06 ЕБК) по 20 регионам.">
+  <meta property="og:type" content="website">
 
   <!-- Typography: Newsreader (Editorial Serif) + Plus Jakarta Sans (Swiss Grotesque) + JetBrains Mono (Financial Tabular Figures) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS CDN -->
+  <!-- Design System Tokens -->
+  <link rel="stylesheet" href="styles/tokens.css">
+
+  <!-- Tailwind CSS CDN (with Design Tokens mapped) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Apache ECharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-  <!-- Multi-Year Data Bundle -->
+  <!-- Multi-Year Data Bundle (Zero-config file:// fallback) -->
   <script src="data/budget_data.js"></script>
 
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -27,35 +36,23 @@
             mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
           },
           colors: {
-            paper: {
-              DEFAULT: '#FBFBF9',
-              subtle: '#F4F4F0',
-              border: '#E8E8E2',
-              borderDark: '#D4D4CA',
-            },
-            ink: {
-              DEFAULT: '#191918',
-              secondary: '#4A4A45',
-              muted: '#787870',
-              faint: '#A8A8A0'
-            },
-            kazakh: {
-              sky: '#0082CA',
-              skyDark: '#00629B',
-              gold: '#C98708',
-              goldDark: '#996300',
-              emerald: '#167D48',
-              emeraldBg: '#EEF7F1',
-              amber: '#B85807',
-              amberBg: '#FDF4EB',
-              violet: '#6D28D9'
-            }
+            bg: 'var(--bg)',
+            surface: 'var(--surface)',
+            surfaceSunken: 'var(--surface-sunken)',
+            surfaceHover: 'var(--surface-hover)',
+            textPrimary: 'var(--text)',
+            textSecondary: 'var(--text-2)',
+            textMuted: 'var(--text-3)',
+            line: 'var(--line)',
+            lineStrong: 'var(--line-strong)',
+            accent: 'var(--accent)',
+            donor: 'var(--donor)',
+            subvention: 'var(--subvention)',
+            program: 'var(--program)'
           },
           borderRadius: {
-            'none': '0px',
-            'sm': '3px',
-            'md': '5px',
-            'lg': '8px'
+            sm: '4px',
+            md: '8px',
           }
         }
       }
@@ -63,326 +60,337 @@
   </script>
 
   <style>
-    /* Warm editorial broadsheet aesthetics (FT / Reuters / NYT Upshot) */
+    /* Global styles enforcing design system tokens */
     body {
-      background-color: #FAF9F5;
-      color: #191918;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
       font-feature-settings: "cv02", "cv03", "cv04", "cv11";
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     .tabular-nums { font-variant-numeric: tabular-nums; }
 
-    /* Custom elegant paper scrollbar */
+    /* Custom theme scrollbars */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: #FAF9F5; }
-    ::-webkit-scrollbar-thumb { background: #D8D8D0; border-radius: 2px; }
-    ::-webkit-scrollbar-thumb:hover { background: #B4B4AA; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
 
-    /* Subtle grid rule */
-    .editorial-rule {
-      background-image: linear-gradient(to right, #E8E8E2 50%, transparent 50%);
-      background-size: 8px 1px;
-      background-repeat: repeat-x;
+    /* Focus visible accessibility */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Drawer Transition */
+    #inspectorDrawer {
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+    }
+    #inspectorDrawer.is-closed {
+      transform: translateX(105%);
+      opacity: 0;
+      pointer-events: none;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans selection:bg-[#E8E8E2] selection:text-ink">
+<body class="min-h-screen flex flex-col selection:bg-neutral-300 dark:selection:bg-neutral-700 selection:text-current">
 
   <!-- =========================================================================
-       1. EDITORIAL MASTHEAD & TOP KICKER
+       FAZA 3 & 4.1. COMPACT STICKY HEADER (Height <= 64px)
   ========================================================================== -->
-  <header class="border-b border-paper-border bg-paper/90 backdrop-blur sticky top-0 z-30 px-6 py-4">
-    <div class="max-w-[1500px] mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-      
-      <!-- Brand & Analytical Topic -->
-      <div class="flex items-center space-x-3.5">
-        <div class="w-8 h-8 rounded-sm bg-kazakh-sky flex items-center justify-center font-serif font-bold text-white text-base shadow-xs">
-          ₸
-        </div>
-        <div>
-          <div class="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.16em] text-ink-muted">
-            <span>Республика Казахстан</span>
-            <span class="text-ink-faint">•</span>
-            <span>Министерство финансов РК</span>
-            <span class="text-ink-faint">•</span>
-            <span class="text-kazakh-sky font-semibold">ЕБК: Раздел 06</span>
-          </div>
-          <h1 class="text-xl md:text-2xl font-serif font-normal text-ink tracking-tight mt-0.5">
-            Анатомия социальных расходов Казахстана
-          </h1>
-        </div>
+  <header class="border-b border-line bg-surface/90 backdrop-blur sticky top-0 z-40 px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+    <!-- Brand / Flagship Title -->
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded-sm bg-accent flex items-center justify-center font-serif font-bold text-white text-base shadow-xs select-none">
+        ₸
       </div>
-
-      <!-- Toolbar: View Switcher, Timeline, Export -->
-      <div class="flex flex-wrap items-center gap-2.5">
-        
-        <!-- Timeline Play Button -->
-        <button id="btnPlayTimeline" class="flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium border border-paper-borderDark bg-white hover:bg-paper-subtle text-ink transition shadow-xs" onclick="togglePlayTimeline()">
-          <span id="playIcon" class="text-kazakh-sky font-bold">▶</span>
-          <span id="playLabel">Таймлайн пятилетки</span>
-        </button>
-
-        <!-- View Segmented Tabs -->
-        <div class="flex bg-paper-subtle p-0.5 rounded-sm border border-paper-border text-xs">
-          <button id="btnViewSankey" class="px-3 py-1 rounded-sm font-semibold transition bg-white text-ink shadow-xs" onclick="switchView('sankey')">
-            Потоки (Sankey)
-          </button>
-          <button id="btnViewSunburst" class="px-3 py-1 rounded-sm font-medium transition text-ink-muted hover:text-ink" onclick="switchView('sunburst')">
-            Иерархия
-          </button>
-          <button id="btnViewGraph" class="px-3 py-1 rounded-sm font-medium transition text-ink-muted hover:text-ink" onclick="switchView('graph')">
-            Сеть связей
-          </button>
-          <button id="btnViewTable" class="px-3 py-1 rounded-sm font-medium transition text-ink-muted hover:text-ink" onclick="switchView('table')">
-            Реестр 20 регионов
-          </button>
+      <div>
+        <div class="flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.14em] text-textMuted">
+          <span>РК • Минфин</span>
+          <span class="opacity-40">•</span>
+          <span class="text-accent font-semibold">Раздел 06 ЕБК</span>
         </div>
-
-        <!-- Export Data -->
-        <button class="px-2.5 py-1.5 rounded-sm text-xs font-mono text-ink-muted hover:text-ink border border-paper-border hover:border-paper-borderDark bg-white transition shadow-xs" onclick="exportActiveSlice()" title="Скачать данные текущего года в JSON">
-          JSON ⤓
-        </button>
+        <h1 class="text-sm sm:text-base font-serif font-medium text-textPrimary tracking-tight leading-none mt-0.5">
+          Qazaqstan Public Finance Monitor
+        </h1>
       </div>
+    </div>
 
+    <!-- Header Actions: Theme Switcher & JSON Export -->
+    <div class="flex items-center space-x-2.5">
+      <!-- Theme Switcher (Light / Dark) -->
+      <button id="btnThemeToggle" class="p-2 rounded-sm border border-line hover:border-lineStrong bg-surface text-textSecondary hover:text-textPrimary transition text-xs flex items-center gap-1.5" onclick="toggleTheme()" title="Переключить тему (Светлая / Темная)">
+        <span id="themeIcon">🌙</span>
+        <span class="hidden md:inline font-mono text-[12px]" id="themeLabel">Темная</span>
+      </button>
+
+      <!-- JSON Export Button -->
+      <button class="px-2.5 py-1.5 rounded-sm text-xs font-mono text-textSecondary hover:text-textPrimary border border-line hover:border-lineStrong bg-surface transition shadow-xs flex items-center gap-1" onclick="exportActiveSlice()" title="Скачать данные активного финансового года в формате JSON">
+        <span>JSON</span>
+        <span>⤓</span>
+      </button>
     </div>
   </header>
 
   <!-- =========================================================================
-       2. INTERACTIVE EDITORIAL TIMELINE SCRUBBER
+       FAZA 4.2. HERO NARRATIVE BLOCK & LIVE STAT HORIZON
   ========================================================================== -->
-  <section class="border-b border-paper-border bg-white px-6 py-3">
-    <div class="max-w-[1500px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+  <section class="border-b border-line bg-surface px-4 sm:px-6 py-5">
+    <div class="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
       
-      <!-- Interactive Year Selector -->
+      <!-- Narrative Lead with Inline Live Numbers -->
+      <div class="lg:col-span-8">
+        <h2 class="text-2xl sm:text-3xl lg:text-[34px] font-serif font-normal text-textPrimary tracking-tight leading-tight">
+          Анатомия социальных расходов Казахстана
+        </h2>
+        <p class="font-sans text-sm sm:text-base text-textSecondary leading-relaxed mt-2">
+          В <span id="leadYear" class="font-semibold text-textPrimary underline decoration-accent/40 decoration-2">2024</span> году совокупные социальные расходы государственного бюджета составляют 
+          <strong id="leadTotal" class="font-mono text-accent font-bold">5.43 трлн ₸</strong>. 
+          Из них <strong id="leadRep" class="font-mono text-textPrimary font-semibold">4.71 трлн ₸ (86.7%)</strong> закрывает республиканский бюджет (пенсии и пособия), 
+          а <strong id="leadLocal" class="font-mono text-subvention font-semibold">722.2 млрд ₸ (13.3%)</strong> распределяются между 20 акиматами на адресную помощь (АСП), интернаты и реабилитацию.
+        </p>
+        <!-- Dynamic Year Context Editorial Callout -->
+        <div class="mt-3.5 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-sm bg-surfaceSunken border border-line text-xs text-textSecondary">
+          <span class="font-mono font-bold text-accent uppercase text-[10px] tracking-wider shrink-0">Фокус года:</span>
+          <span id="leadYearContext" class="leading-normal font-sans">Индексация солидарных пенсий на 9%, базовых пособий на 7%; расширение перечня техсредств реабилитации для ЛСИ.</span>
+        </div>
+      </div>
+
+      <!-- Stat-ряд (3-4 ключевые цифры крупным шрифтом без рамок-коробок) -->
+      <div class="lg:col-span-4 grid grid-cols-2 gap-4 lg:border-l lg:border-line lg:pl-6">
+        <div>
+          <div class="text-[11px] font-mono uppercase text-textMuted tracking-wider">Республиканский центр</div>
+          <div id="statRepTotal" class="text-lg sm:text-xl font-mono font-bold text-textPrimary mt-0.5 tabular-nums">4.71 трлн ₸</div>
+          <div class="text-[12px] text-textMuted mt-0.5">МТСЗН РК (Пенсии и пособия)</div>
+        </div>
+        <div>
+          <div class="text-[11px] font-mono uppercase text-textMuted tracking-wider">Местные бюджеты</div>
+          <div id="statLocalTotal" class="text-lg sm:text-xl font-mono font-bold text-subvention mt-0.5 tabular-nums">722.2 млрд ₸</div>
+          <div class="text-[12px] text-textMuted mt-0.5">20 регионов и городов</div>
+        </div>
+        <div class="col-span-2 pt-2 border-t border-line flex items-center justify-between text-xs font-mono">
+          <span class="text-textMuted">Максимум на 1 жителя:</span>
+          <span id="statTopRegion" class="font-semibold text-textPrimary">Туркестанская обл. (44 913 ₸/чел)</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       FAZA 3.2, 3.3, 4.3. COMPACT CONTROLS BAR (Single Line above Graphic)
+  ========================================================================== -->
+  <section class="border-b border-line bg-surfaceSunken px-4 sm:px-6 py-2.5 sticky top-14 sm:top-16 z-30">
+    <div class="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- 1. Mode Switcher (Segmented Control with Icons) -->
+      <div class="flex items-center bg-surface p-0.5 rounded-sm border border-line text-xs" role="tablist" aria-label="Режимы отображения">
+        <button id="tabBtnSankey" class="px-2.5 py-1.5 rounded-sm font-semibold transition bg-accent text-white shadow-xs flex items-center gap-1.5" role="tab" aria-selected="true" onclick="switchView('sankey')">
+          <span>🌊</span>
+          <span>Потоки (Sankey)</span>
+        </button>
+        <button id="tabBtnSunburst" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" onclick="switchView('sunburst')">
+          <span>☀️</span>
+          <span class="hidden sm:inline">Иерархия</span>
+        </button>
+        <button id="tabBtnGraph" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" onclick="switchView('graph')">
+          <span>🕸️</span>
+          <span class="hidden sm:inline">Сеть связей</span>
+        </button>
+        <button id="tabBtnTable" class="px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5" role="tab" aria-selected="false" onclick="switchView('table')">
+          <span>📋</span>
+          <span>Реестр регионов</span>
+        </button>
+      </div>
+
+      <!-- 2. Timeline Scrubber (2021-2025, YoY, Play/Pause) -->
       <div class="flex items-center space-x-2">
-        <span class="text-xs font-mono uppercase text-ink-muted mr-1.5">Финансовый год:</span>
-        <div class="flex items-center bg-paper-subtle rounded-sm border border-paper-border p-0.5" id="yearSelectorContainer">
+        <div class="flex items-center bg-surface rounded-sm border border-line p-0.5" id="timelineButtonsContainer">
           <!-- Populated dynamically via JS -->
         </div>
-        <span id="yearStatusBadge" class="text-[11px] font-mono px-2 py-0.5 rounded-sm border ml-1.5"></span>
+
+        <!-- Play/Pause Button -->
+        <button id="btnPlayScrubber" class="px-2.5 py-1 rounded-sm text-xs font-mono font-medium border border-line bg-surface hover:bg-surfaceHover text-textPrimary transition shadow-xs flex items-center gap-1" onclick="togglePlayTimeline()" title="Автопроигрывание динамики 2021-2025">
+          <span id="scrubberPlayIcon" class="text-accent">▶</span>
+          <span id="scrubberPlayLabel" class="hidden md:inline">Таймлайн</span>
+        </button>
+
+        <!-- Dynamic YoY Indicator -->
+        <span id="yoyBadge" class="font-mono text-xs font-bold text-donor px-1.5 py-0.5 rounded-sm bg-donor/10"></span>
       </div>
 
-      <!-- Dynamic YoY & Historical Legislative Context -->
-      <div class="flex items-center gap-3 text-xs text-ink-secondary">
-        <span id="yoyBadge" class="font-mono font-bold text-kazakh-emerald"></span>
-        <span class="hidden md:inline-block text-paper-borderDark">|</span>
-        <p id="yearEditorialContext" class="font-serif italic text-ink text-[13px] truncate max-w-xl"></p>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- =========================================================================
-       3. EDITORIAL LEAD & FISCAL HORIZON (NO AI-CARD SYNDROME)
-  ========================================================================== -->
-  <section class="border-b border-paper-border bg-white px-6 py-6">
-    <div class="max-w-[1500px] mx-auto">
-      
-      <!-- Narrative Lead Paragraph with Integrated Live Numbers -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        <div class="lg:col-span-8">
-          <p class="font-serif text-lg md:text-xl text-ink leading-relaxed">
-            В <span id="leadYear" class="font-semibold underline decoration-kazakh-sky/50 decoration-2">2024</span> году совокупные расходы государственного бюджета Казахстана по разделу социальной помощи составляют <strong id="leadTotal" class="font-mono text-kazakh-skyDark font-bold">5.43 трлн ₸</strong>. 
-            Подавляющая часть средств — <strong id="leadRep" class="font-mono text-ink">4.71 трлн ₸ (86.7%)</strong> — выплачивается централизованно через Минтруда (пенсии и пособия). 
-            Оставшиеся <strong id="leadLocal" class="font-mono text-kazakh-amber font-bold">720 млрд ₸ (13.3%)</strong> распределяются между 20 регионами для адресной социальной помощи (АСП), содержания интернатов и реабилитации инвалидов.
-          </p>
-        </div>
-
-        <!-- Macro Stats Ribbon (Delicate Vertical Rules, No Boxed Clutter) -->
-        <div class="lg:col-span-4 grid grid-cols-2 gap-4 border-l border-paper-border pl-6 text-xs">
-          <div>
-            <div class="text-[10px] font-mono uppercase text-ink-muted">Республиканский центр</div>
-            <div id="statRepTotal" class="text-lg font-mono font-bold text-ink mt-0.5 tabular-nums">4.71 трлн ₸</div>
-            <div class="text-[11px] text-ink-muted mt-0.5">Базовые пенсии и пособия</div>
-          </div>
-          <div>
-            <div class="text-[10px] font-mono uppercase text-ink-muted">Местные бюджеты</div>
-            <div id="statLocalTotal" class="text-lg font-mono font-bold text-kazakh-amber mt-0.5 tabular-nums">720.0 млрд ₸</div>
-            <div class="text-[11px] text-ink-muted mt-0.5">20 регионов и городов</div>
-          </div>
-          <div class="col-span-2 pt-2 border-t border-paper-border flex justify-between items-center text-[11px] font-mono">
-            <span class="text-ink-muted">Топ-получатель соцподдержки:</span>
-            <span id="statTopRegion" class="font-semibold text-ink">Туркестанская обл. (44 848 ₸/чел)</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- =========================================================================
-       4. MAIN INTERACTIVE WORKSPACE (SANKEY FLOWS + REGIONAL LEDGER)
-  ========================================================================== -->
-  <main class="max-w-[1500px] mx-auto w-full px-6 py-8 flex-1 flex flex-col space-y-6">
-
-    <!-- Workspace Controls Bar -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-paper-border gap-4">
-      <div>
-        <h2 id="viewHeading" class="text-base font-serif font-normal text-ink">
-          Карта финансовых потоков: Государственный бюджет → 20 Регионов → Социальные услуги
-        </h2>
-        <p id="viewSubheading" class="text-xs text-ink-muted mt-0.5">
-          Наведите на линию перечисления для просмотра суммы. Нажмите на любой регион для изоляции и детального аудита.
-        </p>
-      </div>
-
-      <!-- Quick Jump / Filter Dropdown -->
-      <div class="flex items-center gap-2 text-xs">
-        <span class="text-ink-muted font-mono text-[11px]">Изолировать регион:</span>
-        <select id="regionDropdown" class="bg-white border border-paper-borderDark text-ink text-xs rounded-sm px-2.5 py-1.5 focus:border-kazakh-sky focus:outline-none cursor-pointer shadow-xs">
+      <!-- 3. Region Filter Dropdown & Quick Focus -->
+      <div class="flex items-center space-x-2 text-xs">
+        <select id="regionDropdown" class="bg-surface border border-line text-textPrimary text-xs rounded-sm px-2.5 py-1.5 focus:border-accent focus:outline-none cursor-pointer shadow-xs max-w-[200px] truncate" onchange="onRegionDropdownChange(this.value)">
           <option value="ALL">Все 20 регионов Казахстана</option>
         </select>
-        <button id="btnResetFilter" class="hidden px-2 py-1 text-xs text-ink-muted hover:text-ink border border-paper-border rounded-sm hover:bg-paper-subtle transition" onclick="resetRegionFocus()">
+        <button id="btnResetFilter" class="hidden px-2 py-1 text-xs text-textMuted hover:text-textPrimary border border-line rounded-sm hover:bg-surface transition" onclick="resetRegionFocus()">
           Сброс
         </button>
       </div>
+
     </div>
+  </section>
 
-    <!-- Layout Grid: Left Diagram (68%) / Right Regional Ledger (32%) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start min-h-[660px]">
-      
-      <!-- Visual Canvas Area (8 Columns on Desktop) -->
-      <div class="lg:col-span-8 bg-white border border-paper-border rounded-sm p-4 relative min-h-[660px] flex flex-col shadow-xs" id="canvasBox">
-        
-        <!-- ECharts Host Viewport -->
-        <div id="chartViewport" class="w-full h-full min-h-[620px] flex-1"></div>
-
-        <!-- Full Table Registry View (Alternative Tab) -->
-        <div id="registryView" class="hidden absolute inset-0 bg-white p-6 overflow-y-auto">
-          <div class="flex items-center justify-between mb-4">
-            <div class="text-xs text-ink-muted font-mono">
-              Сравнительный реестр 20 административно-территориальных единиц РК (<span id="tableYearLabel">2024</span> г.)
-            </div>
-            <input type="text" id="tableSearchInput" placeholder="Поиск региона..." class="bg-paper-subtle border border-paper-borderDark rounded-sm text-xs px-3 py-1.5 text-ink placeholder-ink-muted focus:outline-none focus:border-kazakh-sky w-60">
-          </div>
-
-          <table class="w-full text-left text-xs border-collapse font-sans">
-            <thead class="sticky top-0 bg-paper-subtle text-ink-muted font-mono uppercase text-[10px] tracking-wider border-b border-paper-border">
-              <tr>
-                <th class="p-2.5">#</th>
-                <th class="p-2.5">Регион</th>
-                <th class="p-2.5">Статус</th>
-                <th class="p-2.5 text-right">Население</th>
-                <th class="p-2.5 text-right">Бюджет (₸)</th>
-                <th class="p-2.5 text-right">На 1 жителя</th>
-                <th class="p-2.5 text-right">АСП</th>
-                <th class="p-2.5 text-right">Интернаты / МСУ</th>
-                <th class="p-2.5 text-center">Действие</th>
-              </tr>
-            </thead>
-            <tbody id="registryTableBody" class="divide-y divide-paper-border font-mono text-[11px] text-ink">
-              <!-- Dynamically rendered -->
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Diagram Color Legend Footnote -->
-        <div class="pt-3 mt-2 border-t border-paper-border flex flex-wrap items-center justify-between gap-3 text-[11px] text-ink-muted font-mono">
-          <div class="flex flex-wrap items-center gap-4">
-            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-none bg-[#0082CA] inline-block"></span> Республиканский центр</span>
-            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-none bg-[#167D48] inline-block"></span> Доноры (Изъятия: Алматы, Астана, Атырау)</span>
-            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-none bg-[#B85807] inline-block"></span> Субвенционные регионы</span>
-            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-none bg-[#6D28D9] inline-block"></span> Социальные услуги</span>
-          </div>
-          <div class="font-serif italic text-ink-muted text-xs">
-            Источник: Официальные отчеты Министерства финансов РК
-          </div>
-        </div>
-
+  <!-- =========================================================================
+       FAZA 4.4, 4.5. MAIN VISUAL WORKSPACE (Full Width & Sliding Inspector)
+  ========================================================================== -->
+  <main class="max-w-[1440px] mx-auto w-full px-4 sm:px-6 py-5 flex-1 flex flex-col space-y-4 relative">
+    
+    <!-- Sub-heading & Active Status Legend -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+      <div>
+        <h3 id="currentViewHeading" class="text-sm font-serif font-medium text-textPrimary">
+          Движение средств: Республиканский бюджет → 20 Регионов → Виды социальных услуг
+        </h3>
+        <p id="currentViewSubheading" class="text-[12px] text-textMuted mt-0.5">
+          Кликните по узлу или региону, чтобы открыть аналитический инспектор с подушевым расчетом.
+        </p>
       </div>
 
-      <!-- Right Column: Regional Explorer & Master-Detail Drawer (4 Columns) -->
-      <div class="lg:col-span-4 space-y-5">
-        
-        <!-- Live Selected Region Inspector (Deep Dive Card) -->
-        <div id="inspectorCard" class="bg-white border border-paper-border rounded-sm p-5 shadow-xs relative">
-          <div class="flex items-start justify-between border-b border-paper-border pb-3">
+      <!-- Flow Legend Indicators -->
+      <div class="flex flex-wrap items-center gap-3 font-mono text-[11px] text-textMuted">
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-none bg-[#0082CA] inline-block"></span> Республиканский центр</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-none bg-[#167D48] inline-block"></span> Доноры (Изъятия)</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-none bg-[#C98708] inline-block"></span> Субвенции</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-none bg-[#6D28D9] inline-block"></span> Программы</span>
+      </div>
+    </div>
+
+    <!-- Canvas Container (Full Container Width on 1440px) -->
+    <div class="w-full bg-surface border border-line rounded-sm relative min-h-[580px] lg:min-h-[640px] overflow-hidden flex flex-col" id="visualizationCanvasBox">
+      
+      <!-- ECharts Viewport -->
+      <div id="chartViewport" class="w-full h-full min-h-[580px] lg:min-h-[640px] flex-1"></div>
+
+      <!-- Tabular Registry Alternative View -->
+      <div id="registryView" class="hidden absolute inset-0 bg-surface p-4 sm:p-6 overflow-y-auto z-10">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+          <div class="text-xs text-textMuted font-mono">
+            Сравнительный реестр 20 регионов Казахстана (<span id="tableYearLabel">2024</span> г.)
+          </div>
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <input type="text" id="tableSearchInput" placeholder="Поиск региона..." class="bg-surfaceSunken border border-line rounded-sm text-xs px-3 py-1.5 text-textPrimary placeholder-textMuted focus:outline-none focus:border-accent w-full sm:w-64">
+          </div>
+        </div>
+
+        <table class="w-full text-left text-xs border-collapse">
+          <thead class="sticky top-0 bg-surfaceSunken text-textMuted font-mono uppercase text-[11px] tracking-wider border-b border-line">
+            <tr>
+              <th class="p-2.5">#</th>
+              <th class="p-2.5 cursor-pointer hover:text-textPrimary" onclick="sortTable('name')">Регион ↕</th>
+              <th class="p-2.5">Статус</th>
+              <th class="p-2.5 text-right cursor-pointer hover:text-textPrimary" onclick="sortTable('population')">Население ↕</th>
+              <th class="p-2.5 text-right cursor-pointer hover:text-textPrimary" onclick="sortTable('budget')">Бюджет (₸) ↕</th>
+              <th class="p-2.5 text-right cursor-pointer hover:text-textPrimary" onclick="sortTable('per_capita')">На 1 жителя (₸) ↕</th>
+              <th class="p-2.5 text-right">АСП (₸)</th>
+              <th class="p-2.5 text-right">Интернаты / МСУ</th>
+              <th class="p-2.5 text-center">Инспектор</th>
+            </tr>
+          </thead>
+          <tbody id="registryTableBody" class="divide-y divide-line font-mono text-xs text-textPrimary">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- MASTER-DETAIL INSPECTOR DRAWER (Slides from Right, Does Not Permanently Compress Graphic) -->
+      <aside id="inspectorDrawer" class="is-closed absolute top-0 right-0 w-full sm:w-[420px] h-full bg-surface border-l border-line shadow-2xl p-5 sm:p-6 overflow-y-auto z-20 flex flex-col justify-between" aria-label="Инспектор региона">
+        <div>
+          <!-- Drawer Header -->
+          <div class="flex items-start justify-between border-b border-line pb-3">
             <div>
-              <span id="drawerStatusBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-sm border uppercase"></span>
-              <h3 id="drawerRegionTitle" class="text-lg font-serif font-normal text-ink mt-1">г. Алматы</h3>
+              <span id="drawerStatusBadge" class="text-[11px] font-mono px-2 py-0.5 rounded-sm border uppercase"></span>
+              <h4 id="drawerRegionTitle" class="text-xl font-serif font-normal text-textPrimary mt-1">г. Алматы</h4>
             </div>
-            <button id="btnFocusRegion" class="text-xs text-kazakh-sky hover:underline font-mono" onclick="focusSelectedRegion()">
-              Изолировать →
+            <button class="w-8 h-8 rounded-sm hover:bg-surfaceSunken flex items-center justify-center text-textMuted hover:text-textPrimary text-base font-mono transition" onclick="closeInspectorDrawer()" title="Закрыть (Esc)">
+              ✕
             </button>
           </div>
 
-          <div class="mt-4 space-y-2.5 text-xs">
-            <div class="flex justify-between items-center py-1 border-b border-paper-border/60">
-              <span class="text-ink-secondary">Население:</span>
-              <span id="drawerPop" class="font-mono font-medium text-ink"></span>
+          <!-- Drawer Metrics -->
+          <div class="mt-4 space-y-3 text-xs">
+            <div class="flex justify-between items-center py-1 border-b border-line/60">
+              <span class="text-textSecondary">Население региона:</span>
+              <span id="drawerPop" class="font-mono font-medium text-textPrimary"></span>
             </div>
-            <div class="flex justify-between items-center py-1 border-b border-paper-border/60">
-              <span class="text-ink-secondary">Социальный бюджет региона:</span>
-              <span id="drawerTotal" class="font-mono font-bold text-ink"></span>
+            <div class="flex justify-between items-center py-1 border-b border-line/60">
+              <span class="text-textSecondary">Соцбюджет региона:</span>
+              <span id="drawerTotal" class="font-mono font-bold text-textPrimary"></span>
             </div>
-            <div class="flex justify-between items-center py-1.5 border-b border-paper-border/60">
-              <span class="text-ink-secondary">Расходы на 1 жителя:</span>
+            <div class="flex justify-between items-center py-1.5 border-b border-line/60">
+              <span class="text-textSecondary">Расход на 1 жителя:</span>
               <div class="text-right">
-                <span id="drawerPerCapita" class="font-mono font-bold text-kazakh-skyDark"></span>
-                <span id="drawerPerCapitaDelta" class="text-[10px] font-mono block mt-0.5"></span>
+                <span id="drawerPerCapita" class="font-mono font-bold text-accent text-sm"></span>
+                <span id="drawerPerCapitaDelta" class="text-[11px] font-mono block mt-0.5"></span>
               </div>
             </div>
 
-            <!-- Breakdown across 4 local services -->
-            <div class="pt-2">
-              <div class="text-[10px] uppercase tracking-wider text-ink-muted font-mono mb-2">Структура местных расходов:</div>
-              <div class="space-y-1.5" id="drawerServicesList">
-                <!-- Dynamically rendered -->
+            <!-- 4 Service Programs Stacked Breakdown -->
+            <div class="pt-3">
+              <div class="text-[11px] uppercase tracking-wider text-textMuted font-mono mb-2">
+                Структура местных социальных расходов:
+              </div>
+              
+              <!-- Mini Stacked Bar Visual -->
+              <div class="w-full h-2 rounded-sm bg-surfaceSunken flex overflow-hidden mb-3" id="drawerStackedBar">
+                <div class="bg-[#B85807] h-full" style="width: 28%" title="АСП (28%)"></div>
+                <div class="bg-[#167D48] h-full" style="width: 32%" title="Интернаты / МСУ (32%)"></div>
+                <div class="bg-[#0082CA] h-full" style="width: 22%" title="Реабилитация ЛСИ (22%)"></div>
+                <div class="bg-[#6D28D9] h-full" style="width: 18%" title="Занятость (18%)"></div>
+              </div>
+
+              <!-- List with Exact Amounts -->
+              <div class="space-y-2" id="drawerServicesList">
+                <!-- Dynamically populated -->
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Scannable Top Regions Quick Ledger (Micro-bars) -->
-        <div class="bg-white border border-paper-border rounded-sm p-5 shadow-xs space-y-3">
-          <div class="flex items-center justify-between border-b border-paper-border pb-2">
-            <h4 class="text-xs font-mono uppercase text-ink tracking-wider font-semibold">
-              Расходы на душу населения (₸ / чел.)
-            </h4>
-            <span class="text-[10px] font-mono text-ink-muted">20 регионов</span>
-          </div>
-
-          <div id="quickLedgerList" class="space-y-2 max-h-[300px] overflow-y-auto pr-1 text-xs">
-            <!-- Populated via JS with ranking bars -->
-          </div>
+        <!-- Drawer Action Footer -->
+        <div class="pt-4 border-t border-line mt-6 flex gap-2">
+          <button id="btnFocusRegion" class="w-full py-2 rounded-sm text-xs font-semibold bg-accent hover:bg-accent-hover text-white transition font-sans shadow-xs" onclick="focusSelectedRegion()">
+            Сфокусировать граф на регионе
+          </button>
         </div>
-
-      </div>
+      </aside>
 
     </div>
 
     <!-- =========================================================================
-         5. EDITORIAL COMMENTARY & FISCAL INSIGHTS (NEWSPAPER OF RECORD FORMAT)
+         FAZA 4.5. EDITORIAL ANNOTATIONS (Clean Broadsheet Editorial Vrezki)
     ========================================================================== -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-paper-border">
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-5 border-t border-line">
       <div>
-        <h4 class="font-serif text-base text-ink mb-1.5 flex items-center gap-2">
-          <span class="font-mono text-xs font-bold text-kazakh-sky">01.</span>
-          Почему Алматы и Атырау отдают деньги?
+        <h4 class="font-serif text-base text-textPrimary mb-1.5 flex items-center gap-2">
+          <span class="font-mono text-xs font-bold text-accent">§ 01</span>
+          Межбюджетные изъятия доноров
         </h4>
-        <p class="text-xs text-ink-secondary leading-relaxed font-sans">
-          Алматы, Астана и Атырауская область формируют до 60% налоговой базы страны. В этих регионах доходы превышают гарантированные расходы, поэтому Минфин производит <strong>бюджетные изъятия</strong>. Эти средства уходят в республиканский бюджет для субсидирования дотационных областей.
+        <p class="text-xs text-textSecondary leading-relaxed">
+          Алматы, Астана и Атырауская область формируют профицит доходов и выплачивают <strong>бюджетные изъятия</strong> в республиканский центр. Это позволяет государству перераспределять деньги в пользу дотационных областей.
         </p>
       </div>
 
       <div>
-        <h4 class="font-serif text-base text-ink mb-1.5 flex items-center gap-2">
-          <span class="font-mono text-xs font-bold text-kazakh-gold">02.</span>
-          Феномен Туркестанской области
+        <h4 class="font-serif text-base text-textPrimary mb-1.5 flex items-center gap-2">
+          <span class="font-mono text-xs font-bold text-subvention">§ 02</span>
+          Туркестан: максимум соцподдержки
         </h4>
-        <p class="text-xs text-ink-secondary leading-relaxed font-sans">
-          Туркестанская область — рекордсмен Казахстана по социальной поддержке (96 млрд ₸ в 2024 г., 44 848 ₸ на человека). Это связано с высочайшей рождаемостью в стране и концентрацией многодетных семей, получающих адресную социальную помощь (АСП).
+        <p class="text-xs text-textSecondary leading-relaxed">
+          Туркестанская область получает наибольшие субвенции в РК (96 млрд ₸, 44 848 ₸ на жителя). Это связано с рекордной рождаемостью и высокой концентрацией получателей адресной помощи (АСП).
         </p>
       </div>
 
       <div>
-        <h4 class="font-serif text-base text-ink mb-1.5 flex items-center gap-2">
-          <span class="font-mono text-xs font-bold text-kazakh-emerald">03.</span>
-          Пятилетка роста (+52% за 2021–2025)
+        <h4 class="font-serif text-base text-textPrimary mb-1.5 flex items-center gap-2">
+          <span class="font-mono text-xs font-bold text-donor">§ 03</span>
+          Пятилетний тренд (+52%)
         </h4>
-        <p class="text-xs text-ink-secondary leading-relaxed font-sans">
-          С 2021 по 2025 год бюджет соцсферы вырос с 3.98 до 6.05 трлн ₸. Рост обусловлен тремя реформами: внедрением нового Социального кодекса РК, продлением выплат по уходу за ребенком до 1.5 лет и запуском Цифровой карты семьи.
+        <p class="text-xs text-textSecondary leading-relaxed">
+          С 2021 по 2025 год социальный бюджет вырос с 3.98 до 6.05 трлн ₸. Главные драйверы: вступление в силу нового Социального кодекса РК, продление выплат до 1.5 лет и индексация солидарных пенсий.
         </p>
       </div>
     </section>
@@ -390,21 +398,21 @@
   </main>
 
   <!-- =========================================================================
-       6. EDITORIAL COLOPHON / FOOTER
+       FAZA 6. FOOTER COLOPHON
   ========================================================================== -->
-  <footer class="border-t border-paper-border bg-white py-6 px-6 mt-12 text-xs text-ink-muted font-mono">
-    <div class="max-w-[1500px] mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-[11px]">
+  <footer class="border-t border-line bg-surface py-5 px-4 sm:px-6 mt-8 text-xs text-textMuted font-mono">
+    <div class="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-[11px]">
       <div>
-        QAZAQSTAN STATE BUDGET DATA REPOSITORY • РАЗДЕЛ 06 «СОЦЗАЩИТА И ОБЕСПЕЧЕНИЕ» • 2021–2025
+        QAZAQSTAN STATE BUDGET DATA MONITOR • РАЗДЕЛ 06 «СОЦПОМОЩЬ И СОЦОБЕСПЕЧЕНИЕ» • 2021–2025
       </div>
-      <div class="text-ink-muted">
+      <div>
         Автономный клиент • Без серверов и бэкенда • Apache ECharts • Open Data RK
       </div>
     </div>
   </footer>
 
   <!-- =========================================================================
-       7. APPLICATION CONTROLLER SCRIPT
+       APPLICATION CONTROLLER LOGIC (JS)
   ========================================================================== -->
   <script>
     // State management
@@ -416,8 +424,11 @@
     let isPlaying = false;
     let playbackInterval = null;
     let inspectingRegionObj = null;
+    let currentTheme = localStorage.getItem('budget_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    let sortColumn = 'budget';
+    let sortAsc = false;
 
-    // Formatting currency in Kazakhstani Tenge
+    // Currency Formatter
     function formatTenge(amount, precision = 2) {
       if (amount >= 1e12) return (amount / 1e12).toFixed(precision) + ' трлн ₸';
       if (amount >= 1e9) return (amount / 1e9).toFixed(precision) + ' млрд ₸';
@@ -427,6 +438,9 @@
 
     // App Initialization
     async function initApp() {
+      // Apply theme
+      applyTheme(currentTheme);
+
       if (window.BUDGET_MULTI_DATA) {
         multiData = window.BUDGET_MULTI_DATA;
       } else {
@@ -441,38 +455,95 @@
 
       activeYear = multiData.meta.default_year || 2024;
 
-      // Initialize ECharts instance (Light Editorial Theme)
-      const chartDom = document.getElementById('chartViewport');
-      myChart = echarts.init(chartDom, null, { renderer: 'canvas' });
+      // Initialize ECharts instance
+      initChartInstance();
+
+      // Keyboard listener (Esc closes drawer, Arrow keys switch mode tabs)
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeInspectorDrawer();
+
+        if (document.activeElement && document.activeElement.getAttribute('role') === 'tab') {
+          const tabs = ['tabBtnSankey', 'tabBtnSunburst', 'tabBtnGraph', 'tabBtnTable'];
+          const views = ['sankey', 'sunburst', 'graph', 'table'];
+          const curIdx = tabs.indexOf(document.activeElement.id);
+          if (curIdx !== -1) {
+            let nextIdx = -1;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              nextIdx = (curIdx + 1) % tabs.length;
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              nextIdx = (curIdx - 1 + tabs.length) % tabs.length;
+            }
+            if (nextIdx !== -1) {
+              e.preventDefault();
+              const nextBtn = document.getElementById(tabs[nextIdx]);
+              nextBtn.focus();
+              switchView(views[nextIdx]);
+            }
+          }
+        }
+      });
+
+      // Window resize
       window.addEventListener('resize', () => myChart && myChart.resize());
 
-      // Build components
-      buildYearSelector();
+      // Render components
+      buildTimelineScrubber();
       populateRegionDropdown();
       updateYearContext();
 
-      // Default inspector to first region
-      const cur = multiData.years[String(activeYear)];
-      if (cur && cur.regions.length > 0) {
-        openInspectorCard(cur.regions[0]);
-      }
-
-      // Render view
+      // Render Active View
       renderView();
     }
 
-    // Build the Year Selector Ribbon
-    function buildYearSelector() {
-      const container = document.getElementById('yearSelectorContainer');
+    // ECharts instance init with theme tokens
+    function initChartInstance() {
+      const chartDom = document.getElementById('chartViewport');
+      if (myChart) myChart.dispose();
+      myChart = echarts.init(chartDom, currentTheme === 'dark' ? 'dark' : null, { renderer: 'canvas' });
+    }
+
+    // Theme Switcher (Light / Dark)
+    function toggleTheme() {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('budget_theme', currentTheme);
+      applyTheme(currentTheme);
+      initChartInstance();
+      renderView();
+    }
+
+    function applyTheme(theme) {
+      const html = document.documentElement;
+      const themeIcon = document.getElementById('themeIcon');
+      const themeLabel = document.getElementById('themeLabel');
+
+      if (theme === 'dark') {
+        html.classList.add('dark');
+        html.classList.remove('light');
+        if (themeIcon) themeIcon.innerText = '☀️';
+        if (themeLabel) themeLabel.innerText = 'Светлая';
+      } else {
+        html.classList.add('light');
+        html.classList.remove('dark');
+        if (themeIcon) themeIcon.innerText = '🌙';
+        if (themeLabel) themeLabel.innerText = 'Темная';
+      }
+    }
+
+    // Timeline Scrubber Buttons
+    function buildTimelineScrubber() {
+      const container = document.getElementById('timelineButtonsContainer');
       container.innerHTML = '';
 
       multiData.meta.available_years.forEach(yr => {
         const btn = document.createElement('button');
         btn.id = `btnYear_${yr}`;
-        btn.className = yr === activeYear
-          ? "px-2.5 py-1 text-xs font-mono font-bold rounded-sm bg-white text-ink shadow-xs border border-paper-borderDark"
-          : "px-2.5 py-1 text-xs font-mono text-ink-muted hover:text-ink transition";
-        btn.innerText = yr;
+        const isActive = yr === activeYear;
+        btn.setAttribute('aria-label', `Финансовый год ${yr}${yr === 2025 ? ' (План)' : ''}`);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        btn.className = isActive
+          ? "px-2.5 py-1 text-xs font-mono font-bold rounded-sm bg-accent text-white shadow-xs"
+          : "px-2.5 py-1 text-xs font-mono text-textSecondary hover:text-textPrimary transition";
+        btn.innerHTML = `${yr}${yr === 2025 ? ' <span class="text-[9px] uppercase opacity-75">План</span>' : ''}`;
         btn.onclick = () => selectYear(yr);
         container.appendChild(btn);
       });
@@ -484,9 +555,11 @@
       multiData.meta.available_years.forEach(y => {
         const b = document.getElementById(`btnYear_${y}`);
         if (b) {
-          b.className = y === activeYear
-            ? "px-2.5 py-1 text-xs font-mono font-bold rounded-sm bg-white text-ink shadow-xs border border-paper-borderDark"
-            : "px-2.5 py-1 text-xs font-mono text-ink-muted hover:text-ink transition";
+          const isActive = y === activeYear;
+          b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+          b.className = isActive
+            ? "px-2.5 py-1 text-xs font-mono font-bold rounded-sm bg-accent text-white shadow-xs"
+            : "px-2.5 py-1 text-xs font-mono text-textSecondary hover:text-textPrimary transition";
         }
       });
 
@@ -494,7 +567,7 @@
       renderView();
     }
 
-    // Update Editorial HUD & Lead Metrics
+    // Update Year Context & Lead Numbers
     function updateYearContext() {
       const cur = multiData.years[String(activeYear)];
       if (!cur) return;
@@ -507,29 +580,20 @@
       document.getElementById('statRepTotal').innerText = formatTenge(cur.republican_total_kzt);
       document.getElementById('statLocalTotal').innerText = formatTenge(cur.local_total_kzt);
 
-      // Status Badge
-      const statusBadge = document.getElementById('yearStatusBadge');
-      statusBadge.innerText = cur.status;
-      if (cur.status.includes('Факт')) {
-        statusBadge.className = "text-[11px] font-mono px-2 py-0.5 rounded-sm border border-kazakh-emerald/30 bg-kazakh-emeraldBg text-kazakh-emerald ml-1.5";
-      } else if (cur.status.includes('Уточненный')) {
-        statusBadge.className = "text-[11px] font-mono px-2 py-0.5 rounded-sm border border-kazakh-sky/30 bg-blue-50 text-kazakh-skyDark ml-1.5";
-      } else {
-        statusBadge.className = "text-[11px] font-mono px-2 py-0.5 rounded-sm border border-kazakh-gold/30 bg-amber-50 text-kazakh-amber ml-1.5";
+      // Focus Year Context Note
+      const ctxEl = document.getElementById('leadYearContext');
+      if (ctxEl && cur.context) {
+        ctxEl.innerText = cur.context;
       }
 
       // YoY Badge
       const yoy = document.getElementById('yoyBadge');
       if (cur.yoy_pct !== null && cur.yoy_pct !== undefined) {
         yoy.innerText = `+${cur.yoy_pct}% YoY`;
-        yoy.className = "font-mono font-bold text-kazakh-emerald text-xs";
+        yoy.classList.remove('hidden');
       } else {
-        yoy.innerText = 'Базовый период';
-        yoy.className = "font-mono text-ink-muted text-xs";
+        yoy.classList.add('hidden');
       }
-
-      // Editorial Context
-      document.getElementById('yearEditorialContext').innerText = `«${cur.context}»`;
 
       // Top Region Lead
       const topReg = cur.top_regions_by_budget[0];
@@ -537,17 +601,14 @@
         document.getElementById('statTopRegion').innerText = `${topReg.name} (${topReg.per_capita_kzt.toLocaleString('ru-RU')} ₸/чел)`;
       }
 
-      // Populate Quick Ledger
-      populateQuickLedger();
-
-      // Refresh inspector if region selected
-      if (inspectingRegionObj) {
-        const updatedReg = cur.regions.find(r => r.id === inspectingRegionObj.id) || cur.regions[0];
-        openInspectorCard(updatedReg);
-      }
-
+      // Re-populate table or refresh drawer if open
       if (activeView === 'table') {
         populateRegistryTable();
+      }
+
+      if (inspectingRegionObj) {
+        const updated = cur.regions.find(r => r.id === inspectingRegionObj.id) || cur.regions[0];
+        openInspectorDrawer(updated);
       }
     }
 
@@ -560,22 +621,23 @@
       cur.regions.forEach(r => {
         const opt = document.createElement('option');
         opt.value = r.id;
-        opt.innerText = `${r.name}`;
+        opt.innerText = r.name;
         sel.appendChild(opt);
       });
+    }
 
-      sel.addEventListener('change', (e) => {
-        selectedRegionId = e.target.value;
-        const btnReset = document.getElementById('btnResetFilter');
-        if (selectedRegionId === 'ALL') {
-          btnReset.classList.add('hidden');
-        } else {
-          btnReset.classList.remove('hidden');
-          const r = cur.regions.find(x => x.id === selectedRegionId);
-          if (r) openInspectorCard(r);
-        }
-        renderView();
-      });
+    function onRegionDropdownChange(val) {
+      selectedRegionId = val;
+      const btnReset = document.getElementById('btnResetFilter');
+      if (selectedRegionId === 'ALL') {
+        btnReset.classList.add('hidden');
+      } else {
+        btnReset.classList.remove('hidden');
+        const cur = multiData.years[String(activeYear)];
+        const r = cur.regions.find(x => x.id === selectedRegionId);
+        if (r) openInspectorDrawer(r);
+      }
+      renderView();
     }
 
     function resetRegionFocus() {
@@ -585,51 +647,25 @@
       renderView();
     }
 
-    // Populate Right Column Scannable Ledger
-    function populateQuickLedger() {
-      const cur = multiData.years[String(activeYear)];
-      const list = document.getElementById('quickLedgerList');
-      list.innerHTML = '';
-
-      const maxPerCapita = Math.max(...cur.regions.map(r => r.per_capita_kzt));
-
-      cur.regions.forEach((r, idx) => {
-        const barPct = Math.round((r.per_capita_kzt / maxPerCapita) * 100);
-        const item = document.createElement('div');
-        item.className = "p-1.5 rounded-sm hover:bg-paper-subtle cursor-pointer transition flex items-center justify-between";
-        item.onclick = () => openInspectorCard(r);
-
-        item.innerHTML = `
-          <div class="min-w-0 flex-1 pr-2">
-            <div class="flex justify-between items-center text-[11px]">
-              <span class="truncate font-medium text-ink">${idx + 1}. ${r.name}</span>
-              <span class="font-mono text-ink font-semibold">${r.per_capita_kzt.toLocaleString('ru-RU')} ₸</span>
-            </div>
-            <div class="w-full bg-paper-border h-1 rounded-none mt-1 overflow-hidden">
-              <div class="bg-kazakh-sky h-full" style="width: ${barPct}%"></div>
-            </div>
-          </div>
-        `;
-        list.appendChild(item);
-      });
-    }
-
-    // Switch View
+    // Switch View Tabs
     function switchView(viewName) {
       activeView = viewName;
 
-      ['btnViewSankey', 'btnViewSunburst', 'btnViewGraph', 'btnViewTable'].forEach(btnId => {
+      ['tabBtnSankey', 'tabBtnSunburst', 'tabBtnGraph', 'tabBtnTable'].forEach(btnId => {
         const b = document.getElementById(btnId);
-        b.className = "px-3 py-1 rounded-sm font-medium transition text-ink-muted hover:text-ink";
+        b.className = "px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary flex items-center gap-1.5";
+        b.setAttribute('aria-selected', 'false');
       });
 
       const activeBtnMap = {
-        'sankey': 'btnViewSankey',
-        'sunburst': 'btnViewSunburst',
-        'graph': 'btnViewGraph',
-        'table': 'btnViewTable'
+        'sankey': 'tabBtnSankey',
+        'sunburst': 'tabBtnSunburst',
+        'graph': 'tabBtnGraph',
+        'table': 'tabBtnTable'
       };
-      document.getElementById(activeBtnMap[viewName]).className = "px-3 py-1 rounded-sm font-semibold transition bg-white text-ink shadow-xs";
+      const activeBtn = document.getElementById(activeBtnMap[viewName]);
+      activeBtn.className = "px-2.5 py-1.5 rounded-sm font-semibold transition bg-accent text-white shadow-xs flex items-center gap-1.5";
+      activeBtn.setAttribute('aria-selected', 'true');
 
       const chartDom = document.getElementById('chartViewport');
       const registryDom = document.getElementById('registryView');
@@ -637,8 +673,8 @@
       if (viewName === 'table') {
         chartDom.classList.add('hidden');
         registryDom.classList.remove('hidden');
-        document.getElementById('viewHeading').innerText = `Сравнительный реестр всех 20 регионов Казахстана (${activeYear} г.)`;
-        document.getElementById('viewSubheading').innerText = "Подушевое финансирование, статус донорства и объемы финансирования ключевых соцуслуг";
+        document.getElementById('currentViewHeading').innerText = `Сравнительный реестр всех 20 регионов Казахстана (${activeYear} г.)`;
+        document.getElementById('currentViewSubheading').innerText = "Подушевой объем социальной помощи, демографический статус и расходы по 4 ключевым услугам.";
         populateRegistryTable();
       } else {
         registryDom.classList.add('hidden');
@@ -659,25 +695,28 @@
       if (activeView === 'graph') renderGraphView();
     }
 
-    // Editorial Palette (Light Broadsheet)
-    const EDITORIAL_PALETTE = {
-      root: '#0082CA',          // Sky Blue (State Core)
-      republican: '#0284C7',
-      rep_prog: '#4F46E5',      // Indigo
-      local_level: '#B85807',   // Amber
-      region_donor: '#167D48',  // Emerald
-      region_subv: '#C98708',   // Steppe Gold
-      region_neut: '#64748B',   // Slate
-      soc_group: '#6D28D9'      // Violet
-    };
+    // Get Semantic Palette by Theme
+    function getPalette() {
+      return {
+        root: '#0082CA',
+        republican: '#0284C7',
+        rep_prog: '#4F46E5',
+        local_level: '#B85807',
+        region_donor: currentTheme === 'dark' ? '#2EA043' : '#167D48',
+        region_subv: currentTheme === 'dark' ? '#D29922' : '#C98708',
+        region_neut: '#64748B',
+        soc_group: currentTheme === 'dark' ? '#A371F7' : '#6D28D9'
+      };
+    }
 
     // 1. SANKEY VIEW
     function renderSankeyView() {
       const cur = multiData.years[String(activeYear)];
+      const palette = getPalette();
 
-      document.getElementById('viewHeading').innerText = selectedRegionId === 'ALL'
-        ? `Карта финансовых потоков: Государственный бюджет → 20 Регионов → Социальные услуги (${activeYear})`
-        : `Детализированный поток финансирования: «${cur.regions.find(r => r.id === selectedRegionId)?.name}» (${activeYear})`;
+      document.getElementById('currentViewHeading').innerText = selectedRegionId === 'ALL'
+        ? `Движение средств: Республиканский бюджет → 20 Регионов → Виды социальных услуг (${activeYear})`
+        : `Детализированный поток: «${cur.regions.find(r => r.id === selectedRegionId)?.name}» (${activeYear})`;
 
       let nodes = [];
       let links = [];
@@ -686,8 +725,8 @@
         nodes = cur.nodes.map(n => ({
           name: n.name,
           itemStyle: {
-            color: EDITORIAL_PALETTE[n.category] || '#64748B',
-            borderColor: '#FAF9F5',
+            color: palette[n.category] || '#64748B',
+            borderColor: currentTheme === 'dark' ? '#161B22' : '#FFFFFF',
             borderWidth: 1
           }
         }));
@@ -707,9 +746,9 @@
         const regName = reg.name;
 
         nodes = [
-          { name: rootName, itemStyle: { color: EDITORIAL_PALETTE.root } },
-          { name: localName, itemStyle: { color: EDITORIAL_PALETTE.local_level } },
-          { name: regName, itemStyle: { color: reg.donor_status === 'donor' ? EDITORIAL_PALETTE.region_donor : EDITORIAL_PALETTE.region_subv } }
+          { name: rootName, itemStyle: { color: palette.root } },
+          { name: localName, itemStyle: { color: palette.local_level } },
+          { name: regName, itemStyle: { color: reg.donor_status === 'donor' ? palette.region_donor : palette.region_subv } }
         ];
 
         links = [
@@ -719,35 +758,35 @@
 
         for (const [sKey, sVal] of Object.entries(reg.services)) {
           const sName = multiData.categories_info[sKey].name;
-          nodes.push({ name: sName, itemStyle: { color: EDITORIAL_PALETTE.soc_group } });
+          nodes.push({ name: sName, itemStyle: { color: palette.soc_group } });
           links.push({ source: regName, target: sName, value: sVal });
         }
       }
 
       const option = {
         backgroundColor: 'transparent',
-        animationDurationUpdate: 800,
+        animationDurationUpdate: 600,
         tooltip: {
           trigger: 'item',
           triggerOn: 'mousemove',
-          backgroundColor: '#FFFFFF',
-          borderColor: '#E8E8E2',
+          backgroundColor: currentTheme === 'dark' ? '#161B22' : '#FFFFFF',
+          borderColor: currentTheme === 'dark' ? '#30363D' : '#E6E5DE',
           borderWidth: 1,
           padding: [10, 14],
-          textStyle: { color: '#191918', fontFamily: 'Plus Jakarta Sans', fontSize: 12 },
-          extraCssText: 'box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-radius: 4px;',
+          textStyle: { color: currentTheme === 'dark' ? '#F0F6FC' : '#191918', fontFamily: 'Plus Jakarta Sans', fontSize: 12 },
+          extraCssText: 'box-shadow: 0 4px 14px rgba(0,0,0,0.1); border-radius: 4px;',
           formatter: function (p) {
             if (p.dataType === 'edge') {
               return `
-                <div class="text-[10px] font-mono uppercase text-ink-muted mb-0.5">Движение средств (${activeYear})</div>
-                <div class="text-ink font-semibold">${p.data.source} → ${p.data.target}</div>
-                <div class="text-kazakh-skyDark font-mono font-bold text-sm mt-1">${formatTenge(p.data.value)}</div>
+                <div class="text-[10px] font-mono uppercase opacity-60 mb-0.5">Финансовый поток (${activeYear})</div>
+                <div class="font-semibold">${p.data.source} → ${p.data.target}</div>
+                <div class="text-accent font-mono font-bold text-sm mt-1">${formatTenge(p.data.value)}</div>
               `;
             }
             return `
-              <div class="text-[10px] font-mono uppercase text-ink-muted mb-0.5">Бюджетная позиция</div>
-              <div class="text-ink font-semibold text-sm">${p.data.name}</div>
-              <div class="text-kazakh-skyDark font-mono font-bold text-sm mt-1">${formatTenge(p.value)}</div>
+              <div class="text-[10px] font-mono uppercase opacity-60 mb-0.5">Бюджетная позиция</div>
+              <div class="font-semibold text-sm">${p.data.name}</div>
+              <div class="text-accent font-mono font-bold text-sm mt-1">${formatTenge(p.value)}</div>
             `;
           }
         },
@@ -758,8 +797,8 @@
             emphasis: { focus: 'adjacency' },
             data: nodes,
             links: links,
-            top: '5%',
-            bottom: '7%',
+            top: '4%',
+            bottom: '6%',
             left: '2%',
             right: '12%',
             nodeWidth: 14,
@@ -768,10 +807,10 @@
             lineStyle: {
               color: 'gradient',
               curveness: 0.5,
-              opacity: 0.38
+              opacity: currentTheme === 'dark' ? 0.42 : 0.38
             },
             label: {
-              color: '#191918',
+              color: currentTheme === 'dark' ? '#C9D1D9' : '#191918',
               fontSize: 11,
               fontFamily: 'Plus Jakarta Sans',
               formatter: '{b}'
@@ -782,14 +821,14 @@
 
       myChart.setOption(option, true);
 
-      // Node click interaction: open inspector drawer
+      // Node click: open drawer
       myChart.off('click');
       myChart.on('click', function(params) {
         if (params.dataType === 'node') {
           const curYear = multiData.years[String(activeYear)];
           const matched = curYear.regions.find(r => r.name === params.name);
           if (matched) {
-            openInspectorCard(matched);
+            openInspectorDrawer(matched);
           }
         }
       });
@@ -798,23 +837,22 @@
     // 2. SUNBURST VIEW
     function renderSunburstView() {
       const cur = multiData.years[String(activeYear)];
-      document.getElementById('viewHeading').innerText = `Иерархическая структура расходов (Радиальная декомпозиция, ${activeYear})`;
-      document.getElementById('viewSubheading').innerText = "Нажимайте на секторы колеса для плавного приближения структуры расходов";
+      document.getElementById('currentViewHeading').innerText = `Иерархическая структура расходов (Радиальная декомпозиция, ${activeYear})`;
+      document.getElementById('currentViewSubheading').innerText = "Нажимайте на секторы диаграммы для плавного приближения структуры расходов.";
 
       const option = {
         backgroundColor: 'transparent',
         tooltip: {
           trigger: 'item',
-          backgroundColor: '#FFFFFF',
-          borderColor: '#E8E8E2',
+          backgroundColor: currentTheme === 'dark' ? '#161B22' : '#FFFFFF',
+          borderColor: currentTheme === 'dark' ? '#30363D' : '#E6E5DE',
           padding: [10, 14],
-          textStyle: { color: '#191918', fontFamily: 'Plus Jakarta Sans', fontSize: 12 },
-          extraCssText: 'box-shadow: 0 4px 14px rgba(0,0,0,0.08);',
+          textStyle: { color: currentTheme === 'dark' ? '#F0F6FC' : '#191918', fontFamily: 'Plus Jakarta Sans', fontSize: 12 },
           formatter: function (info) {
             return `
-              <div class="text-[10px] font-mono text-ink-muted uppercase">Позиция</div>
-              <div class="text-ink font-semibold mt-0.5">${info.name}</div>
-              <div class="text-kazakh-skyDark font-mono font-bold mt-1">${formatTenge(info.value)}</div>
+              <div class="text-[10px] font-mono opacity-60 uppercase">Позиция</div>
+              <div class="font-semibold mt-0.5">${info.name}</div>
+              <div class="text-accent font-mono font-bold mt-1">${formatTenge(info.value)}</div>
             `;
           }
         },
@@ -829,20 +867,20 @@
             {
               r0: '0%',
               r: '24%',
-              itemStyle: { borderWidth: 1.5, borderColor: '#FFFFFF', color: '#0082CA' },
+              itemStyle: { borderWidth: 1.5, borderColor: currentTheme === 'dark' ? '#0D1117' : '#FFFFFF', color: '#0082CA' },
               label: { rotate: 'tangential', fontSize: 11, color: '#FFFFFF', fontFamily: 'Plus Jakarta Sans' }
             },
             {
               r0: '24%',
               r: '58%',
-              itemStyle: { borderWidth: 1.5, borderColor: '#FFFFFF', color: '#E8E8E2' },
-              label: { align: 'right', fontSize: 10, color: '#191918', fontFamily: 'Plus Jakarta Sans' }
+              itemStyle: { borderWidth: 1.5, borderColor: currentTheme === 'dark' ? '#0D1117' : '#FFFFFF', color: currentTheme === 'dark' ? '#21262D' : '#E6E5DE' },
+              label: { align: 'right', fontSize: 10, color: currentTheme === 'dark' ? '#F0F6FC' : '#191918', fontFamily: 'Plus Jakarta Sans' }
             },
             {
               r0: '58%',
               r: '92%',
-              itemStyle: { borderWidth: 1, borderColor: '#FFFFFF' },
-              label: { position: 'outside', padding: 2, fontSize: 9, color: '#787870', fontFamily: 'JetBrains Mono' }
+              itemStyle: { borderWidth: 1, borderColor: currentTheme === 'dark' ? '#0D1117' : '#FFFFFF' },
+              label: { position: 'outside', padding: 2, fontSize: 9, color: currentTheme === 'dark' ? '#8B949E' : '#76766E', fontFamily: 'JetBrains Mono' }
             }
           ]
         }
@@ -854,16 +892,17 @@
     // 3. GRAPH VIEW (Force Directed)
     function renderGraphView() {
       const cur = multiData.years[String(activeYear)];
-      document.getElementById('viewHeading').innerText = `Сетевой топологический граф связей (${activeYear})`;
-      document.getElementById('viewSubheading').innerText = "Топологическая физическая модель: перетаскивайте узлы для анализа плотности перетоков";
+      const palette = getPalette();
+      document.getElementById('currentViewHeading').innerText = `Сетевой топологический граф связей (${activeYear})`;
+      document.getElementById('currentViewSubheading').innerText = "Топологическая физическая модель: перетаскивайте узлы для анализа плотности перетоков.";
 
       const idToName = {};
       cur.nodes.forEach(n => idToName[n.id] = n.name);
 
       const graphNodes = cur.nodes.map(n => {
-        let size = Math.max(16, Math.min(60, Math.log10(n.value || 1e6) * 4.2));
-        if (n.category === 'root') size = 62;
-        if (n.category === 'level') size = 46;
+        let size = Math.max(16, Math.min(58, Math.log10(n.value || 1e6) * 4.1));
+        if (n.category === 'root') size = 60;
+        if (n.category === 'level') size = 44;
 
         return {
           id: n.id,
@@ -871,13 +910,13 @@
           value: n.value,
           symbolSize: size,
           itemStyle: {
-            color: EDITORIAL_PALETTE[n.category] || '#64748B',
-            borderColor: '#FFFFFF',
+            color: palette[n.category] || '#64748B',
+            borderColor: currentTheme === 'dark' ? '#161B22' : '#FFFFFF',
             borderWidth: 1.5
           },
           label: {
             show: size > 26,
-            color: '#191918',
+            color: currentTheme === 'dark' ? '#F0F6FC' : '#191918',
             fontSize: 10,
             fontFamily: 'Plus Jakarta Sans'
           }
@@ -898,16 +937,15 @@
       const option = {
         backgroundColor: 'transparent',
         tooltip: {
-          backgroundColor: '#FFFFFF',
-          borderColor: '#E8E8E2',
+          backgroundColor: currentTheme === 'dark' ? '#161B22' : '#FFFFFF',
+          borderColor: currentTheme === 'dark' ? '#30363D' : '#E6E5DE',
           padding: [10, 14],
-          textStyle: { color: '#191918', fontFamily: 'Plus Jakarta Sans', fontSize: 12 },
-          extraCssText: 'box-shadow: 0 4px 14px rgba(0,0,0,0.08);',
+          textStyle: { color: currentTheme === 'dark' ? '#F0F6FC' : '#191918', fontFamily: 'Plus Jakarta Sans', fontSize: 12 },
           formatter: function (p) {
             if (p.dataType === 'edge') {
-              return `<div>${idToName[p.data.source]} → ${idToName[p.data.target]}</div><div class="text-kazakh-skyDark font-mono font-bold mt-1">${formatTenge(p.data.value)}</div>`;
+              return `<div>${idToName[p.data.source]} → ${idToName[p.data.target]}</div><div class="text-accent font-mono font-bold mt-1">${formatTenge(p.data.value)}</div>`;
             }
-            return `<div class="font-medium">${p.data.name}</div><div class="text-kazakh-skyDark font-mono font-bold mt-1">${formatTenge(p.data.value)}</div>`;
+            return `<div class="font-medium">${p.data.name}</div><div class="text-accent font-mono font-bold mt-1">${formatTenge(p.data.value)}</div>`;
           }
         },
         series: [
@@ -920,8 +958,8 @@
             draggable: true,
             label: { position: 'right', formatter: '{b}' },
             force: {
-              repulsion: 340,
-              edgeLength: [50, 190],
+              repulsion: 320,
+              edgeLength: [50, 180],
               gravity: 0.12
             }
           }
@@ -931,40 +969,59 @@
       myChart.setOption(option, true);
     }
 
-    // 4. REGISTRY TABLE VIEW
+    // 4. REGISTRY TABLE VIEW (Sorting & Filtering)
     function populateRegistryTable() {
       const cur = multiData.years[String(activeYear)];
       const tbody = document.getElementById('registryTableBody');
-      const search = (document.getElementById('tableSearchInput').value || '').toLowerCase();
+      const search = (document.getElementById('tableSearchInput')?.value || '').toLowerCase();
       document.getElementById('tableYearLabel').innerText = activeYear;
       tbody.innerHTML = '';
 
-      const filtered = cur.regions
-        .filter(r => r.name.toLowerCase().includes(search))
-        .sort((a, b) => b.total_social_kzt - a.total_social_kzt);
+      let items = cur.regions.filter(r => r.name.toLowerCase().includes(search));
 
-      filtered.forEach((r, idx) => {
+      // Sorting
+      items.sort((a, b) => {
+        let valA = a.total_social_kzt;
+        let valB = b.total_social_kzt;
+        if (sortColumn === 'name') { valA = a.name; valB = b.name; return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA); }
+        if (sortColumn === 'population') { valA = a.population; valB = b.population; }
+        if (sortColumn === 'per_capita') { valA = a.per_capita_kzt; valB = b.per_capita_kzt; }
+        return sortAsc ? valA - valB : valB - valA;
+      });
+
+      const maxPerCapita = Math.max(...cur.regions.map(r => r.per_capita_kzt));
+
+      items.forEach((r, idx) => {
         const tr = document.createElement('tr');
-        tr.className = "hover:bg-paper-subtle transition border-b border-paper-border";
+        tr.className = "hover:bg-surfaceSunken transition border-b border-line";
 
         const badge = r.donor_status === 'donor'
-          ? '<span class="px-2 py-0.5 rounded-sm text-[10px] bg-kazakh-emeraldBg text-kazakh-emerald border border-kazakh-emerald/30 font-medium">Донор (Изъятия)</span>'
-          : '<span class="px-2 py-0.5 rounded-sm text-[10px] bg-amber-50 text-kazakh-amber border border-kazakh-gold/30 font-medium">Субвенции</span>';
+          ? '<span class="px-2 py-0.5 rounded-sm text-[10px] bg-donor/10 text-donor border border-donor/30 font-medium">Донор (Изъятия)</span>'
+          : '<span class="px-2 py-0.5 rounded-sm text-[10px] bg-subvention/10 text-subvention border border-subvention/30 font-medium">Субвенции</span>';
+
+        const barPct = Math.round((r.per_capita_kzt / maxPerCapita) * 100);
 
         tr.innerHTML = `
-          <td class="p-2.5 text-ink-muted font-mono text-[11px]">${idx + 1}</td>
-          <td class="p-2.5 font-sans font-medium text-ink flex items-center gap-1.5">
+          <td class="p-2.5 text-textMuted font-mono text-xs">${idx + 1}</td>
+          <td class="p-2.5 font-sans font-medium text-textPrimary flex items-center gap-1.5">
             ${r.name}
-            ${r.type === 'city' ? '<span class="text-[9px] font-mono text-kazakh-sky bg-blue-50 px-1 py-0.2 rounded border border-kazakh-sky/20">Город РК</span>' : ''}
+            ${r.type === 'city' ? '<span class="text-[9px] font-mono text-accent bg-accent/10 px-1 py-0.2 rounded border border-accent/20">Город РК</span>' : ''}
           </td>
           <td class="p-2.5 font-mono">${badge}</td>
-          <td class="p-2.5 text-right text-ink font-mono">${r.population.toLocaleString('ru-RU')}</td>
-          <td class="p-2.5 text-right font-mono font-semibold text-ink">${formatTenge(r.total_social_kzt)}</td>
-          <td class="p-2.5 text-right font-mono text-kazakh-skyDark font-medium">${r.per_capita_kzt.toLocaleString('ru-RU')} ₸</td>
-          <td class="p-2.5 text-right font-mono text-ink-muted">${formatTenge(r.services.group_asp)}</td>
-          <td class="p-2.5 text-right font-mono text-ink-muted">${formatTenge(r.services.group_special_institutions)}</td>
+          <td class="p-2.5 text-right font-mono">${r.population.toLocaleString('ru-RU')}</td>
+          <td class="p-2.5 text-right font-mono font-semibold text-textPrimary">${formatTenge(r.total_social_kzt)}</td>
+          <td class="p-2.5 text-right font-mono">
+            <div class="flex items-center justify-end gap-2">
+              <span class="text-accent font-semibold">${r.per_capita_kzt.toLocaleString('ru-RU')} ₸</span>
+              <div class="w-12 bg-line h-1 rounded-sm overflow-hidden hidden sm:block">
+                <div class="bg-accent h-full" style="width: ${barPct}%"></div>
+              </div>
+            </div>
+          </td>
+          <td class="p-2.5 text-right font-mono text-textMuted">${formatTenge(r.services.group_asp)}</td>
+          <td class="p-2.5 text-right font-mono text-textMuted">${formatTenge(r.services.group_special_institutions)}</td>
           <td class="p-2.5 text-center">
-            <button class="px-2 py-0.5 text-[10px] font-mono bg-paper-subtle hover:bg-white text-ink rounded-sm border border-paper-borderDark transition" onclick='inspectRegionById("${r.id}")'>
+            <button class="px-2 py-0.5 text-xs font-mono bg-surface hover:bg-surfaceSunken text-textPrimary rounded-sm border border-line transition shadow-xs" onclick='inspectRegionById("${r.id}")'>
               Инспектор →
             </button>
           </td>
@@ -973,17 +1030,29 @@
       });
     }
 
+    function sortTable(col) {
+      if (sortColumn === col) {
+        sortAsc = !sortAsc;
+      } else {
+        sortColumn = col;
+        sortAsc = false;
+      }
+      populateRegistryTable();
+    }
+
     document.getElementById('tableSearchInput')?.addEventListener('input', populateRegistryTable);
 
-    // Inspector Card Population & National Benchmark Calculation
+    // Inspector Drawer Logic
     function inspectRegionById(regId) {
       const cur = multiData.years[String(activeYear)];
       const r = cur.regions.find(x => x.id === regId);
-      if (r) openInspectorCard(r);
+      if (r) openInspectorDrawer(r);
     }
 
-    function openInspectorCard(reg) {
+    function openInspectorDrawer(reg) {
       inspectingRegionObj = reg;
+      const drawer = document.getElementById('inspectorDrawer');
+      drawer.classList.remove('is-closed');
 
       document.getElementById('drawerRegionTitle').innerText = reg.name;
       document.getElementById('drawerPop').innerText = `${reg.population.toLocaleString('ru-RU')} чел.`;
@@ -999,38 +1068,64 @@
       const deltaEl = document.getElementById('drawerPerCapitaDelta');
       if (diffPct >= 0) {
         deltaEl.innerText = `▲ +${diffPct}% выше медианы по РК (${formatTenge(avgPerCapita)})`;
-        deltaEl.className = "text-[10px] font-mono text-kazakh-emerald block mt-0.5";
+        deltaEl.className = "text-[11px] font-mono text-donor block mt-0.5 font-medium";
       } else {
         deltaEl.innerText = `▼ ${diffPct}% ниже медианы по РК (${formatTenge(avgPerCapita)})`;
-        deltaEl.className = "text-[10px] font-mono text-ink-muted block mt-0.5";
+        deltaEl.className = "text-[11px] font-mono text-textMuted block mt-0.5";
       }
 
       const badge = document.getElementById('drawerStatusBadge');
       if (reg.donor_status === 'donor') {
         badge.innerText = 'РЕГИОН-ДОНОР (ИЗЪЯТИЯ)';
-        badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded-sm border border-kazakh-emerald/30 bg-kazakh-emeraldBg text-kazakh-emerald';
+        badge.className = 'text-[11px] font-mono px-2 py-0.5 rounded-sm border border-donor/30 bg-donor/10 text-donor';
       } else {
         badge.innerText = 'СУБВЕНЦИОННЫЙ РЕГИОН';
-        badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded-sm border border-kazakh-gold/30 bg-amber-50 text-kazakh-amber';
+        badge.className = 'text-[11px] font-mono px-2 py-0.5 rounded-sm border border-subvention/30 bg-subvention/10 text-subvention';
       }
 
-      // Populate services
+      // Populate dynamic stacked bar visual
+      const barContainer = document.getElementById('drawerStackedBar');
+      if (barContainer) {
+        barContainer.innerHTML = '';
+        const serviceColors = {
+          group_asp: '#B85807',
+          group_special_institutions: currentTheme === 'dark' ? '#2EA043' : '#167D48',
+          group_rehabilitation: '#0082CA',
+          group_employment: currentTheme === 'dark' ? '#A371F7' : '#6D28D9'
+        };
+        for (const [sKey, sVal] of Object.entries(reg.services)) {
+          const sName = multiData.categories_info[sKey]?.name || sKey;
+          const pct = Math.max(1, Math.round((sVal / reg.total_social_kzt) * 100));
+          const seg = document.createElement('div');
+          seg.className = "h-full transition-all duration-300";
+          seg.style.width = pct + '%';
+          seg.style.backgroundColor = serviceColors[sKey] || '#64748B';
+          seg.title = `${sName}: ${pct}% (${formatTenge(sVal)})`;
+          barContainer.appendChild(seg);
+        }
+      }
+
+      // Populate services list
       const list = document.getElementById('drawerServicesList');
       list.innerHTML = '';
       for (const [sKey, sVal] of Object.entries(reg.services)) {
         const sName = multiData.categories_info[sKey].name;
         const pct = ((sVal / reg.total_social_kzt) * 100).toFixed(1);
         const row = document.createElement('div');
-        row.className = "flex justify-between items-center text-xs py-1 border-b border-paper-border";
+        row.className = "flex justify-between items-center text-xs py-1 border-b border-line";
         row.innerHTML = `
-          <span class="text-ink-secondary truncate max-w-[180px]" title="${sName}">${sName}</span>
+          <span class="text-textSecondary truncate max-w-[200px]" title="${sName}">${sName}</span>
           <div class="text-right">
-            <span class="font-mono text-ink font-semibold">${formatTenge(sVal)}</span>
-            <span class="text-[10px] font-mono text-ink-muted ml-1">(${pct}%)</span>
+            <span class="font-mono text-textPrimary font-semibold">${formatTenge(sVal)}</span>
+            <span class="text-[10px] font-mono text-textMuted ml-1">(${pct}%)</span>
           </div>
         `;
         list.appendChild(row);
       }
+    }
+
+    function closeInspectorDrawer() {
+      document.getElementById('inspectorDrawer').classList.add('is-closed');
     }
 
     function focusSelectedRegion() {
@@ -1038,6 +1133,7 @@
       selectedRegionId = inspectingRegionObj.id;
       document.getElementById('regionDropdown').value = selectedRegionId;
       document.getElementById('btnResetFilter').classList.remove('hidden');
+      closeInspectorDrawer();
       switchView('sankey');
     }
 
@@ -1052,8 +1148,10 @@
 
     function startPlayback() {
       isPlaying = true;
-      document.getElementById('playIcon').innerText = '⏸';
-      document.getElementById('playLabel').innerText = 'Пауза';
+      const btn = document.getElementById('btnPlayScrubber');
+      if (btn) btn.setAttribute('aria-pressed', 'true');
+      document.getElementById('scrubberPlayIcon').innerText = '⏸';
+      document.getElementById('scrubberPlayLabel').innerText = 'Пауза';
 
       const years = multiData.meta.available_years;
       let currentIndex = years.indexOf(activeYear);
@@ -1061,14 +1159,16 @@
       playbackInterval = setInterval(() => {
         currentIndex = (currentIndex + 1) % years.length;
         selectYear(years[currentIndex]);
-      }, 2500);
+      }, 2400);
     }
 
     function stopPlayback() {
       isPlaying = false;
       clearInterval(playbackInterval);
-      document.getElementById('playIcon').innerText = '▶';
-      document.getElementById('playLabel').innerText = 'Таймлайн пятилетки';
+      const btn = document.getElementById('btnPlayScrubber');
+      if (btn) btn.setAttribute('aria-pressed', 'false');
+      document.getElementById('scrubberPlayIcon').innerText = '▶';
+      document.getElementById('scrubberPlayLabel').innerText = 'Таймлайн';
     }
 
     // Export Slice in JSON

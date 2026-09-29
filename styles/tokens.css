@@ -1,0 +1,112 @@
+/* ==========================================================================
+   DESIGN SYSTEM TOKENS: QAZAQSTAN PUBLIC FINANCE MONITOR
+   Strictly adheres to REDESIGN_PLAN.md: Fiscal Editorial BroadSheet & Dark
+   ========================================================================== */
+
+:root {
+  /* Color Palette — Light Editorial (Default: Warm Broadsheet) */
+  --bg: #FAF9F5;              /* Тёплый off-white бумажный фон */
+  --surface: #FFFFFF;         /* Поверхность панелей и модалок */
+  --surface-sunken: #F3F2EC;  /* Утопленные контролы и подложки табов */
+  --surface-hover: #ECEBE4;   /* Ховер интерактивных списков */
+
+  --text: #191918;            /* Основной текст и заголовки (Контраст 14.8:1) */
+  --text-2: #4A4A45;          /* Вторичный текст и пояснения (7.4:1) */
+  --text-3: #76766E;          /* Вспомогательный текст и метки (4.6:1) */
+  --text-inverse: #FFFFFF;
+
+  --line: #E6E5DE;            /* Тонкие разделители 1px hairlines */
+  --line-strong: #D2D0C6;     /* Границы инпутов и активных контролов */
+  --line-focus: #0082CA;      /* Кольцо клавиатурного фокуса */
+
+  /* Sovereign & Categorical Flow Colors */
+  --accent: #0082CA;          /* Суверенный циан Казахстана (Республиканский центр) */
+  --accent-hover: #006BA6;
+  --donor: #167D48;           /* Лесной изумруд (Регионы-доноры / Изъятия) */
+  --donor-bg: #EDF7F1;
+  --subvention: #C98708;      /* Степная охра / золото (Субвенционные области) */
+  --subvention-bg: #FEF8EC;
+  --program: #6D28D9;         /* Аметист (Социальные программы и услуги) */
+  --program-bg: #F5F3FF;
+  --neutral-flow: #64748B;
+
+  /* Typography Scale (Strictly 12 / 14 / 16 / 20 / 28 / 40 / 56 px) */
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 20px;
+  --text-xl: 28px;
+  --text-2xl: 40px;
+  --text-3xl: 56px;
+
+  /* Spacing Grid (4px / 8px scale) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* Radii (Strictly 4px and 8px) */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-full: 9999px;
+
+  /* Elevation */
+  --shadow-drawer: -6px 0 24px rgba(0, 0, 0, 0.08);
+  --shadow-tooltip: 0 4px 14px rgba(0, 0, 0, 0.08);
+
+  /* Chart Canvas */
+  --chart-bg: transparent;
+  --chart-text: #191918;
+  --chart-tooltip-bg: #FFFFFF;
+  --chart-tooltip-border: #E6E5DE;
+  --chart-line-opacity: 0.38;
+}
+
+/* ==========================================================================
+   Dark Theme (Obsidian Sovereign Terminal)
+   ========================================================================== */
+html.dark {
+  --bg: #0D1117;              /* Глубокий обсидиановый минерал */
+  --surface: #161B22;         /* Поверхность карточек */
+  --surface-sunken: #090D12;  /* Утопленные зоны контролов */
+  --surface-hover: #21262D;
+
+  --text: #F0F6FC;            /* Чистый светлый текст (14.2:1) */
+  --text-2: #8B949E;          /* Вторичный текст (6.8:1) */
+  --text-3: #6E7681;          /* Метки и сноски (4.5:1) */
+  --text-inverse: #0D1117;
+
+  --line: #30363D;            /* Тонкие темные hairlines */
+  --line-strong: #484F58;
+  --line-focus: #388BFD;
+
+  /* Sovereign & Categorical Flow Colors */
+  --accent: #388BFD;
+  --accent-hover: #58A6FF;
+  --donor: #2EA043;
+  --donor-bg: rgba(46, 160, 67, 0.15);
+  --subvention: #D29922;
+  --subvention-bg: rgba(210, 153, 34, 0.15);
+  --program: #A371F7;
+  --program-bg: rgba(163, 113, 247, 0.15);
+  --neutral-flow: #8B949E;
+
+  /* Elevation */
+  --shadow-drawer: -6px 0 32px rgba(0, 0, 0, 0.5);
+  --shadow-tooltip: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+  /* Chart Canvas */
+  --chart-bg: transparent;
+  --chart-text: #F0F6FC;
+  --chart-tooltip-bg: #161B22;
+  --chart-tooltip-border: #30363D;
+  --chart-line-opacity: 0.42;
+}
