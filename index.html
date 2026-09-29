@@ -1,14 +1,31 @@
 <!DOCTYPE html>
-<html lang="ru" class="light">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Qazaqstan Public Finance Monitor | Социальные расходы бюджета РК (2021–2025)</title>
   <meta name="description" content="Интерактивное исследование движения 5.4 триллионов тенге: от республиканского бюджета через субвенции акиматов к видам социальных услуг.">
+  <meta name="color-scheme" content="light dark">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230082CA'/><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-size='60' font-family='serif' font-weight='bold' fill='%23ffffff'>₸</text></svg>">
   <meta property="og:title" content="Qazaqstan Public Finance Monitor | Социальные расходы бюджета РК (2021–2025)">
   <meta property="og:description" content="Аналитическая система мониторинга социальных расходов государственного бюджета РК (Раздел 06 ЕБК) по 20 регионам.">
   <meta property="og:type" content="website">
+
+  <!-- Anti-FOUC (Flash of Unstyled Content) Synchronous Theme Detection (Modern Web Guidance) -->
+  <script>
+    {
+      const saved = localStorage.getItem('budget_theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (prefersDark ? 'dark' : 'light');
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      } else {
+        document.documentElement.classList.add('light');
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  </script>
 
   <!-- Typography: Newsreader (Editorial Serif) + Plus Jakarta Sans (Swiss Grotesque) + JetBrains Mono (Financial Tabular Figures) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,6 +80,11 @@
 
   <style>
     /* Global styles enforcing design system tokens */
+    html, body {
+      scrollbar-color: var(--line-strong) transparent;
+      scrollbar-width: thin;
+    }
+
     body {
       background-color: var(--bg);
       color: var(--text);
@@ -72,13 +94,18 @@
       transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    .tabular-nums { font-variant-numeric: tabular-nums; }
+    /* Typographic balancing */
+    h1, h2, h3, h4 { text-wrap: balance; }
+    p { text-wrap: pretty; }
+    .tabular-nums { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
 
-    /* Custom theme scrollbars */
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 2px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+    /* Legacy scrollbar fallback for WebKit/Blink */
+    @supports not (scrollbar-color: auto) {
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+    }
 
     /* Focus visible accessibility */
     :focus-visible {
@@ -89,6 +116,7 @@
     /* Drawer Transition */
     #inspectorDrawer {
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+      will-change: transform;
     }
     #inspectorDrawer.is-closed {
       transform: translateX(105%);
@@ -228,10 +256,10 @@
 
       <!-- 3. Region Filter Dropdown & Quick Focus -->
       <div class="flex items-center space-x-2 text-xs">
-        <select id="regionDropdown" class="bg-surface border border-line text-textPrimary text-xs rounded-sm px-2.5 py-1.5 focus:border-accent focus:outline-none cursor-pointer shadow-xs max-w-[200px] truncate">
+        <select id="regionDropdown" aria-label="Выбор региона Казахстана для фильтрации" class="bg-surface border border-line text-textPrimary text-xs rounded-sm px-2.5 py-1.5 focus:border-accent focus:outline-none cursor-pointer shadow-xs max-w-[200px] truncate">
           <option value="ALL">Все 20 регионов Казахстана</option>
         </select>
-        <button id="btnResetFilter" class="hidden px-2 py-1 text-xs text-textMuted hover:text-textPrimary border border-line rounded-sm hover:bg-surface transition" data-action="reset-region">
+        <button id="btnResetFilter" class="hidden px-2 py-1 text-xs text-textMuted hover:text-textPrimary border border-line rounded-sm hover:bg-surface transition" data-action="reset-region" aria-label="Сбросить выбранный регион">
           Сброс
         </button>
       </div>
@@ -277,7 +305,7 @@
             Сравнительный реестр 20 регионов Казахстана (<span id="tableYearLabel">2024</span> г.)
           </div>
           <div class="flex items-center gap-2 w-full sm:w-auto">
-            <input type="text" id="tableSearchInput" placeholder="Поиск региона..." class="bg-surfaceSunken border border-line rounded-sm text-xs px-3 py-1.5 text-textPrimary placeholder-textMuted focus:outline-none focus:border-accent w-full sm:w-64">
+            <input type="search" id="tableSearchInput" placeholder="Поиск региона..." autocomplete="off" spellcheck="false" aria-label="Поиск региона в реестре" class="bg-surfaceSunken border border-line rounded-sm text-xs px-3 py-1.5 text-textPrimary placeholder-textMuted focus:outline-none focus:border-accent w-full sm:w-64">
           </div>
         </div>
 
@@ -330,9 +358,9 @@
         <!-- Procurement Search & Filter Row -->
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div class="flex flex-wrap items-center gap-2 flex-1">
-            <input type="text" id="procSearchInput" placeholder="Поиск по предмету закупки, поставщику, БИН..." class="bg-surfaceSunken border border-line rounded-sm text-xs px-3 py-1.5 text-textPrimary placeholder-textMuted focus:outline-none focus:border-accent w-full sm:w-72">
+            <input type="search" id="procSearchInput" placeholder="Поиск по предмету закупки, поставщику, БИН..." autocomplete="off" spellcheck="false" aria-label="Поиск договоров по предмету, поставщику или БИН" class="bg-surfaceSunken border border-line rounded-sm text-xs px-3 py-1.5 text-textPrimary placeholder-textMuted focus:outline-none focus:border-accent w-full sm:w-72">
             
-            <select id="procCategoryFilter" class="bg-surfaceSunken border border-line rounded-sm text-xs px-2.5 py-1.5 text-textPrimary focus:outline-none focus:border-accent">
+            <select id="procCategoryFilter" aria-label="Фильтр по категориям социальных услуг" class="bg-surfaceSunken border border-line rounded-sm text-xs px-2.5 py-1.5 text-textPrimary focus:outline-none focus:border-accent">
               <option value="ALL">Все категории соцуслуг</option>
               <option value="group_rehabilitation">Реабилитация и инватакси</option>
               <option value="group_special_institutions">Спец. соцуслуги и интернаты</option>
@@ -340,7 +368,7 @@
               <option value="group_asp">АСП и цифровая инфраструктура</option>
             </select>
 
-            <select id="procMethodFilter" class="bg-surfaceSunken border border-line rounded-sm text-xs px-2.5 py-1.5 text-textPrimary focus:outline-none focus:border-accent">
+            <select id="procMethodFilter" aria-label="Фильтр по способам государственных закупок" class="bg-surfaceSunken border border-line rounded-sm text-xs px-2.5 py-1.5 text-textPrimary focus:outline-none focus:border-accent">
               <option value="ALL">Все способы закупки</option>
               <option value="ООИ">Среди организаций инвалидов (ООИ)</option>
               <option value="Открытый конкурс">Открытый конкурс</option>
@@ -377,7 +405,7 @@
       </div>
 
       <!-- MASTER-DETAIL INSPECTOR DRAWER (Slides from Right, Does Not Permanently Compress Graphic) -->
-      <aside id="inspectorDrawer" class="is-closed absolute top-0 right-0 w-full sm:w-[420px] h-full bg-surface border-l border-line shadow-2xl p-5 sm:p-6 overflow-y-auto z-20 flex flex-col justify-between" aria-label="Инспектор региона">
+      <aside id="inspectorDrawer" class="is-closed absolute top-0 right-0 w-full sm:w-[420px] h-full bg-surface border-l border-line shadow-2xl p-5 sm:p-6 overflow-y-auto z-20 flex flex-col justify-between" role="dialog" aria-modal="true" aria-labelledby="drawerRegionTitle" inert aria-hidden="true">
         <div>
           <!-- Drawer Header -->
           <div class="flex items-start justify-between border-b border-line pb-3">
@@ -506,6 +534,7 @@
     let isPlaying = false;
     let playbackInterval = null;
     let inspectingRegionObj = null;
+    let lastActiveElement = null;
     let currentTheme = localStorage.getItem('budget_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     let sortColumn = 'budget';
     let sortAsc = false;
@@ -522,6 +551,16 @@
     async function initApp() {
       // Apply theme
       applyTheme(currentTheme);
+
+      // System color-scheme dynamic adaptation (Modern Web Guidance)
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('budget_theme')) {
+          currentTheme = e.matches ? 'dark' : 'light';
+          applyTheme(currentTheme);
+          initChartInstance();
+          renderView();
+        }
+      });
 
       if (window.BUDGET_MULTI_DATA) {
         multiData = window.BUDGET_MULTI_DATA;
@@ -636,6 +675,7 @@
       const html = document.documentElement;
       const themeIcon = document.getElementById('themeIcon');
       const themeLabel = document.getElementById('themeLabel');
+      const metaScheme = document.querySelector('meta[name="color-scheme"]');
 
       const sunSvg = `<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`;
       const moonSvg = `<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
@@ -643,11 +683,13 @@
       if (theme === 'dark') {
         html.classList.add('dark');
         html.classList.remove('light');
+        if (metaScheme) metaScheme.content = 'dark';
         if (themeIcon) themeIcon.innerHTML = sunSvg;
         if (themeLabel) themeLabel.innerText = 'Светлая';
       } else {
         html.classList.add('light');
         html.classList.remove('dark');
+        if (metaScheme) metaScheme.content = 'light';
         if (themeIcon) themeIcon.innerHTML = moonSvg;
         if (themeLabel) themeLabel.innerText = 'Темная';
       }
@@ -675,21 +717,31 @@
     }
 
     function selectYear(yr) {
-      activeYear = yr;
+      if (activeYear === yr) return;
 
-      multiData.meta.available_years.forEach(y => {
-        const b = document.getElementById(`btnYear_${y}`);
-        if (b) {
-          const isActive = y === activeYear;
-          b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-          b.className = isActive
-            ? "px-2.5 py-1 text-xs font-mono font-bold rounded-sm bg-accent text-white shadow-xs"
-            : "px-2.5 py-1 text-xs font-mono text-textSecondary hover:text-textPrimary transition";
-        }
-      });
+      const performYearChange = () => {
+        activeYear = yr;
 
-      updateYearContext();
-      renderView();
+        multiData.meta.available_years.forEach(y => {
+          const b = document.getElementById(`btnYear_${y}`);
+          if (b) {
+            const isActive = y === activeYear;
+            b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            b.className = isActive
+              ? "px-2.5 py-1 text-xs font-mono font-bold rounded-sm bg-accent text-white shadow-xs"
+              : "px-2.5 py-1 text-xs font-mono text-textSecondary hover:text-textPrimary transition";
+          }
+        });
+
+        updateYearContext();
+        renderView();
+      };
+
+      if (!isPlaying && document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.startViewTransition(() => performYearChange());
+      } else {
+        performYearChange();
+      }
     }
 
     // Update Year Context & Lead Numbers
@@ -776,53 +828,63 @@
 
     // Switch View Tabs
     function switchView(viewName) {
-      activeView = viewName;
+      if (activeView === viewName) return;
 
-      ['tabBtnSankey', 'tabBtnSunburst', 'tabBtnGraph', 'tabBtnTable', 'tabBtnProcurements'].forEach(btnId => {
-        const b = document.getElementById(btnId);
-        if (b) {
-          b.className = "px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary";
-          b.setAttribute('aria-selected', 'false');
+      const performSwitch = () => {
+        activeView = viewName;
+
+        ['tabBtnSankey', 'tabBtnSunburst', 'tabBtnGraph', 'tabBtnTable', 'tabBtnProcurements'].forEach(btnId => {
+          const b = document.getElementById(btnId);
+          if (b) {
+            b.className = "px-2.5 py-1.5 rounded-sm font-medium transition text-textSecondary hover:text-textPrimary";
+            b.setAttribute('aria-selected', 'false');
+          }
+        });
+
+        const activeBtnMap = {
+          'sankey': 'tabBtnSankey',
+          'sunburst': 'tabBtnSunburst',
+          'graph': 'tabBtnGraph',
+          'table': 'tabBtnTable',
+          'procurements': 'tabBtnProcurements'
+        };
+        const activeBtn = document.getElementById(activeBtnMap[viewName]);
+        if (activeBtn) {
+          activeBtn.className = "px-2.5 py-1.5 rounded-sm font-semibold transition bg-accent text-white shadow-xs";
+          activeBtn.setAttribute('aria-selected', 'true');
         }
-      });
 
-      const activeBtnMap = {
-        'sankey': 'tabBtnSankey',
-        'sunburst': 'tabBtnSunburst',
-        'graph': 'tabBtnGraph',
-        'table': 'tabBtnTable',
-        'procurements': 'tabBtnProcurements'
+        const chartDom = document.getElementById('chartViewport');
+        const registryDom = document.getElementById('registryView');
+        const procDom = document.getElementById('procurementView');
+
+        if (viewName === 'table') {
+          chartDom.classList.add('hidden');
+          procDom.classList.add('hidden');
+          registryDom.classList.remove('hidden');
+          document.getElementById('currentViewHeading').innerText = `Сравнительный реестр 20 регионов Казахстана (${activeYear} г.)`;
+          document.getElementById('currentViewSubheading').innerText = "Подушевые нормативы, трансфертный статус и структура расходов местных исполнительных органов.";
+          populateRegistryTable();
+        } else if (viewName === 'procurements') {
+          chartDom.classList.add('hidden');
+          registryDom.classList.add('hidden');
+          procDom.classList.remove('hidden');
+          document.getElementById('currentViewHeading').innerText = `Реестр государственных закупок социальной сферы (${activeYear} г.)`;
+          document.getElementById('currentViewSubheading').innerText = "Исполнение бюджета через закупки: заказчики, поставщики, контракты и квоты статьи 51 (ООИ).";
+          populateProcurementsView();
+        } else {
+          registryDom.classList.add('hidden');
+          procDom.classList.add('hidden');
+          chartDom.classList.remove('hidden');
+          myChart.resize();
+          renderView();
+        }
       };
-      const activeBtn = document.getElementById(activeBtnMap[viewName]);
-      if (activeBtn) {
-        activeBtn.className = "px-2.5 py-1.5 rounded-sm font-semibold transition bg-accent text-white shadow-xs";
-        activeBtn.setAttribute('aria-selected', 'true');
-      }
 
-      const chartDom = document.getElementById('chartViewport');
-      const registryDom = document.getElementById('registryView');
-      const procDom = document.getElementById('procurementView');
-
-      if (viewName === 'table') {
-        chartDom.classList.add('hidden');
-        procDom.classList.add('hidden');
-        registryDom.classList.remove('hidden');
-        document.getElementById('currentViewHeading').innerText = `Сравнительный реестр 20 регионов Казахстана (${activeYear} г.)`;
-        document.getElementById('currentViewSubheading').innerText = "Подушевые нормативы, трансфертный статус и структура расходов местных исполнительных органов.";
-        populateRegistryTable();
-      } else if (viewName === 'procurements') {
-        chartDom.classList.add('hidden');
-        registryDom.classList.add('hidden');
-        procDom.classList.remove('hidden');
-        document.getElementById('currentViewHeading').innerText = `Реестр государственных закупок социальной сферы (${activeYear} г.)`;
-        document.getElementById('currentViewSubheading').innerText = "Исполнение бюджета через закупки: заказчики, поставщики, контракты и квоты статьи 51 (ООИ).";
-        populateProcurementsView();
+      if (document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.startViewTransition(() => performSwitch());
       } else {
-        registryDom.classList.add('hidden');
-        procDom.classList.add('hidden');
-        chartDom.classList.remove('hidden');
-        myChart.resize();
-        renderView();
+        performSwitch();
       }
     }
 
@@ -1324,9 +1386,12 @@
     }
 
     function openInspectorDrawer(reg) {
+      lastActiveElement = document.activeElement;
       inspectingRegionObj = reg;
       const drawer = document.getElementById('inspectorDrawer');
       drawer.classList.remove('is-closed');
+      drawer.removeAttribute('inert');
+      drawer.setAttribute('aria-hidden', 'false');
 
       document.getElementById('drawerRegionTitle').innerText = reg.name;
       document.getElementById('drawerPop').innerText = `${reg.population.toLocaleString('ru-RU')} чел.`;
@@ -1406,7 +1471,13 @@
     }
 
     function closeInspectorDrawer() {
-      document.getElementById('inspectorDrawer').classList.add('is-closed');
+      const drawer = document.getElementById('inspectorDrawer');
+      drawer.classList.add('is-closed');
+      drawer.setAttribute('inert', '');
+      drawer.setAttribute('aria-hidden', 'true');
+      if (lastActiveElement && typeof lastActiveElement.focus === 'function') {
+        lastActiveElement.focus();
+      }
     }
 
     function focusSelectedRegion() {

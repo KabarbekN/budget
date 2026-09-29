@@ -109,4 +109,89 @@ html.dark {
   --chart-tooltip-bg: #161B22;
   --chart-tooltip-border: #30363D;
   --chart-line-opacity: 0.42;
+
+  /* Modern Web color-scheme override */
+  color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
+}
+
+/* ==========================================================================
+   MODERN WEB GUIDANCE: GLOBAL STANDARDS & PROGRESSIVE ENHANCEMENTS
+   ========================================================================== */
+
+:root {
+  color-scheme: light dark;
+  accent-color: var(--accent);
+  scrollbar-color: var(--line-strong) transparent;
+  scrollbar-width: thin;
+}
+
+/* Typographic Balancing (Avoid single-word line orphans) */
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Tabular Numerals for Financial Data Alignment */
+.tabular-nums, [data-tabular] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Legacy Scrollbar Fallback (WebKit/Blink) */
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* Performance Containment for Large Data Tables */
+#registryTableBody tr,
+#procurementTableBody tr {
+  content-visibility: auto;
+  contain-intrinsic-block-size: auto 38px;
+}
+
+#visualizationCanvasBox {
+  contain: layout paint;
+}
+
+/* Accessible Inert State */
+[inert] {
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+/* View Transitions API Tuning */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.16s;
+}
+
+/* Accessibility: Respect Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
